@@ -10,35 +10,53 @@ var {
   StyleSheet,
   Text,
   View,
+  TouchableOpacity
 } = React;
 
 var YouTube = require('react-native-youtube');
 
 var RCTYouTubeExample = React.createClass({
+  getInitialState: function () {
+    return {
+      isReady: false,
+      status: null,
+      quality: null,
+      error: null,
+      isPlaying: true
+    }
+  },
+
   render: function() {
     return (
       <View style={styles.container}>
         <Text style={styles.welcome}>
-          Welcome to React Native!
+          {"<Youtube /> component for \n React Native."}
         </Text>
         <Text style={styles.instructions}>
-          To get started, edit index.ios.js
+          http://github.com/paramaggarwal/react-native-youtube
         </Text>
+
         <YouTube
-          videoId="Rpy24sRo3Cc"
-          play={true}
+          videoId="KVZ-P-ZI6W4"
+          play={this.state.isPlaying}
           hidden={false}
           playsInline={true}
-          onReady={(e)=>{console.log(e)}}
-          onChangeState={(e)=>{console.log(e)}}
-          onChangeQuality={(e)=>{console.log(e)}}
-          onError={(e)=>{console.log(e)}}
-          style={{width: 300, height: 300, backgroundColor: 'black'}}
+          onReady={(e)=>{this.setState({isReady: true})}}
+          onChangeState={(e)=>{this.setState({status: e.state})}}
+          onChangeQuality={(e)=>{this.setState({quality: e.quality})}}
+          onError={(e)=>{this.setState({error: e.error})}}
+          style={{alignSelf: 'stretch', height: 300, backgroundColor: 'black', marginVertical: 10}}
         />
-        <Text style={styles.instructions}>
-          Press Cmd+R to reload,{'\n'}
-          Cmd+D or shake for dev menu
-        </Text>
+
+        <TouchableOpacity onPress={()=>{this.setState((s) => {return {isPlaying: !s.isPlaying};} )}}>
+          <Text style={[styles.welcome, {color: 'blue'}]}>{this.state.status == 'playing' ? 'Pause' : 'Play'}</Text>
+        </TouchableOpacity>
+
+        <Text style={styles.instructions}>{this.state.isReady ? 'Player is ready.' : 'Player setting up...'}</Text>
+        <Text style={styles.instructions}>Status: {this.state.status}</Text>
+        <Text style={styles.instructions}>Quality: {this.state.quality}</Text>
+        <Text style={styles.instructions}>{this.state.error ? 'Error: ' + this.state.error : ' '}</Text>
+
       </View>
     );
   }

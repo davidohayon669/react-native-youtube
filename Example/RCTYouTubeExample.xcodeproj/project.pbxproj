@@ -24,6 +24,7 @@
 		146834051AC3E58100842450 /* libReact.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 146834041AC3E56700842450 /* libReact.a */; };
 		832341BD1AAA6AB300B99B32 /* libRCTText.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 832341B51AAA6A8300B99B32 /* libRCTText.a */; };
 		8B26A94E1B428F5D000C2690 /* libRCTYouTube.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8B26A9351B428ABF000C2690 /* libRCTYouTube.a */; };
+		8B55F36A1B42B74B00915B8B /* YTPlayerView-iframe-player.html in Resources */ = {isa = PBXBuildFile; fileRef = 8B55F3691B42B74B00915B8B /* YTPlayerView-iframe-player.html */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -136,6 +137,7 @@
 		78C398B01ACF4ADC00677621 /* RCTLinking.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTLinking.xcodeproj; path = "node_modules/react-native/Libraries/LinkingIOS/RCTLinking.xcodeproj"; sourceTree = "<group>"; };
 		832341B01AAA6A8300B99B32 /* RCTText.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTText.xcodeproj; path = "node_modules/react-native/Libraries/Text/RCTText.xcodeproj"; sourceTree = "<group>"; };
 		8B26A9271B428ABF000C2690 /* RCTYouTube.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTYouTube.xcodeproj; path = ../RCTYouTube.xcodeproj; sourceTree = "<group>"; };
+		8B55F3691B42B74B00915B8B /* YTPlayerView-iframe-player.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = "YTPlayerView-iframe-player.html"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -243,6 +245,7 @@
 		13B07FAE1A68108700A75B9A /* RCTYouTubeExample */ = {
 			isa = PBXGroup;
 			children = (
+				8B55F3681B42B74B00915B8B /* Assets */,
 				008F07F21AC5B25A0029DE68 /* main.jsbundle */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
 				13B07FB01A68108700A75B9A /* AppDelegate.m */,
@@ -323,6 +326,15 @@
 				8B26A9351B428ABF000C2690 /* libRCTYouTube.a */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		8B55F3681B42B74B00915B8B /* Assets */ = {
+			isa = PBXGroup;
+			children = (
+				8B55F3691B42B74B00915B8B /* YTPlayerView-iframe-player.html */,
+			);
+			name = Assets;
+			path = ../Assets;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -537,6 +549,7 @@
 			files = (
 				008F07F31AC5B25A0029DE68 /* main.jsbundle in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
+				8B55F36A1B42B74B00915B8B /* YTPlayerView-iframe-player.html in Resources */,
 				13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -101,7 +101,9 @@ NSString *const RNYouTubeEventError = @"youTubeError";
 - (void)playerViewDidBecomeReady:(YTPlayerView *)playerView {
     if (_playsOnLoad) {
         [self playVideo];
+        _isPlaying = YES;
     }
+    _isReady = YES;
 
     [_eventDispatcher sendInputEventWithName:RNYouTubeEventReady
                                         body:@{

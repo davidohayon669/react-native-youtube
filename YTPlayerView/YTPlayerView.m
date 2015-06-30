@@ -684,8 +684,7 @@ NSString static *const kYTPlayerStaticProxyRegexPattern = @"^https://content.goo
 
   NSError *error = nil;
   NSString *path = [[NSBundle mainBundle] pathForResource:@"YTPlayerView-iframe-player"
-                                                   ofType:@"html"
-                                              inDirectory:@"Assets"];
+                                                   ofType:@"html"];
   NSString *embedHTMLTemplate =
       [NSString stringWithContentsOfFile:path encoding:NSUTF8StringEncoding error:&error];
 

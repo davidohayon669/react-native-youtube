@@ -25,9 +25,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		8B26A9121B428A53000C2690 /* YTPlayerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = YTPlayerView.h; path = "youtube-ios-player-helper/Classes/YTPlayerView.h"; sourceTree = SOURCE_ROOT; };
-		8B26A9131B428A53000C2690 /* YTPlayerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = YTPlayerView.m; path = "youtube-ios-player-helper/Classes/YTPlayerView.m"; sourceTree = SOURCE_ROOT; };
-		8B26A9161B428A68000C2690 /* YTPlayerView-iframe-player.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; name = "YTPlayerView-iframe-player.html"; path = "youtube-ios-player-helper/Assets/YTPlayerView-iframe-player.html"; sourceTree = SOURCE_ROOT; };
+		8B26A9121B428A53000C2690 /* YTPlayerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = YTPlayerView.h; path = YTPlayerView/YTPlayerView.h; sourceTree = SOURCE_ROOT; };
+		8B26A9131B428A53000C2690 /* YTPlayerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = YTPlayerView.m; path = YTPlayerView/YTPlayerView.m; sourceTree = SOURCE_ROOT; };
 		8B26A9171B428AA2000C2690 /* RCTYouTube.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RCTYouTube.h; sourceTree = SOURCE_ROOT; };
 		8B26A9181B428AA2000C2690 /* RCTYouTube.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RCTYouTube.m; sourceTree = SOURCE_ROOT; };
 		8B26A9191B428AA2000C2690 /* RCTYouTubeManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RCTYouTubeManager.h; sourceTree = SOURCE_ROOT; };
@@ -49,7 +48,6 @@
 		8B26A9151B428A59000C2690 /* YTPlayerView */ = {
 			isa = PBXGroup;
 			children = (
-				8B26A9161B428A68000C2690 /* YTPlayerView-iframe-player.html */,
 				8B26A9121B428A53000C2690 /* YTPlayerView.h */,
 				8B26A9131B428A53000C2690 /* YTPlayerView.m */,
 			);
