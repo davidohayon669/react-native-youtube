@@ -44,12 +44,13 @@ Uses Google's official [youtube-ios-player-helper](https://github.com/youtube/yo
 (requires react-native >= 0.6.0)
 
 1. Run `npm install react-native-youtube --save`
-2. Open your project in XCode, right click on `Libraries` and click `Add Files to "Your Project Name"`
-   * ![Screenshot](http://url.brentvatne.ca/jQp8.png) ![Screenshot](http://url.brentvatne.ca/1gqUD.png) (use the RCTVideo project rather than the one pictured in screenshot).
-3. Add `libRTCVideo.a` to `Build Phases -> Link Binary With Libraries`
-   ![(Screenshot)](http://url.brentvatne.ca/g9Wp.png).
-4. Add `YTPlayerView-iframe-player.html` asset file to project and to `Build Phases -> Copy Bundle Resources`
-5. Whenever you want to use it within React code now you can: `var YouTube =
+2. Open your project in Xcode, right click on `Libraries` and click `Add Files to "Your Project Name"`:
+   * ![Screenshot](http://i.imgur.com/pOdaLFF.png)
+3. Select `RCTYouTube.xcodeproj` from the Finder.
+4. Add `libRCTYouTube.a` to `Build Phases -> Link Binary With Libraries`:
+   ![(Screenshot)](http://i.imgur.com/iuvEhan.png).
+5. Add `YTPlayerView-iframe-player.html` asset file to project and to `Build Phases -> Copy Bundle Resources`
+6. Whenever you want to use it within React code now you can: `var YouTube =
    require('react-native-youtube');`
 
 ## Example
