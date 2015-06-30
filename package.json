@@ -1,0 +1,24 @@
+{
+  "name": "react-native-youtube",
+  "version": "0.0.1",
+  "description": "YouTube component for React native",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/paramaggarwal/react-native-youtube.git"
+  },
+  "keywords": [
+    "youtube",
+    "react",
+    "react-native"
+  ],
+  "author": "Param Aggarwal",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/paramaggarwal/react-native-youtube/issues"
+  },
+  "homepage": "https://github.com/paramaggarwal/react-native-youtube#readme"
+}
