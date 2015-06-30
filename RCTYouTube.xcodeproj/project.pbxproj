@@ -1,0 +1,284 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		8B26A9141B428A53000C2690 /* YTPlayerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B26A9131B428A53000C2690 /* YTPlayerView.m */; };
+		8B26A91B1B428AA2000C2690 /* RCTYouTube.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B26A9181B428AA2000C2690 /* RCTYouTube.m */; };
+		8B26A91C1B428AA2000C2690 /* RCTYouTubeManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B26A91A1B428AA2000C2690 /* RCTYouTubeManager.m */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		8BDB9BC71B4289AE00EF9FEF /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "include/$(PRODUCT_NAME)";
+			dstSubfolderSpec = 16;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		8B26A9121B428A53000C2690 /* YTPlayerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = YTPlayerView.h; path = "youtube-ios-player-helper/Classes/YTPlayerView.h"; sourceTree = SOURCE_ROOT; };
+		8B26A9131B428A53000C2690 /* YTPlayerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = YTPlayerView.m; path = "youtube-ios-player-helper/Classes/YTPlayerView.m"; sourceTree = SOURCE_ROOT; };
+		8B26A9161B428A68000C2690 /* YTPlayerView-iframe-player.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; name = "YTPlayerView-iframe-player.html"; path = "youtube-ios-player-helper/Assets/YTPlayerView-iframe-player.html"; sourceTree = SOURCE_ROOT; };
+		8B26A9171B428AA2000C2690 /* RCTYouTube.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RCTYouTube.h; sourceTree = SOURCE_ROOT; };
+		8B26A9181B428AA2000C2690 /* RCTYouTube.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RCTYouTube.m; sourceTree = SOURCE_ROOT; };
+		8B26A9191B428AA2000C2690 /* RCTYouTubeManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RCTYouTubeManager.h; sourceTree = SOURCE_ROOT; };
+		8B26A91A1B428AA2000C2690 /* RCTYouTubeManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RCTYouTubeManager.m; sourceTree = SOURCE_ROOT; };
+		8BDB9BC91B4289AE00EF9FEF /* libRCTYouTube.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libRCTYouTube.a; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		8BDB9BC61B4289AE00EF9FEF /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		8B26A9151B428A59000C2690 /* YTPlayerView */ = {
+			isa = PBXGroup;
+			children = (
+				8B26A9161B428A68000C2690 /* YTPlayerView-iframe-player.html */,
+				8B26A9121B428A53000C2690 /* YTPlayerView.h */,
+				8B26A9131B428A53000C2690 /* YTPlayerView.m */,
+			);
+			name = YTPlayerView;
+			sourceTree = "<group>";
+		};
+		8BDB9BC01B4289AE00EF9FEF = {
+			isa = PBXGroup;
+			children = (
+				8BDB9BCB1B4289AE00EF9FEF /* RCTYouTube */,
+				8BDB9BCA1B4289AE00EF9FEF /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		8BDB9BCA1B4289AE00EF9FEF /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				8BDB9BC91B4289AE00EF9FEF /* libRCTYouTube.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		8BDB9BCB1B4289AE00EF9FEF /* RCTYouTube */ = {
+			isa = PBXGroup;
+			children = (
+				8B26A9151B428A59000C2690 /* YTPlayerView */,
+				8B26A9171B428AA2000C2690 /* RCTYouTube.h */,
+				8B26A9181B428AA2000C2690 /* RCTYouTube.m */,
+				8B26A9191B428AA2000C2690 /* RCTYouTubeManager.h */,
+				8B26A91A1B428AA2000C2690 /* RCTYouTubeManager.m */,
+			);
+			path = RCTYouTube;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		8BDB9BC81B4289AE00EF9FEF /* RCTYouTube */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 8BDB9BDD1B4289AE00EF9FEF /* Build configuration list for PBXNativeTarget "RCTYouTube" */;
+			buildPhases = (
+				8BDB9BC51B4289AE00EF9FEF /* Sources */,
+				8BDB9BC61B4289AE00EF9FEF /* Frameworks */,
+				8BDB9BC71B4289AE00EF9FEF /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = RCTYouTube;
+			productName = RCTYouTube;
+			productReference = 8BDB9BC91B4289AE00EF9FEF /* libRCTYouTube.a */;
+			productType = "com.apple.product-type.library.static";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		8BDB9BC11B4289AE00EF9FEF /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0630;
+				ORGANIZATIONNAME = React;
+				TargetAttributes = {
+					8BDB9BC81B4289AE00EF9FEF = {
+						CreatedOnToolsVersion = 6.3.2;
+					};
+				};
+			};
+			buildConfigurationList = 8BDB9BC41B4289AE00EF9FEF /* Build configuration list for PBXProject "RCTYouTube" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = 8BDB9BC01B4289AE00EF9FEF;
+			productRefGroup = 8BDB9BCA1B4289AE00EF9FEF /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				8BDB9BC81B4289AE00EF9FEF /* RCTYouTube */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXSourcesBuildPhase section */
+		8BDB9BC51B4289AE00EF9FEF /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8B26A91C1B428AA2000C2690 /* RCTYouTubeManager.m in Sources */,
+				8B26A9141B428A53000C2690 /* YTPlayerView.m in Sources */,
+				8B26A91B1B428AA2000C2690 /* RCTYouTube.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		8BDB9BDB1B4289AE00EF9FEF /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
+					"$(SRCROOT)/node_modules/react-native/React/**",
+					"$(SRCROOT)/Example/node_modules/react-native/React/**",
+				);
+				IPHONEOS_DEPLOYMENT_TARGET = 8.3;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+			};
+			name = Debug;
+		};
+		8BDB9BDC1B4289AE00EF9FEF /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
+					"$(SRCROOT)/node_modules/react-native/React/**",
+					"$(SRCROOT)/Example/node_modules/react-native/React/**",
+				);
+				IPHONEOS_DEPLOYMENT_TARGET = 8.3;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = iphoneos;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		8BDB9BDE1B4289AE00EF9FEF /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+			};
+			name = Debug;
+		};
+		8BDB9BDF1B4289AE00EF9FEF /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		8BDB9BC41B4289AE00EF9FEF /* Build configuration list for PBXProject "RCTYouTube" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				8BDB9BDB1B4289AE00EF9FEF /* Debug */,
+				8BDB9BDC1B4289AE00EF9FEF /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		8BDB9BDD1B4289AE00EF9FEF /* Build configuration list for PBXNativeTarget "RCTYouTube" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				8BDB9BDE1B4289AE00EF9FEF /* Debug */,
+				8BDB9BDF1B4289AE00EF9FEF /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 8BDB9BC11B4289AE00EF9FEF /* Project object */;
+}
