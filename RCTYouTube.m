@@ -201,7 +201,7 @@ NSString *const RNYouTubeEventError = @"youTubeError";
             playerError = @"html5_error";
             break;
         case kYTPlayerErrorVideoNotFound:
-            playerError = @"video_not)found";
+            playerError = @"video_not_found";
             break;
         case kYTPlayerErrorNotEmbeddable:
             playerError = @"not_embeddable";
