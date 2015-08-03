@@ -34,7 +34,7 @@ RCT_EXPORT_MODULE();
                      @"registrationName": @"onChangeQuality"
                      },
              RNYouTubeEventError: @{
-                     @"registrationName": @"onError"
+                     @"registrationName": @"onYoutubeVideoError"
                      },
              };
 }

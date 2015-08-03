@@ -74,13 +74,13 @@ var YouTube = React.createClass({
 
   render() {
     var style = flattenStyle([styles.base, this.props.style]);
-    
+
     var nativeProps = merge(this.props, {
       style,
       onReady: this._onReady,
       onChangeState: this._onChangeState,
       onChangeQuality: this._onChangeQuality,
-      onError: this._onError,
+      onYoutubeVideoError: this._onError,
     });
 
     return <RCTYouTube {... nativeProps} />;
