@@ -77,9 +77,9 @@ var YouTube = React.createClass({
 
     var nativeProps = merge(this.props, {
       style,
-      onReady: this._onReady,
-      onChangeState: this._onChangeState,
-      onChangeQuality: this._onChangeQuality,
+      onYoutubeVideoReady: this._onReady,
+      onYoutubeVideoChangeState: this._onChangeState,
+      onYoutubeVideoChangeQuality: this._onChangeQuality,
       onYoutubeVideoError: this._onError,
     });
 

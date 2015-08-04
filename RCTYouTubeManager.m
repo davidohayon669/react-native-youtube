@@ -25,13 +25,13 @@ RCT_EXPORT_MODULE();
 {
     return @{
              RNYouTubeEventReady: @{
-                     @"registrationName": @"onReady"
+                     @"registrationName": @"onYoutubeVideoReady"
                      },
              RNYouTubeEventChangeState: @{
-                     @"registrationName": @"onChangeState"
+                     @"registrationName": @"onYoutubeVideoChangeState"
                      },
              RNYouTubeEventChangeQuality: @{
-                     @"registrationName": @"onChangeQuality"
+                     @"registrationName": @"onYoutubeVideoChangeQuality"
                      },
              RNYouTubeEventError: @{
                      @"registrationName": @"onYoutubeVideoError"
