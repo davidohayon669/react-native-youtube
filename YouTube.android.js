@@ -1,3 +1,8 @@
+/**
+ * @providesModule YouTube
+ * @flow
+ */
+
 'use strict';
 
 var warning = require('warning');

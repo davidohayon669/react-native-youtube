@@ -1,39 +1,33 @@
+/**
+ * @providesModule YouTube
+ * @flow
+ */
+
+'use strict';
+
 var React = require('react-native');
-var NativeModules = require('NativeModules');
 var ReactIOSViewAttributes = require('ReactNativeViewAttributes');
-var StyleSheet = require('StyleSheet');
 var PropTypes = require('ReactPropTypes');
-var StyleSheetPropType = require('StyleSheetPropType');
-// var VideoResizeMode = require('./VideoResizeMode');
+var styleSheetPropType = require('StyleSheetPropType');
 var ViewStylePropTypes = require('ViewStylePropTypes');
 var NativeMethodsMixin = require('NativeMethodsMixin');
 var flattenStyle = require('flattenStyle');
 var merge = require('merge');
-var deepDiffer = require('deepDiffer');
-// var keyMirror = require('keyMirror');
-var { requireNativeComponent, } = require('react-native');
-
-// var YouTubeState = keyMirror({
-//   contain: null,
-//   cover: null,
-//   stretch: null,
-// });
-
-// var YouTubeQuality = keyMirror({
-//   contain: null,
-//   cover: null,
-//   stretch: null,
-// });
-
-// var YouTubeError = keyMirror({
-//   contain: null,
-//   cover: null,
-//   stretch: null,
-// });
+var {
+  StyleSheet,
+  requireNativeComponent,
+  NativeModules,
+} = require('react-native');
 
 var YouTube = React.createClass({
+  getInitialState: function () {
+    this._exportedProps = NativeModules.YouTubeManager && NativeModules.YouTubeManager.exportedProps;
+
+    return {};
+  },
+
   propTypes: {
-    style: StyleSheetPropType(ViewStylePropTypes),
+    style: styleSheetPropType(ViewStylePropTypes),
     videoId: PropTypes.string.isRequired,
     playsInline: PropTypes.bool,
     play: PropTypes.bool,
@@ -48,28 +42,23 @@ var YouTube = React.createClass({
 
   viewConfig: {
     uiViewClassName: 'UIView',
-    validAttributes: ReactIOSViewAttributes.UIView
+    validAttributes: ReactIOSViewAttributes.UIView,
   },
 
-  _onReady(event) {
-    this.props.onReady && this.props.onReady(event.nativeEvent);
+  _onReady: function (event) {
+    return this.props.onReady && this.props.onReady(event.nativeEvent);
   },
 
-  _onChangeState(event) {
-    this.props.onChangeState && this.props.onChangeState(event.nativeEvent);
+  _onChangeState: function (event) {
+    return this.props.onChangeState && this.props.onChangeState(event.nativeEvent);
   },
 
-  _onChangeQuality(event) {
-    this.props.onChangeQuality && this.props.onChangeQuality(event.nativeEvent);
+  _onChangeQuality: function (event) {
+    return this.props.onChangeQuality && this.props.onChangeQuality(event.nativeEvent);
   },
 
-  _onError(event) {
-    this.props.onError && this.props.onError(event.nativeEvent);
-  },
-
-
-  seek(time) {
-    this.setNativeProps({seek: parseFloat(time)});
+  _onError: function (event) {
+    return this.props.onError && this.props.onError(event.nativeEvent);
   },
 
   render() {
@@ -82,6 +71,34 @@ var YouTube = React.createClass({
       onYoutubeVideoChangeQuality: this._onChangeQuality,
       onYoutubeVideoError: this._onError,
     });
+
+    /*
+     * Try to use `playerParams` instead of settings `playsInline` and 
+     * `videoId` individually.
+     */
+    if (this._exportedProps) {
+      if (this._exportedProps.playerParams) {
+        nativeProps.playerParams = {
+          videoId: this.props.videoId,
+        };
+        delete nativeProps.videoId;
+
+        if (this.props.playsInline) {
+          nativeProps.playerParams.playerVars = {
+            playsinline: 1
+          };
+
+          delete nativeProps.playsInline;
+        };
+      };
+    } else {
+      /*
+       * For compatibility issues with an older version where setting both 
+       * `playsInline` and `videoId` in quick succession would cause the video
+       * to sometimes not play.
+       */
+      delete nativeProps.playsInline;
+    }
 
     return <RCTYouTube {... nativeProps} />;
   },

@@ -24,19 +24,19 @@ RCT_EXPORT_MODULE();
 - (NSDictionary *)customDirectEventTypes
 {
     return @{
-             RNYouTubeEventReady: @{
-                     @"registrationName": @"onYoutubeVideoReady"
-                     },
-             RNYouTubeEventChangeState: @{
-                     @"registrationName": @"onYoutubeVideoChangeState"
-                     },
-             RNYouTubeEventChangeQuality: @{
-                     @"registrationName": @"onYoutubeVideoChangeQuality"
-                     },
-             RNYouTubeEventError: @{
-                     @"registrationName": @"onYoutubeVideoError"
-                     },
-             };
+        RNYouTubeEventReady: @{
+            @"registrationName": @"onYoutubeVideoReady"
+        },
+        RNYouTubeEventChangeState: @{
+            @"registrationName": @"onYoutubeVideoChangeState"
+         },
+        RNYouTubeEventChangeQuality: @{
+            @"registrationName": @"onYoutubeVideoChangeQuality"
+        },
+        RNYouTubeEventError: @{
+            @"registrationName": @"onYoutubeVideoError"
+        },
+    };
 }
 
 - (dispatch_queue_t)methodQueue
@@ -44,10 +44,22 @@ RCT_EXPORT_MODULE();
     return dispatch_get_main_queue();
 }
 
+- (NSDictionary *)constantsToExport {
+    return @{
+             @"exportedProps": @{
+                 @"videoId": @YES,
+                 @"play": @YES,
+                 @"hidden": @YES,
+                 @"playsInline": @YES,
+                 @"playerParams": @YES
+             }
+            };
+}
 
 RCT_EXPORT_VIEW_PROPERTY(videoId, NSString);
 RCT_EXPORT_VIEW_PROPERTY(play, BOOL);
 RCT_EXPORT_VIEW_PROPERTY(hidden, BOOL);
 RCT_EXPORT_VIEW_PROPERTY(playsInline, BOOL);
+RCT_EXPORT_VIEW_PROPERTY(playerParams, NSDictionary);
 
 @end

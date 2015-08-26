@@ -20,6 +20,7 @@ NSString *const RNYouTubeEventError = @"youTubeError";
 {
     NSString *_videoId;
     BOOL _playsInline;
+    NSDictionary *_playerParams;
     BOOL _isPlaying;
     
     /* Check to see if commands can
@@ -90,10 +91,15 @@ NSString *const RNYouTubeEventError = @"youTubeError";
     } else if (_playsInline) {
         [self loadWithVideoId:videoId playerVars:@{@"playsinline": @1}];
     } else {
-        [self loadWithVideoId:videoId];
+        // will get set when playsInline is set
     }
     
     _videoId = videoId;
+}
+
+- (void)setPlayerParams:(NSDictionary *)playerParams {
+    _playerParams = playerParams;
+    [self loadWithPlayerParams:playerParams];
 }
 
 #pragma mark - YTPlayer delegate methods
