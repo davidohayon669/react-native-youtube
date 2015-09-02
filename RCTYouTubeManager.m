@@ -21,22 +21,14 @@ RCT_EXPORT_MODULE();
     return [[RCTYouTube alloc] initWithEventDispatcher:self.bridge.eventDispatcher];
 }
 
-- (NSDictionary *)customDirectEventTypes
+- (NSArray *)customDirectEventTypes
 {
-    return @{
-        RNYouTubeEventReady: @{
-            @"registrationName": @"onYoutubeVideoReady"
-        },
-        RNYouTubeEventChangeState: @{
-            @"registrationName": @"onYoutubeVideoChangeState"
-         },
-        RNYouTubeEventChangeQuality: @{
-            @"registrationName": @"onYoutubeVideoChangeQuality"
-        },
-        RNYouTubeEventError: @{
-            @"registrationName": @"onYoutubeVideoError"
-        },
-    };
+    return @[
+             @"ready",
+             @"changeState",
+             @"changeQuality",
+             @"error"
+             ];
 }
 
 - (dispatch_queue_t)methodQueue
