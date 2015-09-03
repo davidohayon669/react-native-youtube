@@ -11,11 +11,6 @@
 #import "RCTEventDispatcher.h"
 #import "UIView+React.h"
 
-NSString *const RNYouTubeEventReady = @"youTubeReady";
-NSString *const RNYouTubeEventChangeState = @"youTubeChangeState";
-NSString *const RNYouTubeEventChangeQuality = @"youTubeChangeQuality";
-NSString *const RNYouTubeEventError = @"youTubeError";
-
 @implementation RCTYouTube
 {
     NSString *_videoId;
