@@ -24,10 +24,10 @@ RCT_EXPORT_MODULE();
 - (NSArray *)customDirectEventTypes
 {
     return @[
-        "youtubeVideoReady",
-        "youtubeVideoChangeState",
-        "youtubeVideoChangeQuality",
-        "youtubeVideoError"
+        @"youtubeVideoReady",
+        @"youtubeVideoChangeState",
+        @"youtubeVideoChangeQuality",
+        @"youtubeVideoError"
      ];
 }
 
