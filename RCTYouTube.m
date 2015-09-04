@@ -106,7 +106,7 @@
     }
     _isReady = YES;
 
-    [_eventDispatcher sendInputEventWithName:RNYouTubeEventReady
+    [_eventDispatcher sendInputEventWithName:@"youtubeVideoReady"
                                         body:@{
                                                @"target": self.reactTag
                                                }];
@@ -141,7 +141,7 @@
             break;
     }
     
-    [_eventDispatcher sendInputEventWithName:RNYouTubeEventChangeState
+    [_eventDispatcher sendInputEventWithName:@"youtubeVideoChangeState"
                                         body:@{
                                                @"state": playerState,
                                                @"target": self.reactTag
@@ -184,7 +184,7 @@
             break;
     }
 
-    [_eventDispatcher sendInputEventWithName:RNYouTubeEventChangeQuality
+    [_eventDispatcher sendInputEventWithName:@"youtubeVideoChangeQuality"
                                         body:@{
                                                @"quality": playerQuality,
                                                @"target": self.reactTag
@@ -214,7 +214,7 @@
             break;
     }
     
-    [_eventDispatcher sendInputEventWithName:RNYouTubeEventError
+    [_eventDispatcher sendInputEventWithName:@"youtubeVideoError"
                                         body:@{
                                                @"error": playerError,
                                                @"target": self.reactTag
