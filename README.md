@@ -15,12 +15,12 @@ Uses Google's official [youtube-ios-player-helper](https://github.com/youtube/yo
   play={true}           // control playback of video with true/false
   hidden={false}        // control visiblity of the entire view
   playsInline={true}    // control whether the video should play inline
-  
+
   onReady={(e)=>{this.setState({isReady: true})}}
   onChangeState={(e)=>{this.setState({status: e.state})}}
   onChangeQuality={(e)=>{this.setState({quality: e.quality})}}
   onError={(e)=>{this.setState({error: e.error})}}
-  
+
   style={{alignSelf: 'stretch', height: 300, backgroundColor: 'black', marginVertical: 10}}
 />
 ```
@@ -31,6 +31,9 @@ Uses Google's official [youtube-ios-player-helper](https://github.com/youtube/yo
 * `play`: Controls playback of video with `true`/`false`. Setting it as `true` in the beginning itself makes the video autoplay on loading.
 * `hidden`: Controls the `view.hidden` native property. For example, use this to hide player while it loads.
 * `playsInline`: Controls whether the video should play inline, or in full screen.
+* `modestbranding`: This parameter lets you use a YouTube player that does not show a YouTube logo. Default `false`.
+* `controls`: This parameter indicates whether the video player controls are displayed. Supported values are `0`, `1`, `2`. Default `1`. [More information](https://developers.google.com/youtube/player_parameters?hl=en#controls)
+* `showinfo`: Setting the parameter's value to false causes the player to not display information like the video title and uploader before the video starts playing. Default `true`.
 
 ## Events
 
