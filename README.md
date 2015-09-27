@@ -27,7 +27,7 @@ Uses Google's official [youtube-ios-player-helper](https://github.com/youtube/yo
 />
 ```
 ```javascript
-youtubePlayer.seekTo(20);
+this.refs.youtubePlayer.seekTo(20);
 ```
 
 ## Properties
