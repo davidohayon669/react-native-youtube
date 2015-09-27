@@ -60,6 +60,9 @@ var YouTube = React.createClass({
   _onError: function (event) {
     return this.props.onError && this.props.onError(event.nativeEvent);
   },
+  _onProgress:function(event){
+      return this.props.onProgress && this.props.onProgress(event.nativeEvent);
+  },
 
   render() {
     var style = flattenStyle([styles.base, this.props.style]);
@@ -70,10 +73,11 @@ var YouTube = React.createClass({
       onYoutubeVideoChangeState: this._onChangeState,
       onYoutubeVideoChangeQuality: this._onChangeQuality,
       onYoutubeVideoError: this._onError,
+      onYoutubeProgress:this._onProgress
     });
 
     /*
-     * Try to use `playerParams` instead of settings `playsInline` and 
+     * Try to use `playerParams` instead of settings `playsInline` and
      * `videoId` individually.
      */
     if (this._exportedProps) {

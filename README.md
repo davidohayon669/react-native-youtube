@@ -38,6 +38,7 @@ Uses Google's official [youtube-ios-player-helper](https://github.com/youtube/yo
 * `onChangeState`: Sends the current state of the player on `e.state`. Common values are `buffering`/`playing`/`paused` and more.
 * `onChangeQuality`: Sends the current quality of video playback on `e.quality`.
 * `onError`: Sends any errors during video playback on `e.error`.
+* `onProgress`: Sends any time progress made on `e.currentTime` and `e.duration`.
 
 ### Installation
 
