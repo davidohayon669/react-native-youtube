@@ -9,6 +9,8 @@
 #import "RCTYouTubeManager.h"
 #import "RCTYouTube.h"
 #import "RCTBridge.h"
+#import "RCTUIManager.h"
+#import "RCTSparseArray.h"
 
 @implementation RCTYouTubeManager
 
@@ -34,7 +36,7 @@ RCT_EXPORT_MODULE();
 
 - (dispatch_queue_t)methodQueue
 {
-    return dispatch_get_main_queue();
+    return _bridge.uiManager.methodQueue;
 }
 
 - (NSDictionary *)constantsToExport {
@@ -54,5 +56,19 @@ RCT_EXPORT_VIEW_PROPERTY(play, BOOL);
 RCT_EXPORT_VIEW_PROPERTY(hidden, BOOL);
 RCT_EXPORT_VIEW_PROPERTY(playsInline, BOOL);
 RCT_EXPORT_VIEW_PROPERTY(playerParams, NSDictionary);
+
+RCT_EXPORT_METHOD(seekTo:(nonnull NSNumber *)reactTag seconds:(nonnull NSNumber *)seconds)
+{
+    [self.bridge.uiManager addUIBlock:
+     ^(__unused RCTUIManager *uiManager, RCTSparseArray *viewRegistry){
+         RCTYouTube *youtube = viewRegistry[reactTag];
+         if ([youtube isKindOfClass:[RCTYouTube class]]) {
+             [youtube seekToSeconds:seconds.floatValue allowSeekAhead:@YES];
+         } else {
+             RCTLogError(@"Cannot seek: %@ (tag #%@) is not RCTYouTube", youtube, reactTag);
+         }
+     }];
+}
+
 
 @end

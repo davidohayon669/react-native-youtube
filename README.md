@@ -11,6 +11,7 @@ Uses Google's official [youtube-ios-player-helper](https://github.com/youtube/yo
 
 ```javascript
 <YouTube
+  ref="youtubePlayer"
   videoId="KVZ-P-ZI6W4" // The YouTube video ID
   play={true}           // control playback of video with true/false
   hidden={false}        // control visiblity of the entire view
@@ -20,9 +21,13 @@ Uses Google's official [youtube-ios-player-helper](https://github.com/youtube/yo
   onChangeState={(e)=>{this.setState({status: e.state})}}
   onChangeQuality={(e)=>{this.setState({quality: e.quality})}}
   onError={(e)=>{this.setState({error: e.error})}}
+  onProgress={(e)=>{this.setState({currentTime: e.currentTime, duration: e.duration})}}
 
   style={{alignSelf: 'stretch', height: 300, backgroundColor: 'black', marginVertical: 10}}
 />
+```
+```javascript
+youtubePlayer.seekTo(20);
 ```
 
 ## Properties
@@ -42,6 +47,10 @@ Uses Google's official [youtube-ios-player-helper](https://github.com/youtube/yo
 * `onChangeQuality`: Sends the current quality of video playback on `e.quality`.
 * `onError`: Sends any errors during video playback on `e.error`.
 * `onProgress`: Sends any time progress made on `e.currentTime` and `e.duration`.
+
+## Methods
+
+* `seekTo(seconds)`: Seeks to a specified time in the video
 
 ### Installation
 
