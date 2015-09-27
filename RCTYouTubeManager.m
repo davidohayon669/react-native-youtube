@@ -27,7 +27,8 @@ RCT_EXPORT_MODULE();
         @"youtubeVideoReady",
         @"youtubeVideoChangeState",
         @"youtubeVideoChangeQuality",
-        @"youtubeVideoError"
+        @"youtubeVideoError",
+        @"youtubeProgress"
      ];
 }
 

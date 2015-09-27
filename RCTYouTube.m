@@ -191,8 +191,19 @@
                                                }];
 }
 
+- (void)playerView:(YTPlayerView *)playerView didPlayTime:(float)currentTime {
+
+    [_eventDispatcher sendInputEventWithName:@"youtubeProgress"
+                                        body:@{
+                                               @"currentTime": @(currentTime),
+                                               @"duration": @(self.duration),
+                                               @"target": self.reactTag
+                                               }];
+
+}
+
 - (void)playerView:(YTPlayerView *)playerView receivedError:(YTPlayerError)error {
-    
+
     NSString *playerError;
     switch (error) {
         case kYTPlayerErrorInvalidParam:
