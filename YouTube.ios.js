@@ -6,18 +6,14 @@
 'use strict';
 
 var React = require('react-native');
-var ReactIOSViewAttributes = require('ReactNativeViewAttributes');
-var PropTypes = require('ReactPropTypes');
-var styleSheetPropType = require('StyleSheetPropType');
-var ViewStylePropTypes = require('ViewStylePropTypes');
-var NativeMethodsMixin = require('NativeMethodsMixin');
-var flattenStyle = require('flattenStyle');
-var merge = require('merge');
 var {
+  View,
   StyleSheet,
   requireNativeComponent,
   NativeModules,
-} = require('react-native');
+  NativeMethodsMixin,
+  PropTypes
+} = React;
 
 var YouTube = React.createClass({
   getInitialState: function () {
@@ -27,7 +23,7 @@ var YouTube = React.createClass({
   },
 
   propTypes: {
-    style: styleSheetPropType(ViewStylePropTypes),
+    style: View.propTypes.style,
     videoId: PropTypes.string.isRequired,
     playsInline: PropTypes.bool,
     showinfo: PropTypes.bool,
@@ -42,11 +38,6 @@ var YouTube = React.createClass({
   },
 
   mixins: [NativeMethodsMixin],
-
-  viewConfig: {
-    uiViewClassName: 'UIView',
-    validAttributes: ReactIOSViewAttributes.UIView,
-  },
 
   _onReady: function (event) {
     return this.props.onReady && this.props.onReady(event.nativeEvent);
@@ -68,16 +59,14 @@ var YouTube = React.createClass({
   },
 
   render() {
-    var style = flattenStyle([styles.base, this.props.style]);
-
-    var nativeProps = merge(this.props, {
-      style,
-      onYoutubeVideoReady: this._onReady,
-      onYoutubeVideoChangeState: this._onChangeState,
-      onYoutubeVideoChangeQuality: this._onChangeQuality,
-      onYoutubeVideoError: this._onError,
-      onYoutubeProgress:this._onProgress
-    });
+    var style = [styles.base, this.props.style];
+    var nativeProps = Object.assign({}, this.props);
+    nativeProps.style = style;
+    nativeProps.onYoutubeVideoReady = this._onReady;
+    nativeProps.onYoutubeVideoChangeState = this._onChangeState;
+    nativeProps.onYoutubeVideoChangeQuality = this._onChangeQuality;
+    nativeProps.onYoutubeVideoError = this._onError;
+    nativeProps.onYoutubeProgress = this._onProgress;
 
     /*
      * Try to use `playerParams` instead of settings `playsInline` and
