@@ -33,6 +33,7 @@ var YouTube = React.createClass({
     showinfo: PropTypes.bool,
     modestbranding: PropTypes.bool,
     controls: PropTypes.oneOf([0,1,2]),
+    origin: PropTypes.string,
     play: PropTypes.bool,
     hidden: PropTypes.bool,
     onReady: PropTypes.func,
@@ -108,6 +109,10 @@ var YouTube = React.createClass({
         if (this.props.controls!==undefined) {
           nativeProps.playerParams.playerVars.controls = this.props.controls;
           delete nativeProps.controls;
+        };
+        if (this.props.origin!==undefined) {
+          nativeProps.playerParams.playerVars.origin = this.props.origin;
+          delete nativeProps.origin;
         };
       };
     } else {
