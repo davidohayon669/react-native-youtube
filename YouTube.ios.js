@@ -55,10 +55,12 @@ var YouTube = React.createClass({
   _onError: function (event) {
     return this.props.onError && this.props.onError(event.nativeEvent);
   },
-  _onProgress:function(event){
+  _onProgress: function(event){
       return this.props.onProgress && this.props.onProgress(event.nativeEvent);
   },
-
+  seekTo: function(seconds){
+    NativeModules.YouTubeManager.seekTo(React.findNodeHandle(this), parseInt(seconds, 10));
+  },
   render() {
     var style = [styles.base, this.props.style];
     var nativeProps = Object.assign({}, this.props);
