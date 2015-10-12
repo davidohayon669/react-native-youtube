@@ -34,6 +34,7 @@ Uses Google's official [youtube-ios-player-helper](https://github.com/youtube/yo
 * `modestbranding`: This parameter lets you use a YouTube player that does not show a YouTube logo. Default `false`.
 * `controls`: This parameter indicates whether the video player controls are displayed. Supported values are `0`, `1`, `2`. Default `1`. [More information](https://developers.google.com/youtube/player_parameters?hl=en#controls)
 * `showinfo`: Setting the parameter's value to false causes the player to not display information like the video title and uploader before the video starts playing. Default `true`.
+* `origin`: This parameter provides an extra security measure for the IFrame API.
 
 ## Events
 
