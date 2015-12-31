@@ -10,7 +10,8 @@
 #import "RCTYouTube.h"
 #import "RCTBridge.h"
 #import "RCTUIManager.h"
-#import "RCTSparseArray.h"
+#import "RCTWebView.h"
+#import "UIView+React.h"
 
 @implementation RCTYouTubeManager
 
@@ -59,8 +60,7 @@ RCT_EXPORT_VIEW_PROPERTY(playerParams, NSDictionary);
 
 RCT_EXPORT_METHOD(seekTo:(nonnull NSNumber *)reactTag seconds:(nonnull NSNumber *)seconds)
 {
-    [self.bridge.uiManager addUIBlock:
-     ^(__unused RCTUIManager *uiManager, RCTSparseArray *viewRegistry){
+  [self.bridge.uiManager addUIBlock:^(__unused RCTUIManager *uiManager, NSDictionary<NSNumber *, UIView *> *viewRegistry) {
          RCTYouTube *youtube = viewRegistry[reactTag];
          if ([youtube isKindOfClass:[RCTYouTube class]]) {
              [youtube seekToSeconds:seconds.floatValue allowSeekAhead:@YES];
