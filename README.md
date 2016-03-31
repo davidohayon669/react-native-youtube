@@ -36,6 +36,8 @@ this.refs.youtubePlayer.seekTo(20);
 * `play`: Controls playback of video with `true`/`false`. Setting it as `true` in the beginning itself makes the video autoplay on loading.
 * `hidden`: Controls the `view.hidden` native property. For example, use this to hide player while it loads.
 * `playsInline`: Controls whether the video should play inline, or in full screen.
+* `rel`: Hides related videos at the end of the video. Default `false`.
+* `loop`: Loops the video. Default `false`.
 * `modestbranding`: This parameter lets you use a YouTube player that does not show a YouTube logo. Default `false`.
 * `controls`: This parameter indicates whether the video player controls are displayed. Supported values are `0`, `1`, `2`. Default `1`. [More information](https://developers.google.com/youtube/player_parameters?hl=en#controls)
 * `showinfo`: Setting the parameter's value to false causes the player to not display information like the video title and uploader before the video starts playing. Default `true`.
