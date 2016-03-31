@@ -107,12 +107,12 @@ var YouTube = React.createClass({
           nativeProps.playerParams.playerVars.origin = this.props.origin;
           delete nativeProps.origin;
         };
-        if (this.props.rel) {
-          nativeProps.playerParams.playerVars.rel = 1;
+        if (this.props.rel!==undefined) {
+          nativeProps.playerParams.playerVars.rel = this.props.rel ? 1 : 0;
           delete nativeProps.rel;
         };
-        if (this.props.loop) {
-          nativeProps.playerParams.playerVars.loop = 1;
+        if (this.props.loop!==undefined) {
+          nativeProps.playerParams.playerVars.loop = this.props.loop ? 1 : 0;
           delete nativeProps.loop;
         };
       };
