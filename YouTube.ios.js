@@ -26,6 +26,8 @@ var YouTube = React.createClass({
     style: View.propTypes.style,
     videoId: PropTypes.string.isRequired,
     playsInline: PropTypes.bool,
+    loop: PropTypes.bool,
+    rel: PropTypes.bool,
     showinfo: PropTypes.bool,
     modestbranding: PropTypes.bool,
     controls: PropTypes.oneOf([0,1,2]),
@@ -104,6 +106,15 @@ var YouTube = React.createClass({
         if (this.props.origin!==undefined) {
           nativeProps.playerParams.playerVars.origin = this.props.origin;
           delete nativeProps.origin;
+        };
+        if (this.props.rel!==undefined) {
+          nativeProps.playerParams.playerVars.rel = this.props.rel ? 1 : 0;
+          delete nativeProps.rel;
+        };
+        if (this.props.loop!==undefined) {
+          nativeProps.playerParams.playerVars.loop = this.props.loop ? 1 : 0;
+          if(this.props.loop) nativeProps.playerParams.playerVars.playlist = this.props.videoId;
+          delete nativeProps.loop;
         };
       };
     } else {
