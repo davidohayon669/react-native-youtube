@@ -5,8 +5,8 @@
 
 'use strict';
 
-import React, { Component, PropTypes } from 'react';
-import {
+import { Component, PropTypes } from 'react';
+import ReactNative, {
   View,
   StyleSheet,
   requireNativeComponent,
@@ -57,7 +57,7 @@ export default class YouTube extends Component {
       return this.props.onProgress && this.props.onProgress(event.nativeEvent);
   }
   seekTo(seconds){
-    NativeModules.YouTubeManager.seekTo(React.findNodeHandle(this), parseInt(seconds, 10));
+    NativeModules.YouTubeManager.seekTo(ReactNative.findNodeHandle(this), parseInt(seconds, 10));
   }
   render() {
     var style = [styles.base, this.props.style];
