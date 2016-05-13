@@ -5,29 +5,22 @@
 
 'use strict';
 
-var React = require('react-native');
-var {
+import { Component, PropTypes } from 'react';
+import ReactNative, {
   View,
   StyleSheet,
   requireNativeComponent,
   NativeModules,
-  NativeMethodsMixin,
-  PropTypes
-} = React;
+  NativeMethodsMixin
+} from 'react-native';
 
-var YouTube = React.createClass({
-  getInitialState: function () {
-    this._exportedProps = NativeModules.YouTubeManager && NativeModules.YouTubeManager.exportedProps;
+const RCTYouTube = requireNativeComponent('RCTYouTube', null);
 
-    return {};
-  },
-
-  propTypes: {
+export default class YouTube extends Component {
+  static propTypes = {
     style: View.propTypes.style,
     videoId: PropTypes.string.isRequired,
     playsInline: PropTypes.bool,
-    loop: PropTypes.bool,
-    rel: PropTypes.bool,
     showinfo: PropTypes.bool,
     modestbranding: PropTypes.bool,
     controls: PropTypes.oneOf([0,1,2]),
@@ -38,40 +31,43 @@ var YouTube = React.createClass({
     onChangeState: PropTypes.func,
     onChangeQuality: PropTypes.func,
     onError: PropTypes.func,
-  },
+  };
 
-  mixins: [NativeMethodsMixin],
+  constructor(props) {
+    super(props);
+    this._exportedProps = NativeModules.YouTubeManager && NativeModules.YouTubeManager.exportedProps;
+  }
 
-  _onReady: function (event) {
+  _onReady(event) {
     return this.props.onReady && this.props.onReady(event.nativeEvent);
-  },
+  }
 
-  _onChangeState: function (event) {
+  _onChangeState(event) {
     return this.props.onChangeState && this.props.onChangeState(event.nativeEvent);
-  },
+  }
 
-  _onChangeQuality: function (event) {
+  _onChangeQuality(event) {
     return this.props.onChangeQuality && this.props.onChangeQuality(event.nativeEvent);
-  },
+  }
 
-  _onError: function (event) {
+  _onError(event) {
     return this.props.onError && this.props.onError(event.nativeEvent);
-  },
-  _onProgress: function(event){
+  }
+  _onProgress(event){
       return this.props.onProgress && this.props.onProgress(event.nativeEvent);
-  },
-  seekTo: function(seconds){
-    NativeModules.YouTubeManager.seekTo(React.findNodeHandle(this), parseInt(seconds, 10));
-  },
+  }
+  seekTo(seconds){
+    NativeModules.YouTubeManager.seekTo(ReactNative.findNodeHandle(this), parseInt(seconds, 10));
+  }
   render() {
     var style = [styles.base, this.props.style];
     var nativeProps = Object.assign({}, this.props);
     nativeProps.style = style;
-    nativeProps.onYoutubeVideoReady = this._onReady;
-    nativeProps.onYoutubeVideoChangeState = this._onChangeState;
-    nativeProps.onYoutubeVideoChangeQuality = this._onChangeQuality;
-    nativeProps.onYoutubeVideoError = this._onError;
-    nativeProps.onYoutubeProgress = this._onProgress;
+    nativeProps.onYoutubeVideoReady = this._onReady.bind(this);
+    nativeProps.onYoutubeVideoChangeState = this._onChangeState.bind(this);
+    nativeProps.onYoutubeVideoChangeQuality = this._onChangeQuality.bind(this);
+    nativeProps.onYoutubeVideoError = this._onError.bind(this);
+    nativeProps.onYoutubeProgress = this._onProgress.bind(this);
 
     /*
      * Try to use `playerParams` instead of settings `playsInline` and
@@ -107,15 +103,6 @@ var YouTube = React.createClass({
           nativeProps.playerParams.playerVars.origin = this.props.origin;
           delete nativeProps.origin;
         };
-        if (this.props.rel!==undefined) {
-          nativeProps.playerParams.playerVars.rel = this.props.rel ? 1 : 0;
-          delete nativeProps.rel;
-        };
-        if (this.props.loop!==undefined) {
-          nativeProps.playerParams.playerVars.loop = this.props.loop ? 1 : 0;
-          if(this.props.loop) nativeProps.playerParams.playerVars.playlist = this.props.videoId;
-          delete nativeProps.loop;
-        };
       };
     } else {
       /*
@@ -127,15 +114,11 @@ var YouTube = React.createClass({
     }
 
     return <RCTYouTube {... nativeProps} />;
-  },
-});
+  }
+}
 
-var RCTYouTube = requireNativeComponent('RCTYouTube', null);
-
-var styles = StyleSheet.create({
+const styles = StyleSheet.create({
   base: {
     overflow: 'hidden',
   },
 });
-
-module.exports = YouTube;
