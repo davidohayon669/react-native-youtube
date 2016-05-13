@@ -59,15 +59,8 @@ this.refs.youtubePlayer.seekTo(20);
 
 (requires react-native >= 0.6.0)
 
-1. Run `npm install react-native-youtube --save`
-2. Open your project in Xcode, right click on `Libraries` and click `Add Files to "Your Project Name"`:
-   * ![Screenshot](http://i.imgur.com/pOdaLFF.png)
-3. Select `RCTYouTube.xcodeproj` from the `node_modules/react-native-youtube` folder in Finder.
-4. Add `libRCTYouTube.a` to `Build Phases -> Link Binary With Libraries`:
-   ![(Screenshot)](http://i.imgur.com/iuvEhan.png).
-5. Add `YTPlayerView-iframe-player.html` asset file to project and to `Build Phases -> Copy Bundle Resources`
-6. Whenever you want to use it within React code now you can: `var YouTube =
-   require('react-native-youtube');`
+`$ rnpm install react-native-youtube`
+
 
 ## Example
 Try the included `RCTYouTubeExample`:
