@@ -1,4 +1,4 @@
-# react-native-youtube
+# react-native-youtube [![react-native-youtube](http://img.shields.io/npm/dm/react-native-youtube.svg)](https://www.npmjs.org/package/react-native-youtube) [![npm version](https://badge.fury.io/js/react-native-youtube.svg)](http://badge.fury.io/js/react-native-youtube) [![Dependency Status](https://david-dm.org/inProgress-team/react-native-youtube.svg)](https://david-dm.org/inProgress-team/react-native-youtube)
 A `<YouTube/>` component for React Native.
 
 Uses Google's official [youtube-ios-player-helper](https://github.com/youtube/youtube-ios-player-helper) and exposes much of the API into React Native.
