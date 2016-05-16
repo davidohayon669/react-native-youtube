@@ -16,6 +16,7 @@ Uses Google's official [youtube-ios-player-helper](https://github.com/youtube/yo
   play={true}           // control playback of video with true/false
   hidden={false}        // control visiblity of the entire view
   playsInline={true}    // control whether the video should play inline
+  loop={false}          // control whether the video should loop when ended
 
   onReady={(e)=>{this.setState({isReady: true})}}
   onChangeState={(e)=>{this.setState({status: e.state})}}
@@ -74,7 +75,8 @@ open RCTYouTubeExample.xcodeproj
 Then `Cmd+R` to start the React Packager, build and run the project in the simulator.
 
 ## Author
-Param Aggarwal (paramaggarwal@gmail.com)
+* Param Aggarwal (paramaggarwal@gmail.com)
+* Ownership has been transfered to inProgress-team
 
 ## License
 MIT License

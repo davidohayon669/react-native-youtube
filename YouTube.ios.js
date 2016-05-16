@@ -5,7 +5,7 @@
 
 'use strict';
 
-import { Component, PropTypes } from 'react';
+import React, { Component, PropTypes } from 'react';
 import ReactNative, {
   View,
   StyleSheet,
@@ -31,6 +31,11 @@ export default class YouTube extends Component {
     onChangeState: PropTypes.func,
     onChangeQuality: PropTypes.func,
     onError: PropTypes.func,
+    loop: PropTypes.bool,
+  };
+
+  static defaultProps = {
+    loop: false
   };
 
   constructor(props) {
@@ -43,6 +48,9 @@ export default class YouTube extends Component {
   }
 
   _onChangeState(event) {
+    if(event.nativeEvent.state == 'ended' && this.props.loop) {
+      this.seekTo(0);
+    }
     return this.props.onChangeState && this.props.onChangeState(event.nativeEvent);
   }
 
