@@ -62,6 +62,8 @@ this.refs.youtubePlayer.seekTo(20);
 
 `$ rnpm install react-native-youtube`
 
+`$ add YTPlayerView-iframe-player.html from Assets to your xcode project`
+
 
 ## Example
 Try the included `RCTYouTubeExample`:

@@ -26,6 +26,7 @@ export default class YouTube extends Component {
     controls: PropTypes.oneOf([0,1,2]),
     origin: PropTypes.string,
     play: PropTypes.bool,
+    rel: PropTypes.bool,
     hidden: PropTypes.bool,
     onReady: PropTypes.func,
     onChangeState: PropTypes.func,
@@ -110,6 +111,10 @@ export default class YouTube extends Component {
         if (this.props.origin!==undefined) {
           nativeProps.playerParams.playerVars.origin = this.props.origin;
           delete nativeProps.origin;
+        };
+        if (this.props.rel!==undefined) {
+          nativeProps.playerParams.playerVars.rel = this.props.rel ? 1 : 0;
+          delete nativeProps.rel;
         };
       };
     } else {
