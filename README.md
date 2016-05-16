@@ -64,13 +64,13 @@ this.refs.youtubePlayer.seekTo(20);
 
 `$ add YTPlayerView-iframe-player.html from Assets to your xcode project`
 
-OPTIONAL : Do you want to let sound on when on vibrate mode ? Then follow theses steps :
+##### OPTIONAL : Activated sound when phone is on vibrate mode
 
-* Open AppDelegate.m and add :
+Open AppDelegate.m and add :
 
-`#import <AVFoundation/AVFoundation.h>`
+* `#import <AVFoundation/AVFoundation.h>`
 
-`[[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayback error: nil];` in your didFinishLaunchingWithOptions method
+* `[[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayback error: nil];` in your didFinishLaunchingWithOptions method
 
 ## Example
 Try the included `RCTYouTubeExample`:
