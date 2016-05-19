@@ -53,7 +53,6 @@ export default class YouTube extends Component {
   }
 
   _onReady(event) {
-    console.log('ok ready');
     return this.props.onReady && this.props.onReady(event.nativeEvent);
   }
 
@@ -69,14 +68,12 @@ export default class YouTube extends Component {
   }
 
   _onError(event) {
-    console.log('ok error');
     return this.props.onError && this.props.onError(event.nativeEvent);
   }
   _onProgress(event){
       return this.props.onProgress && this.props.onProgress(event.nativeEvent);
   }
   seekTo(seconds){
-    console.log("seconds : " + seconds);
     NativeModules.YouTubeModule.seekTo(parseInt(seconds, 10));
     //this.refs.youtubePlayer.seekTo(ReactNative.findNodeHandle(this), parseInt(seconds, 10));
   }
