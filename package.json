@@ -2,7 +2,7 @@
   "name": "react-native-youtube",
   "version": "0.7.2",
   "description": "A <YouTube/> component for React Native.",
-  "main": "YouTube.ios.js",
+  "main": "main.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },

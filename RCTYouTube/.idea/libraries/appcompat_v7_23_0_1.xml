@@ -1,0 +1,15 @@
+<component name="libraryTable">
+  <library name="appcompat-v7-23.0.1">
+    <ANNOTATIONS>
+      <root url="jar://$USER_HOME$/Dropbox/Temp/react-native-youtube_qui_marche/RCTYouTube/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.0.1/annotations.zip!/" />
+    </ANNOTATIONS>
+    <CLASSES>
+      <root url="jar://$USER_HOME$/Dropbox/Temp/react-native-youtube_qui_marche/RCTYouTube/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.0.1/classes.jar!/" />
+      <root url="file://$USER_HOME$/Dropbox/Temp/react-native-youtube_qui_marche/RCTYouTube/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.0.1/res" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar:///media/julien/457ae72d-903f-489b-8e3c-5fb812002622/android-sdk-linux/extras/android/m2repository/com/android/support/appcompat-v7/23.0.1/appcompat-v7-23.0.1-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>
