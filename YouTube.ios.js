@@ -62,12 +62,27 @@ export default class YouTube extends Component {
   _onError(event) {
     return this.props.onError && this.props.onError(event.nativeEvent);
   }
-  _onProgress(event){
+
+  _onProgress(event) {
       return this.props.onProgress && this.props.onProgress(event.nativeEvent);
   }
-  seekTo(seconds){
+
+  seekTo(seconds) {
     NativeModules.YouTubeManager.seekTo(ReactNative.findNodeHandle(this), parseInt(seconds, 10));
   }
+
+  play() {
+    NativeModules.YouTubeManager.playVideo(ReactNative.findNodeHandle(this));
+  }
+
+  pause() {
+    NativeModules.YouTubeManager.pauseVideo(ReactNative.findNodeHandle(this));
+  }
+
+  stop() {
+    NativeModules.YouTubeManager.stopVideo(ReactNative.findNodeHandle(this));
+  }
+
   render() {
     var style = [styles.base, this.props.style];
     var nativeProps = Object.assign({}, this.props);
