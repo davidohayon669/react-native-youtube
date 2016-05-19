@@ -18,7 +18,7 @@ public class YouTubeView extends RelativeLayout {
     Activity mMainActivity;
     YouTubePlayerController youtubeController;
     private YouTubePlayerFragment youTubePlayerFragment;
-    public static String youtube_key; //= "AIzaSyDiRradoIsTTmnnsQlce2ck5JFPQVWA1Gc";
+    public static String youtube_key; 
 
     public YouTubeView(Context context, Activity mainActivity) {
         super(context);
