@@ -68,6 +68,15 @@ NSString static *const kYTPlayerStaticProxyRegexPattern = @"^https://content.goo
 
 @implementation YTPlayerView
 
+- (id)initWithFrame:(CGRect)frame {
+    self = [super initWithFrame:frame];
+    if (self) {
+        self.backgroundColor = [UIColor blackColor];
+    }
+    return self;
+}
+
+
 - (BOOL)loadWithVideoId:(NSString *)videoId {
   return [self loadWithVideoId:videoId playerVars:nil];
 }
