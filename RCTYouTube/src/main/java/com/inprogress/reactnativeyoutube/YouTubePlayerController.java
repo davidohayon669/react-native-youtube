@@ -1,6 +1,9 @@
 package com.inprogress.reactnativeyoutube;
 
 import android.content.Context;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ProgressBar;
 
 import com.google.android.youtube.player.YouTubeInitializationResult;
 import com.google.android.youtube.player.YouTubePlayer;
@@ -37,6 +40,7 @@ public class YouTubePlayerController implements
         if (!wasRestored) {
             mYouTubePlayer = youTubePlayer;
             mYouTubePlayer.setPlayerStateChangeListener(this);
+            mYouTubePlayer.setPlaybackEventListener(this);
             updateControls();
             mYouTubeView.playerViewDidBecomeReady();
             setLoaded(true);
@@ -67,10 +71,41 @@ public class YouTubePlayerController implements
         mYouTubeView.didChangeToState("stopped");
     }
 
+
     @Override
     public void onBuffering(boolean b) {
         if (b)
             mYouTubeView.didChangeToState("buffering");
+
+        //Trick to remove when YouTube will patch it
+        ProgressBar progressBar;
+        try {
+            // As of 2016-02-16, the ProgressBar is at position 0 -> 3 -> 2 in the view tree of the Youtube Player Fragment
+            ViewGroup child1 = (ViewGroup)mYouTubeView.getChildAt(0);
+            ViewGroup child2 = (ViewGroup)child1.getChildAt(3);
+            progressBar = (ProgressBar)child2.getChildAt(2);
+        } catch (Throwable t) {
+            // As its position may change, we fallback to looking for it
+            progressBar = findProgressBar(mYouTubeView);
+        }
+
+        int visibility = b ? View.VISIBLE : View.INVISIBLE;
+        if (progressBar != null) {
+            progressBar.setVisibility(visibility);
+        }
+    }
+
+    private ProgressBar findProgressBar(View view) {
+        if (view instanceof ProgressBar) {
+            return (ProgressBar)view;
+        } else if (view instanceof ViewGroup) {
+            ViewGroup viewGroup = (ViewGroup)view;
+            for (int i = 0; i < viewGroup.getChildCount(); i++) {
+                ProgressBar res = findProgressBar(viewGroup.getChildAt(i));
+                if (res != null) return res;
+            }
+        }
+        return null;
     }
 
     @Override

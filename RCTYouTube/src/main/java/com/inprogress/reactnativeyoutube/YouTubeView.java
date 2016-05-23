@@ -18,7 +18,7 @@ public class YouTubeView extends RelativeLayout {
     Activity mMainActivity;
     YouTubePlayerController youtubeController;
     private YouTubePlayerFragment youTubePlayerFragment;
-    public static String youtube_key; 
+    public static String youtube_key;
 
     public YouTubeView(Context context, Activity mainActivity) {
         super(context);
@@ -32,9 +32,8 @@ public class YouTubeView extends RelativeLayout {
         youTubePlayerFragment = (YouTubePlayerFragment) mMainActivity.getFragmentManager()
                 .findFragmentById(R.id.youtubeplayerfragment);
         youtubeController = new YouTubePlayerController(mMainActivity, YouTubeView.this);
-        youTubePlayerFragment = (YouTubePlayerFragment) mMainActivity.getFragmentManager()
-                .findFragmentById(R.id.youtubeplayerfragment);
     }
+
 
     @Override
     protected void onDetachedFromWindow() {
