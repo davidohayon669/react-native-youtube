@@ -83,6 +83,10 @@ export default class YouTube extends Component {
     NativeModules.YouTubeManager.stopVideo(ReactNative.findNodeHandle(this));
   }
 
+  cueVideoById(videoId) {
+    NativeModules.YouTubeManager.cueVideoById(ReactNative.findNodeHandle(this), videoId);
+  }
+
   render() {
     var style = [styles.base, this.props.style];
     var nativeProps = Object.assign({}, this.props);
