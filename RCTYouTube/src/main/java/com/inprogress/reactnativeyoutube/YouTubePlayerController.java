@@ -20,7 +20,7 @@ public class YouTubePlayerController implements
     YouTubeView mYouTubeView;
 
     private boolean isLoaded = false;
-    private boolean autoPlay = false;
+    private boolean play = false;
     private boolean hidden = false;
     private boolean related = false;
     private boolean modestBranding = false;
@@ -41,11 +41,13 @@ public class YouTubePlayerController implements
             mYouTubePlayer = youTubePlayer;
             mYouTubePlayer.setPlayerStateChangeListener(this);
             mYouTubePlayer.setPlaybackEventListener(this);
+            mYouTubePlayer.setFullscreen(true);
             updateControls();
             mYouTubeView.playerViewDidBecomeReady();
             setLoaded(true);
-            if (videoId != null && isAutoPlay()) {
+            if (videoId != null && isPlay()) {
                 startVideo();
+                mYouTubePlayer.setFullscreen(false);
             }
         }
     }
@@ -196,8 +198,14 @@ public class YouTubePlayerController implements
         }
     }
 
-    public void setAutoPlay(boolean autoPlay) {
-        this.autoPlay = autoPlay;
+    public void setPlay(boolean play) {
+        this.play = play;
+        if(mYouTubePlayer!=null)
+            if(this.play && !mYouTubePlayer.isPlaying()){
+                mYouTubePlayer.play();
+            }else if(!this.play && mYouTubePlayer.isPlaying()){
+                mYouTubePlayer.pause();
+             }
     }
 
     public void setLoop(boolean loop) {
@@ -238,8 +246,8 @@ public class YouTubePlayerController implements
     }
 
 
-    public boolean isAutoPlay() {
-        return autoPlay;
+    public boolean isPlay() {
+        return play;
     }
 
     public boolean isHidden() {

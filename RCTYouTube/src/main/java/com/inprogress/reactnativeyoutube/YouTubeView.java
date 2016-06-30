@@ -120,7 +120,7 @@ public class YouTubeView extends RelativeLayout {
     }
 
     public void setPlay(Boolean bool) {
-        youtubeController.setAutoPlay(bool);
+        youtubeController.setPlay(bool);
     }
 
     public void setHidden(Boolean bool) {

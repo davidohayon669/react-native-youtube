@@ -2,6 +2,7 @@ package com.inprogress.reactnativeyoutube;
 
 import android.app.Activity;
 import android.support.annotation.Nullable;
+import android.util.Log;
 
 import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.common.MapBuilder;
@@ -85,7 +86,7 @@ public class YouTubeManager extends SimpleViewManager<YouTubeView> {
     @ReactProp(name = PROP_PLAY)
     public void setPropPlay(
             YouTubeView view, @Nullable Boolean param) {
-        //Log.e(PROP_PLAY,""+param);
+        Log.e(PROP_PLAY,""+param);
         view.setPlay(param);
     }
 

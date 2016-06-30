@@ -64,6 +64,36 @@ this.refs.youtubePlayer.seekTo(20);
 
 `$ add YTPlayerView-iframe-player.html from Assets to your xcode project`
 
+##### For android branch, rnpm is not working yet :
+
+`$ git clone -b android-support https://github.com/inProgress-team/react-native-youtube.git`
+
+Then add in settings.gradle :
+ ```
+include ':RCTYouTube', ':app'
+project(':RCTYouTube').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-youtube/RCTYouTube')
+ ```
+In build.gradle :
+
+ ```
+ dependencies {
+    [...]
+    compile project(':RCTYouTube')     // From node_modules
+   
+} 
+```
+
+In MainActivity.java :
+```
+ @Override
+    protected List<ReactPackage> getPackages() {
+        return Arrays.<ReactPackage>asList(
+            new MainReactPackage(),
+                new ReactNativeYouTube(this)
+        );
+    }
+ ```
+
 ##### OPTIONAL : Activated sound when phone is on vibrate mode
 
 Open AppDelegate.m and add :
