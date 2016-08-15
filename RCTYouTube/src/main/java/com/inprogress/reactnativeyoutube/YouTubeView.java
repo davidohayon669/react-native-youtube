@@ -11,36 +11,46 @@ import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.uimanager.events.RCTEventEmitter;
 import com.google.android.youtube.player.YouTubePlayerFragment;
+import com.facebook.react.bridge.ReactApplicationContext;
 
 
 public class YouTubeView extends RelativeLayout {
 
-    Activity mMainActivity;
     YouTubePlayerController youtubeController;
     private YouTubePlayerFragment youTubePlayerFragment;
     public static String youtube_key;
 
-    public YouTubeView(Context context, Activity mainActivity) {
+    private Activity mMainActivity;
+    private ReactApplicationContext mCtx;
+
+    private Boolean mHidden;
+    private Boolean mPlay;
+    private Boolean mPlaysInline;
+    private String mVideoId;
+
+    public YouTubeView(Context context, ReactApplicationContext appCtx) {
         super(context);
-        mMainActivity = mainActivity;
+        mCtx = appCtx;
         init();
     }
 
-
     public void init() {
-        inflate(getContext(), R.layout.youtube_layout, this);
-        youTubePlayerFragment = (YouTubePlayerFragment) mMainActivity.getFragmentManager()
-                .findFragmentById(R.id.youtubeplayerfragment);
-        youtubeController = new YouTubePlayerController(mMainActivity, YouTubeView.this);
+        Activity mainActivity = mCtx.getCurrentActivity();
+        if(mainActivity != null){
+            inflate(getContext(), R.layout.youtube_layout, this);
+            youTubePlayerFragment = (YouTubePlayerFragment) mainActivity.getFragmentManager()
+                    .findFragmentById(R.id.youtubeplayerfragment);
+            youtubeController = new YouTubePlayerController(mainActivity, YouTubeView.this);    
+        }        
     }
-
 
     @Override
     protected void onDetachedFromWindow() {
         try {
-            youTubePlayerFragment = (YouTubePlayerFragment) mMainActivity.getFragmentManager()
+            Activity mainActivity = mCtx.getCurrentActivity();
+            youTubePlayerFragment = (YouTubePlayerFragment) mainActivity.getFragmentManager()
                     .findFragmentById(R.id.youtubeplayerfragment);
-            FragmentTransaction ft = mMainActivity.getFragmentManager().beginTransaction();
+            FragmentTransaction ft = mainActivity.getFragmentManager().beginTransaction();
             ft.remove(youTubePlayerFragment);
             ft.commit();
         } catch (Exception e) {
@@ -48,11 +58,11 @@ public class YouTubeView extends RelativeLayout {
         super.onDetachedFromWindow();
     }
 
-    @ReactMethod
     public void seekTo(int second) {
         youtubeController.seekTo(second);
     }
 
+    // Player events
 
     public void playerViewDidBecomeReady() {
         WritableMap event = Arguments.createMap();
@@ -60,7 +70,6 @@ public class YouTubeView extends RelativeLayout {
         event.putInt("target", getId());
         reactContext.getJSModule(RCTEventEmitter.class).receiveEvent(getId(), "ready", event);
     }
-
 
     public void didChangeToState(String param) {
         WritableMap event = Arguments.createMap();
@@ -70,7 +79,6 @@ public class YouTubeView extends RelativeLayout {
         reactContext.getJSModule(RCTEventEmitter.class).receiveEvent(getId(), "state", event);
     }
 
-
     public void didChangeToQuality(String param) {
         WritableMap event = Arguments.createMap();
         event.putString("quality", param);
@@ -78,7 +86,6 @@ public class YouTubeView extends RelativeLayout {
         ReactContext reactContext = (ReactContext) getContext();
         reactContext.getJSModule(RCTEventEmitter.class).receiveEvent(getId(), "quality", event);
     }
-
 
     public void didPlayTime(String current, String duration) {
         WritableMap event = Arguments.createMap();
@@ -89,7 +96,6 @@ public class YouTubeView extends RelativeLayout {
         reactContext.getJSModule(RCTEventEmitter.class).receiveEvent(getId(), "progress", event);
     }
 
-
     public void receivedError(String param) {
         WritableMap event = Arguments.createMap();
         ReactContext reactContext = (ReactContext) getContext();
@@ -98,33 +104,34 @@ public class YouTubeView extends RelativeLayout {
         reactContext.getJSModule(RCTEventEmitter.class).receiveEvent(getId(), "error", event);
     }
 
+    // Player param updates
 
-    public void setVideoId(String str) {
-        youtubeController.setVideoId(str);
+    public void setVideoId(String videoId) {
+        youtubeController.setVideoId(videoId);
     }
 
-    public void setInline(Boolean bool) {
-        youtubeController.setPlayInline(bool);
+    public void setInline(Boolean playsInline) {
+        youtubeController.setPlayInline(playsInline);
     }
 
-    public void setShowInfo(Boolean bool) {
-        youtubeController.setShowInfo(bool);
+    public void setShowInfo(Boolean showInfo) {
+        youtubeController.setShowInfo(showInfo);
     }
 
-    public void setModestbranding(Boolean bool) {
-        youtubeController.setModestBranding(bool);
+    public void setModestbranding(Boolean modestBranding) {
+        youtubeController.setModestBranding(modestBranding);
     }
 
-    public void setControls(Integer nb) {
-        youtubeController.setControls(nb);
+    public void setControls(Integer controlsType) {
+        youtubeController.setControls(controlsType);
     }
 
-    public void setPlay(Boolean bool) {
-        youtubeController.setPlay(bool);
+    public void setPlay(Boolean play) {
+        youtubeController.setPlay(play);
     }
 
-    public void setHidden(Boolean bool) {
-        youtubeController.setHidden(bool);
+    public void setHidden(Boolean hidden) {
+        youtubeController.setHidden(hidden);
     }
 
     public void setApiKey(String apiKey){

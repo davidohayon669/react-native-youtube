@@ -13,23 +13,13 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-
 public class ReactNativeYouTube implements ReactPackage {
 
-    Activity mMainActivity;
-    YouTubeManager youTubeManager;
-
-    public ReactNativeYouTube(Activity activity) {
-        mMainActivity = activity;
-        youTubeManager = new YouTubeManager(mMainActivity);
-    }
+    public ReactNativeYouTube() {}
 
     @Override
-    public List<NativeModule> createNativeModules(
-            ReactApplicationContext reactContext) {
+    public List<NativeModule> createNativeModules(ReactApplicationContext ctx) {
         List<NativeModule> modules = new ArrayList<>();
-        YouTubeModule youTubeModule = new YouTubeModule(reactContext, youTubeManager);
-        modules.add(youTubeModule);
         return modules;
     }
 
@@ -39,9 +29,8 @@ public class ReactNativeYouTube implements ReactPackage {
     }
 
     @Override
-    public List<ViewManager> createViewManagers(ReactApplicationContext reactContext) {
-        return Arrays.<ViewManager>asList(
-                youTubeManager
-        );
+    public List<ViewManager> createViewManagers(ReactApplicationContext ctx) {
+        YouTubeManager mgr = new YouTubeManager(ctx);
+        return Arrays.<ViewManager>asList(mgr);
     }
 }
