@@ -9,6 +9,7 @@ import com.facebook.react.common.MapBuilder;
 import com.facebook.react.uimanager.SimpleViewManager;
 import com.facebook.react.uimanager.ThemedReactContext;
 import com.facebook.react.uimanager.annotations.ReactProp;
+import com.facebook.react.bridge.ReactApplicationContext;
 
 import java.util.Map;
 
@@ -19,7 +20,7 @@ public class YouTubeManager extends SimpleViewManager<YouTubeView> {
 
     public YouTubeView mYouTubeView;
 
-    private Activity mMainActivity;
+    private ReactApplicationContext mCtx;
 
     public static final String PROP_VIDEO_ID = "videoId";
     public static final String PROP_API_KEY = "apiKey";
@@ -33,8 +34,8 @@ public class YouTubeManager extends SimpleViewManager<YouTubeView> {
     public static final String PROP_LOOP = "loop";
 
 
-    public YouTubeManager(Activity activity) {
-        this.mMainActivity = activity;
+    public YouTubeManager(ReactApplicationContext ctx) {
+        mCtx = ctx;
     }
 
     @Override
@@ -44,7 +45,7 @@ public class YouTubeManager extends SimpleViewManager<YouTubeView> {
 
     @Override
     protected YouTubeView createViewInstance(ThemedReactContext themedReactContext) {
-        mYouTubeView = new YouTubeView(themedReactContext, mMainActivity);
+        mYouTubeView = new YouTubeView(themedReactContext, mCtx);
         return mYouTubeView;
     }
 
@@ -86,7 +87,7 @@ public class YouTubeManager extends SimpleViewManager<YouTubeView> {
     @ReactProp(name = PROP_PLAY)
     public void setPropPlay(
             YouTubeView view, @Nullable Boolean param) {
-        Log.e(PROP_PLAY,""+param);
+        //Log.e(PROP_PLAY,""+param);
         view.setPlay(param);
     }
 
