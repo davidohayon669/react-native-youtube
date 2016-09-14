@@ -11,7 +11,6 @@ import ReactNative, {
   StyleSheet,
   requireNativeComponent,
   NativeModules,
-  NativeMethodsMixin
 } from 'react-native';
 
 const RCTYouTube = requireNativeComponent('RCTYouTube', null);
@@ -38,6 +37,10 @@ export default class YouTube extends Component {
   static defaultProps = {
     loop: false
   };
+
+  setNativeProps(nativeProps) {
+    this._root.setNativeProps(nativeProps);
+  }
 
   constructor(props) {
     super(props);
@@ -77,7 +80,11 @@ export default class YouTube extends Component {
     nativeProps.onYoutubeVideoChangeQuality = this._onChangeQuality.bind(this);
     nativeProps.onYoutubeVideoError = this._onError.bind(this);
     nativeProps.onYoutubeProgress = this._onProgress.bind(this);
+    return <RCTYouTube ref={component => this._root = component} {...nativeProps} />;
+  }
 
+  componentDidUpdate() {
+    var nativeProps = Object.assign({}, this.props);
     /*
      * Try to use `playerParams` instead of settings `playsInline` and
      * `videoId` individually.
@@ -87,7 +94,9 @@ export default class YouTube extends Component {
         nativeProps.playerParams = {
           videoId: this.props.videoId,
         };
-        delete nativeProps.videoId;
+        // Make sure we leave it in as the nativeProps,
+        // since future setNativeProps() calls will depend on it existing.
+        //delete nativeProps.videoId;
 
         nativeProps.playerParams.playerVars = {};
 
@@ -125,8 +134,7 @@ export default class YouTube extends Component {
        */
       delete nativeProps.playsInline;
     }
-
-    return <RCTYouTube {... nativeProps} />;
+    this._root.setNativeProps(nativeProps);
   }
 }
 
