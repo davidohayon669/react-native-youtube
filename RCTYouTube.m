@@ -52,7 +52,6 @@
 #pragma mark - YTPlayer control methods
 
 - (void)setPlay:(BOOL)play {
-    
     // if not ready, configure for later
     if (!_isReady) {
         _playsOnLoad = play;
@@ -130,12 +129,15 @@
             break;
         case kYTPlayerStatePlaying:
             playerState = @"playing";
+            _isPlaying = YES;
             break;
         case kYTPlayerStatePaused:
             playerState = @"paused";
+            _isPlaying = NO;
             break;
         case kYTPlayerStateEnded:
             playerState = @"ended";
+            _isPlaying = NO;
             break;
         default:
             break;
