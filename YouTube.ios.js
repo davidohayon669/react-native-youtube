@@ -38,37 +38,40 @@ export default class YouTube extends Component {
     loop: false
   };
 
-  setNativeProps(nativeProps) {
+  _root: any;
+  _exportedProps: any;
+
+  setNativeProps(nativeProps: any) {
     this._root.setNativeProps(nativeProps);
   }
 
-  constructor(props) {
+  constructor(props: any) {
     super(props);
     this._exportedProps = NativeModules.YouTubeManager && NativeModules.YouTubeManager.exportedProps;
   }
 
-  _onReady(event) {
+  _onReady(event: SyntheticEvent) {
     return this.props.onReady && this.props.onReady(event.nativeEvent);
   }
 
-  _onChangeState(event) {
+  _onChangeState(event: SyntheticEvent) {
     if(event.nativeEvent.state == 'ended' && this.props.loop) {
       this.seekTo(0);
     }
     return this.props.onChangeState && this.props.onChangeState(event.nativeEvent);
   }
 
-  _onChangeQuality(event) {
+  _onChangeQuality(event: SyntheticEvent) {
     return this.props.onChangeQuality && this.props.onChangeQuality(event.nativeEvent);
   }
 
-  _onError(event) {
+  _onError(event: SyntheticEvent) {
     return this.props.onError && this.props.onError(event.nativeEvent);
   }
-  _onProgress(event){
+  _onProgress(event: SyntheticEvent){
       return this.props.onProgress && this.props.onProgress(event.nativeEvent);
   }
-  seekTo(seconds){
+  seekTo(seconds: number){
     NativeModules.YouTubeManager.seekTo(ReactNative.findNodeHandle(this), parseInt(seconds, 10));
   }
   render() {
@@ -93,12 +96,11 @@ export default class YouTube extends Component {
       if (this._exportedProps.playerParams) {
         nativeProps.playerParams = {
           videoId: this.props.videoId,
+          playerVars: {},
         };
         // Make sure we leave it in as the nativeProps,
         // since future setNativeProps() calls will depend on it existing.
         //delete nativeProps.videoId;
-
-        nativeProps.playerParams.playerVars = {};
 
         if (this.props.playsInline) {
           nativeProps.playerParams.playerVars.playsinline = 1;
