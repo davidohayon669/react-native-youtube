@@ -70,6 +70,7 @@
 
 - (void)setPlaysInline:(BOOL)playsInline {
     _isReady = false;
+    _isPlaying = false;
     if (_videoId && playsInline) {
         [self loadWithVideoId:_videoId playerVars:@{@"playsinline": @1}];
     } else if (_videoId && !playsInline){
@@ -85,10 +86,11 @@
     if (_videoId && [_videoId isEqualToString:videoId]) {
         return;
     }
-    _isReady = false;
     if (_videoId) {
         [self cueVideoById:videoId startSeconds:0 suggestedQuality:kYTPlaybackQualityDefault];
     } else if (_playsInline) {
+        _isReady = false;
+        _isPlaying = false;
         [self loadWithVideoId:videoId playerVars:@{@"playsinline": @1}];
     } else {
         // will get set when playsInline is set
@@ -100,6 +102,7 @@
 - (void)setPlayerParams:(NSDictionary *)playerParams {
     _playerParams = playerParams;
     _isReady = false;
+    _isPlaying = false;
     [self loadWithPlayerParams:playerParams];
 }
 
