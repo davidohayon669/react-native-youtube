@@ -14,19 +14,9 @@ import java.util.List;
 
 public class ReactNativeYouTube implements ReactPackage {
 
-    YouTubeManager youTubeManager;
-
-    public ReactNativeYouTube() {
-        youTubeManager = new YouTubeManager();
-    }
-
     @Override
-    public List<NativeModule> createNativeModules(
-            ReactApplicationContext reactContext) {
-        List<NativeModule> modules = new ArrayList<>();
-        YouTubeModule youTubeModule = new YouTubeModule(reactContext, youTubeManager);
-        modules.add(youTubeModule);
-        return modules;
+    public List<NativeModule> createNativeModules(ReactApplicationContext reactContext) {
+        return Collections.emptyList();
     }
 
     @Override
@@ -37,7 +27,7 @@ public class ReactNativeYouTube implements ReactPackage {
     @Override
     public List<ViewManager> createViewManagers(ReactApplicationContext reactContext) {
         return Arrays.<ViewManager>asList(
-                youTubeManager
+                new YouTubeManager()
         );
     }
 }
