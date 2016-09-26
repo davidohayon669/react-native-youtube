@@ -60,7 +60,7 @@ RCT_EXPORT_VIEW_PROPERTY(playerParams, NSDictionary);
 
 RCT_EXPORT_METHOD(seekTo:(nonnull NSNumber *)reactTag seconds:(nonnull NSNumber *)seconds)
 {
-  [self.bridge.uiManager addUIBlock:^(__unused RCTUIManager *uiManager, NSDictionary<NSNumber *, UIView *> *viewRegistry) {
+    [self.bridge.uiManager addUIBlock:^(__unused RCTUIManager *uiManager, NSDictionary<NSNumber *, UIView *> *viewRegistry) {
          RCTYouTube *youtube = viewRegistry[reactTag];
          if ([youtube isKindOfClass:[RCTYouTube class]]) {
              [youtube seekToSeconds:seconds.floatValue allowSeekAhead:@YES];
@@ -68,6 +68,54 @@ RCT_EXPORT_METHOD(seekTo:(nonnull NSNumber *)reactTag seconds:(nonnull NSNumber 
              RCTLogError(@"Cannot seek: %@ (tag #%@) is not RCTYouTube", youtube, reactTag);
          }
      }];
+}
+
+RCT_EXPORT_METHOD(playVideo:(nonnull NSNumber *)reactTag)
+{
+    [self.bridge.uiManager addUIBlock:^(__unused RCTUIManager *uiManager, NSDictionary<NSNumber *, UIView *> *viewRegistry) {
+         RCTYouTube *youtube = viewRegistry[reactTag];
+         if ([youtube isKindOfClass:[RCTYouTube class]]) {
+             [youtube playVideo];
+         } else {
+             RCTLogError(@"Cannot play: %@ (tag #%@) is not RCTYouTube", youtube, reactTag);
+         }
+     }];
+}
+
+RCT_EXPORT_METHOD(pauseVideo:(nonnull NSNumber *)reactTag)
+{
+    [self.bridge.uiManager addUIBlock:^(__unused RCTUIManager *uiManager, NSDictionary<NSNumber *, UIView *> *viewRegistry) {
+         RCTYouTube *youtube = viewRegistry[reactTag];
+         if ([youtube isKindOfClass:[RCTYouTube class]]) {
+             [youtube pauseVideo];
+         } else {
+             RCTLogError(@"Cannot pause: %@ (tag #%@) is not RCTYouTube", youtube, reactTag);
+         }
+     }];
+}
+
+RCT_EXPORT_METHOD(stopVideo:(nonnull NSNumber *)reactTag)
+{
+    [self.bridge.uiManager addUIBlock:^(__unused RCTUIManager *uiManager, NSDictionary<NSNumber *, UIView *> *viewRegistry) {
+         RCTYouTube *youtube = viewRegistry[reactTag];
+         if ([youtube isKindOfClass:[RCTYouTube class]]) {
+             [youtube stopVideo];
+         } else {
+             RCTLogError(@"Cannot stop: %@ (tag #%@) is not RCTYouTube", youtube, reactTag);
+         }
+     }];
+}
+
+RCT_EXPORT_METHOD(cueVideoById:(nonnull NSNumber *)reactTag videoId:(nonnull NSString *)videoId)
+{
+    [self.bridge.uiManager addUIBlock:^(__unused RCTUIManager *uiManager, NSDictionary<NSNumber *, UIView *> *viewRegistry) {
+        RCTYouTube *youtube = viewRegistry[reactTag];
+        if ([youtube isKindOfClass:[RCTYouTube class]]) {
+            [youtube cueVideoById:videoId startSeconds:0 suggestedQuality:kYTPlaybackQualityDefault];
+        } else {
+            RCTLogError(@"Cannot stop: %@ (tag #%@) is not RCTYouTube", youtube, reactTag);
+        }
+    }];
 }
 
 @end
