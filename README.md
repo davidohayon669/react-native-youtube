@@ -43,6 +43,7 @@ this.refs.youtubePlayer.seekTo(20);
 * `controls`: This parameter indicates whether the video player controls are displayed. Supported values are `0`, `1`, `2`. Default `1`. [More information](https://developers.google.com/youtube/player_parameters?hl=en#controls)
 * `showinfo`: Setting the parameter's value to false causes the player to not display information like the video title and uploader before the video starts playing. Default `true`.
 * `origin`: This parameter provides an extra security measure for the IFrame API.
+* `apiKey`: This parameter is required on Android for the YouTube API to work.
 
 ## Events
 
@@ -58,15 +59,18 @@ this.refs.youtubePlayer.seekTo(20);
 
 ### Installation
 
+##### IOS
 (requires react-native >= 0.6.0)
 
 `$ rnpm install react-native-youtube`
 
 `$ add YTPlayerView-iframe-player.html from Assets to your xcode project`
 
-##### For android branch, rnpm is not working yet :
+##### Android : rnpm is not working yet !!
 
-`$ git clone -b android-support https://github.com/inProgress-team/react-native-youtube.git`
+In node_module :
+
+`$ git clone https://github.com/inProgress-team/react-native-youtube.git`
 
 Then add in settings.gradle :
  ```
@@ -83,14 +87,14 @@ In build.gradle :
 } 
 ```
 
-In MainActivity.java :
+In MainApplication.java :
 ```
  @Override
     protected List<ReactPackage> getPackages() {
-        return Arrays.<ReactPackage>asList(
-            new MainReactPackage(),
-                new ReactNativeYouTube(this)
-        );
+      return Arrays.<ReactPackage>asList(
+          new MainReactPackage(),
+              new ReactNativeYouTube()
+      );
     }
  ```
 
