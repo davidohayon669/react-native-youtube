@@ -88,7 +88,12 @@ In build.gradle :
 ```
 
 In MainApplication.java :
+
 ```
+import com.inprogress.reactnativeyoutube.ReactNativeYouTube;
+
+[...]
+
  @Override
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
