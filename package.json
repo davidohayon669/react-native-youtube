@@ -2,7 +2,7 @@
   "name": "react-native-youtube",
   "version": "0.7.2",
   "description": "A <YouTube/> component for React Native.",
-  "main": "YouTube.ios.js",
+  "main": "main.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -20,5 +20,10 @@
   "bugs": {
     "url": "https://github.com/paramaggarwal/react-native-youtube/issues"
   },
-  "homepage": "https://github.com/paramaggarwal/react-native-youtube#readme"
+  "homepage": "https://github.com/paramaggarwal/react-native-youtube#readme",
+  "rnpm": {
+    "android": {
+      "packageInstance": "new ReactNativeYouTube()"
+    }
+  }
 }
