@@ -1,6 +1,5 @@
 package com.inprogress.reactnativeyoutube;
 
-import android.app.Activity;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
@@ -19,8 +18,6 @@ public class YouTubeManager extends SimpleViewManager<YouTubeView> {
 
     public YouTubeView mYouTubeView;
 
-    private Activity mMainActivity;
-
     public static final String PROP_VIDEO_ID = "videoId";
     public static final String PROP_API_KEY = "apiKey";
     public static final String PROP_INLINE = "playInline";
@@ -33,8 +30,8 @@ public class YouTubeManager extends SimpleViewManager<YouTubeView> {
     public static final String PROP_LOOP = "loop";
 
 
-    public YouTubeManager(Activity activity) {
-        this.mMainActivity = activity;
+    public YouTubeManager() {
+
     }
 
     @Override
@@ -44,7 +41,7 @@ public class YouTubeManager extends SimpleViewManager<YouTubeView> {
 
     @Override
     protected YouTubeView createViewInstance(ThemedReactContext themedReactContext) {
-        mYouTubeView = new YouTubeView(themedReactContext, mMainActivity);
+        mYouTubeView = new YouTubeView(themedReactContext, themedReactContext.getCurrentActivity());
         return mYouTubeView;
     }
 
