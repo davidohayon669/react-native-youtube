@@ -52,7 +52,6 @@ public class YouTubeView extends RelativeLayout {
         super.onDetachedFromWindow();
     }
 
-    @ReactMethod
     public void seekTo(int second) {
         youtubeController.seekTo(second);
     }
