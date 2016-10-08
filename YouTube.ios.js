@@ -62,12 +62,42 @@ export default class YouTube extends Component {
   _onError(event) {
     return this.props.onError && this.props.onError(event.nativeEvent);
   }
+
   _onProgress(event){
       return this.props.onProgress && this.props.onProgress(event.nativeEvent);
   }
-  seekTo(seconds){
-    NativeModules.YouTubeManager.seekTo(ReactNative.findNodeHandle(this), parseInt(seconds, 10));
+
+  playVideo() {
+    NativeModules.YouTubeManager.playVideo(ReactNative.findNodeHandle(this))
   }
+
+  seekTo(seconds) {
+    NativeModules.YouTubeManager.seekTo(ReactNative.findNodeHandle(this), parseInt(seconds, 10))
+  }
+
+  loadVideoById(videoId) {
+    NativeModules.YouTubeManager.loadVideoById(ReactNative.findNodeHandle(this), videoId)
+  }
+
+  playVideoAt(index) {
+    NativeModules.YouTubeManager.playVideoAt(ReactNative.findNodeHandle(this), parseInt(index, 10))
+  }
+
+  nextVideo() {
+    NativeModules.YouTubeManager.nextVideo(ReactNative.findNodeHandle(this))
+  }
+
+  previousVideo() {
+    NativeModules.YouTubeManager.previousVideo(ReactNative.findNodeHandle(this))
+  }
+
+  playlistIndex() {
+    return new Promise((resolve, reject) =>
+      NativeModules.YouTubeManager.playlistIndex(ReactNative.findNodeHandle(this))
+        .then(index => resolve(index))
+        .catch(errorMessage => reject(errorMessage)))
+  }
+
   render() {
     var style = [styles.base, this.props.style];
     var nativeProps = Object.assign({}, this.props);
