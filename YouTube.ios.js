@@ -39,9 +39,15 @@ export default class YouTube extends Component {
     loop: false
   };
 
+  _root: any;
+
   constructor(props) {
     super(props);
     this._exportedProps = NativeModules.YouTubeManager && NativeModules.YouTubeManager.exportedProps;
+  }
+
+  setNativeProps(nativeProps: any) {
+    this._root.setNativeProps(nativeProps);
   }
 
   _onReady(event) {
@@ -126,7 +132,9 @@ export default class YouTube extends Component {
       delete nativeProps.playsInline;
     }
 
-    return <RCTYouTube {... nativeProps} />;
+    return <RCTYouTube
+      ref={component => { this._root = component; }}
+      {... nativeProps} />;
   }
 }
 
