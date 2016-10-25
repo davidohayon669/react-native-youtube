@@ -4,16 +4,11 @@
  */
 'use strict';
 
-var React = require('react-native');
-var {
-  AppRegistry,
-  StyleSheet,
-  Text,
-  View,
-  TouchableOpacity
-} = React;
-
+var React = require('react');
+var ReactNative = require('react-native');
 var YouTube = require('react-native-youtube');
+
+var { AppRegistry, StyleSheet, Text, View, TouchableOpacity } = ReactNative;
 
 var RCTYouTubeExample = React.createClass({
   getInitialState: function () {
@@ -41,14 +36,14 @@ var RCTYouTubeExample = React.createClass({
           play={this.state.isPlaying}
           hidden={false}
           playsInline={true}
-          onReady={(e)=>{this.setState({isReady: true})}}
-          onChangeState={(e)=>{this.setState({status: e.state})}}
-          onChangeQuality={(e)=>{this.setState({quality: e.quality})}}
-          onError={(e)=>{this.setState({error: e.error})}}
-          style={{alignSelf: 'stretch', height: 300, backgroundColor: 'black', marginVertical: 10}}
+          onReady={e => this.setState({ isReady: true })}
+          onChangeState={e => this.setState({ status: e.state })}
+          onChangeQuality={e => this.setState({ quality: e.quality })}
+          onError={e => this.setState({ error: e.error })}
+          style={{ alignSelf: 'stretch', height: 300, backgroundColor: 'black', marginVertical: 10 }}
         />
 
-        <TouchableOpacity onPress={()=>{this.setState((s) => {return {isPlaying: !s.isPlaying};} )}}>
+        <TouchableOpacity onPress={() => this.setState(s => ({ isPlaying: !s.isPlaying }))}>
           <Text style={[styles.welcome, {color: 'blue'}]}>{this.state.status == 'playing' ? 'Pause' : 'Play'}</Text>
         </TouchableOpacity>
 

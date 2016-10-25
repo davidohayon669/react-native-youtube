@@ -3,27 +3,20 @@
  * @flow
  */
 
-'use strict';
-
 import React, { Component, PropTypes } from 'react';
-import ReactNative, {
-  View,
-  StyleSheet,
-  requireNativeComponent,
-  NativeModules,
-  NativeMethodsMixin
-} from 'react-native';
+import ReactNative, { View, requireNativeComponent, NativeModules } from 'react-native';
 
-const RCTYouTube = requireNativeComponent('RCTYouTube', null);
+const RCTYouTube = requireNativeComponent('RCTYouTube', null)
 
 export default class YouTube extends Component {
+
   static propTypes = {
     style: View.propTypes.style,
     videoId: PropTypes.string.isRequired,
     playsInline: PropTypes.bool,
     showinfo: PropTypes.bool,
     modestbranding: PropTypes.bool,
-    controls: PropTypes.oneOf([0,1,2]),
+    controls: PropTypes.oneOf([0, 1, 2]),
     origin: PropTypes.string,
     play: PropTypes.bool,
     rel: PropTypes.bool,
@@ -33,25 +26,28 @@ export default class YouTube extends Component {
     onChangeQuality: PropTypes.func,
     onError: PropTypes.func,
     loop: PropTypes.bool,
-  };
+  }
 
   static defaultProps = {
-    loop: false
-  };
+    loop: false,
+  }
 
-  constructor(props) {
+  constructor(props: Object) {
     super(props);
-    this._exportedProps = NativeModules.YouTubeManager && NativeModules.YouTubeManager.exportedProps;
+    this._onReady = this._onReady.bind(this);
+    this._onChangeState = this._onChangeState.bind(this);
+    this._onChangeQuality = this._onChangeQuality.bind(this);
+    this._onError = this._onError.bind(this);
+    this._onProgress = this._onProgress.bind(this);
+    this._exportedProps = NativeModules.YouTubeManager
+      && NativeModules.YouTubeManager.exportedProps;
   }
 
   _onReady(event) {
-    return this.props.onReady && this.props.onReady(event.nativeEvent);
+    return this.props.onReady && this.props.onReady(event.nativeEvent)
   }
 
   _onChangeState(event) {
-    if(event.nativeEvent.state == 'ended' && this.props.loop) {
-      this.seekTo(0);
-    }
     return this.props.onChangeState && this.props.onChangeState(event.nativeEvent);
   }
 
@@ -63,105 +59,99 @@ export default class YouTube extends Component {
     return this.props.onError && this.props.onError(event.nativeEvent);
   }
 
-  _onProgress(event){
-      return this.props.onProgress && this.props.onProgress(event.nativeEvent);
+  _onProgress(event) {
+    return this.props.onProgress && this.props.onProgress(event.nativeEvent);
   }
 
-  playVideo() {
-    NativeModules.YouTubeManager.playVideo(ReactNative.findNodeHandle(this))
+  playVideo(): void {
+    NativeModules.YouTubeManager.playVideo(ReactNative.findNodeHandle(this));
   }
 
-  seekTo(seconds) {
-    NativeModules.YouTubeManager.seekTo(ReactNative.findNodeHandle(this), parseInt(seconds, 10))
+  seekTo(seconds: number): void {
+    NativeModules.YouTubeManager.seekTo(ReactNative.findNodeHandle(this), parseInt(seconds, 10));
   }
 
-  loadVideoById(videoId) {
-    NativeModules.YouTubeManager.loadVideoById(ReactNative.findNodeHandle(this), videoId)
+  loadVideoById(videoId: string): void {
+    NativeModules.YouTubeManager.loadVideoById(ReactNative.findNodeHandle(this), videoId);
   }
 
-  playVideoAt(index) {
-    NativeModules.YouTubeManager.playVideoAt(ReactNative.findNodeHandle(this), parseInt(index, 10))
+  playVideoAt(index: number): void {
+    NativeModules.YouTubeManager.playVideoAt(ReactNative.findNodeHandle(this), parseInt(index, 10));
   }
 
-  nextVideo() {
-    NativeModules.YouTubeManager.nextVideo(ReactNative.findNodeHandle(this))
+  nextVideo(): void {
+    NativeModules.YouTubeManager.nextVideo(ReactNative.findNodeHandle(this));
   }
 
-  previousVideo() {
-    NativeModules.YouTubeManager.previousVideo(ReactNative.findNodeHandle(this))
+  previousVideo(): void {
+    NativeModules.YouTubeManager.previousVideo(ReactNative.findNodeHandle(this));
   }
 
   playlistIndex() {
     return new Promise((resolve, reject) =>
       NativeModules.YouTubeManager.playlistIndex(ReactNative.findNodeHandle(this))
         .then(index => resolve(index))
-        .catch(errorMessage => reject(errorMessage)))
+        .catch(errorMessage => reject(errorMessage)));
   }
 
   render() {
-    var style = [styles.base, this.props.style];
-    var nativeProps = Object.assign({}, this.props);
-    nativeProps.style = style;
-    nativeProps.onYoutubeVideoReady = this._onReady.bind(this);
-    nativeProps.onYoutubeVideoChangeState = this._onChangeState.bind(this);
-    nativeProps.onYoutubeVideoChangeQuality = this._onChangeQuality.bind(this);
-    nativeProps.onYoutubeVideoError = this._onError.bind(this);
-    nativeProps.onYoutubeProgress = this._onProgress.bind(this);
+    const nativeProps = { ...this.props };
+    nativeProps.style = [{ overflow: 'hidden' }, this.props.style];
+    nativeProps.onYoutubeVideoReady = this._onReady;
+    nativeProps.onYoutubeVideoChangeState = this._onChangeState;
+    nativeProps.onYoutubeVideoChangeQuality = this._onChangeQuality;
+    nativeProps.onYoutubeVideoError = this._onError;
+    nativeProps.onYoutubeProgress = this._onProgress;
 
-    /*
-     * Try to use `playerParams` instead of settings `playsInline` and
-     * `videoId` individually.
-     */
-    if (this._exportedProps) {
-      if (this._exportedProps.playerParams) {
-        nativeProps.playerParams = {
-          videoId: this.props.videoId,
-        };
-        delete nativeProps.videoId;
+    if (this._exportedProps.playerParams) {
+      nativeProps.playerParams = {
+        videoId: this.props.videoId,
+      }
+      delete nativeProps.videoId;
 
-        nativeProps.playerParams.playerVars = {};
+      nativeProps.playerParams.playerVars = {};
 
-        if (this.props.playsInline) {
-          nativeProps.playerParams.playerVars.playsinline = 1;
-          delete nativeProps.playsInline;
-        };
-        if (this.props.modestbranding) {
-          nativeProps.playerParams.playerVars.modestbranding = 1;
-          delete nativeProps.modestbranding;
-        };
+      if (this.props.playlist) {
+        nativeProps.playerParams.playerVars.playlist = this.props.playlist;
+        delete nativeProps.playlist;
+      }
 
-        if (this.props.showinfo!==undefined) {
-          nativeProps.playerParams.playerVars.showinfo = this.props.showinfo ? 1 : 0;
-          delete nativeProps.showinfo;
-        };
-        if (this.props.controls!==undefined) {
-          nativeProps.playerParams.playerVars.controls = this.props.controls;
-          delete nativeProps.controls;
-        };
-        if (this.props.origin!==undefined) {
-          nativeProps.playerParams.playerVars.origin = this.props.origin;
-          delete nativeProps.origin;
-        };
-        if (this.props.rel!==undefined) {
-          nativeProps.playerParams.playerVars.rel = this.props.rel ? 1 : 0;
-          delete nativeProps.rel;
-        };
-      };
-    } else {
-      /*
-       * For compatibility issues with an older version where setting both
-       * `playsInline` and `videoId` in quick succession would cause the video
-       * to sometimes not play.
-       */
-      delete nativeProps.playsInline;
+      if (this.props.playsInline) {
+        nativeProps.playerParams.playerVars.playsinline = 1;
+        delete nativeProps.playsInline;
+      }
+
+      if (this.props.modestbranding) {
+        nativeProps.playerParams.playerVars.modestbranding = 1;
+        delete nativeProps.modestbranding;
+      }
+
+      if (this.props.showinfo !== undefined) {
+        nativeProps.playerParams.playerVars.showinfo = this.props.showinfo ? 1 : 0;
+        delete nativeProps.showinfo;
+      }
+
+      if (this.props.controls !== undefined) {
+        nativeProps.playerParams.playerVars.controls = this.props.controls;
+        delete nativeProps.controls;
+      }
+
+      if (this.props.loop !== undefined) {
+        nativeProps.playerParams.playerVars.loop = this.props.loop ? 1 : 0;
+        delete nativeProps.loop;
+      }
+
+      if (this.props.origin !== undefined) {
+        nativeProps.playerParams.playerVars.origin = this.props.origin;
+        delete nativeProps.origin;
+      }
+
+      if (this.props.rel !== undefined) {
+        nativeProps.playerParams.playerVars.rel = this.props.rel ? 1 : 0;
+        delete nativeProps.rel;
+      }
     }
 
-    return <RCTYouTube {... nativeProps} />;
+    return <RCTYouTube {...nativeProps} />;
   }
 }
-
-const styles = StyleSheet.create({
-  base: {
-    overflow: 'hidden',
-  },
-});

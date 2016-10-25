@@ -17,13 +17,13 @@
     BOOL _playsInline;
     NSDictionary *_playerParams;
     BOOL _isPlaying;
-    
+
     /* Check to see if commands can
      * be sent to the player
      */
     BOOL _isReady;
     BOOL _playsOnLoad;
-    
+
     /* Required to publish events */
     RCTEventDispatcher *_eventDispatcher;
 }
@@ -34,16 +34,16 @@
         _eventDispatcher = eventDispatcher;
         _playsInline = NO;
         _isPlaying = NO;
-        
+
         self.delegate = self;
     }
-    
+
     return self;
 }
 
 - (void)layoutSubviews {
     [super layoutSubviews];
-    
+
     if (self.webView) {
         self.webView.frame = self.bounds;
     }
@@ -52,13 +52,13 @@
 #pragma mark - YTPlayer control methods
 
 - (void)setPlay:(BOOL)play {
-    
+
     // if not ready, configure for later
     if (!_isReady) {
         _playsOnLoad = play;
         return;
     }
-    
+
     if (!_isPlaying && play) {
         [self playVideo];
         _isPlaying = YES;
@@ -88,7 +88,7 @@
     } else {
         // will get set when playsInline is set
     }
-    
+
     _videoId = videoId;
 }
 
@@ -113,44 +113,18 @@
 }
 
 - (void)playerView:(YTPlayerView *)playerView didChangeToState:(YTPlayerState)state {
-    
-    NSString *playerState;
-    switch (state) {
-        case kYTPlayerStateUnknown:
-            playerState = @"unknown";
-            break;
-        case kYTPlayerStateUnstarted:
-            playerState = @"unstarted";
-            break;
-        case kYTPlayerStateQueued:
-            playerState = @"queued";
-            break;
-        case kYTPlayerStateBuffering:
-            playerState = @"buffering";
-            break;
-        case kYTPlayerStatePlaying:
-            playerState = @"playing";
-            break;
-        case kYTPlayerStatePaused:
-            playerState = @"paused";
-            break;
-        case kYTPlayerStateEnded:
-            playerState = @"ended";
-            break;
-        default:
-            break;
-    }
-    
+
+    NSNumber *stateNumber = [NSNumber numberWithInt:state];
+
     [_eventDispatcher sendInputEventWithName:@"youtubeVideoChangeState"
                                         body:@{
-                                               @"state": playerState,
+                                               @"data": stateNumber,
                                                @"target": self.reactTag
                                                }];
-
 }
 
 - (void)playerView:(YTPlayerView *)playerView didChangeToQuality:(YTPlaybackQuality)quality {
-    
+
     NSString *playerQuality;
     switch (quality) {
         case kYTPlaybackQualitySmall:
@@ -199,38 +173,17 @@
                                                @"duration": @(self.duration),
                                                @"target": self.reactTag
                                                }];
-
 }
 
 - (void)playerView:(YTPlayerView *)playerView receivedError:(YTPlayerError)error {
 
-    NSString *playerError;
-    switch (error) {
-        case kYTPlayerErrorInvalidParam:
-            playerError = @"invalid_param";
-            break;
-        case kYTPlayerErrorHTML5Error:
-            playerError = @"html5_error";
-            break;
-        case kYTPlayerErrorVideoNotFound:
-            playerError = @"video_not_found";
-            break;
-        case kYTPlayerErrorNotEmbeddable:
-            playerError = @"not_embeddable";
-            break;
-        case kYTPlayerErrorUnknown:
-            playerError = @"unknown";
-            break;
-        default:
-            break;
-    }
-    
+    NSNumber *errorNumber = [NSNumber numberWithInt:error];
+
     [_eventDispatcher sendInputEventWithName:@"youtubeVideoError"
                                         body:@{
-                                               @"error": playerError,
+                                               @"data": errorNumber,
                                                @"target": self.reactTag
                                                }];
-
 }
 
 #pragma mark - Lifecycle

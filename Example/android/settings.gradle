@@ -1,0 +1,3 @@
+rootProject.name = 'RCTYouTubeExample'
+
+include ':app'

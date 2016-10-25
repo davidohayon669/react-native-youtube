@@ -3,27 +3,26 @@
  * @flow
  */
 
-'use strict';
-
 import React, { Component, PropTypes } from 'react';
 import ReactNative, {
   View,
   StyleSheet,
   requireNativeComponent,
   NativeModules,
-  NativeMethodsMixin
+  NativeMethodsMixin,
 } from 'react-native';
 
-const RCTYouTube = requireNativeComponent('ReactYouTube', YouTube,
-{
-  nativeOnly: {onError:true,
-              onReady:true,
-              onChangeState:true,
-              onChangeQuality:true
-              }
+const RCTYouTube = requireNativeComponent('ReactYouTube', YouTube, {
+  nativeOnly: {
+    onError:true,
+    onReady:true,
+    onChangeState:true,
+    onChangeQuality:true,
+  }
 });
 
 export default class YouTube extends Component {
+
   static propTypes = {
     style: View.propTypes.style,
     videoId: PropTypes.string.isRequired,
@@ -57,7 +56,7 @@ export default class YouTube extends Component {
   }
 
   _onChangeState(event) {
-    if(event.nativeEvent.state == 'ended' && this.props.loop) {
+    if (event.nativeEvent.state == 'ended' && this.props.loop) {
       this.seekTo(0);
     }
     return this.props.onChangeState && this.props.onChangeState(event.nativeEvent);
@@ -70,9 +69,11 @@ export default class YouTube extends Component {
   _onError(event) {
     return this.props.onError && this.props.onError(event.nativeEvent);
   }
+
   _onProgress(event){
-      return this.props.onProgress && this.props.onProgress(event.nativeEvent);
+    return this.props.onProgress && this.props.onProgress(event.nativeEvent);
   }
+
   seekTo(seconds){
     NativeModules.YouTubeModule.seekTo(parseInt(seconds, 10));
     //this.refs.youtubePlayer.seekTo(ReactNative.findNodeHandle(this), parseInt(seconds, 10));
@@ -136,7 +137,7 @@ export default class YouTube extends Component {
       delete nativeProps.playsInline;
     }
 
-    return <RCTYouTube {... nativeProps} />;
+    return <RCTYouTube {...nativeProps} />
   }
 }
 
