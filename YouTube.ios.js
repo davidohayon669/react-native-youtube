@@ -13,6 +13,7 @@ export default class YouTube extends Component {
   static propTypes = {
     style: View.propTypes.style,
     videoId: PropTypes.string.isRequired,
+    playlist: PropTypes.string,
     playsInline: PropTypes.bool,
     showinfo: PropTypes.bool,
     modestbranding: PropTypes.bool,
@@ -32,7 +33,7 @@ export default class YouTube extends Component {
     loop: false,
   }
 
-  constructor(props: Object) {
+  constructor(props) {
     super(props);
     this._onReady = this._onReady.bind(this);
     this._onChangeState = this._onChangeState.bind(this);
@@ -63,27 +64,27 @@ export default class YouTube extends Component {
     return this.props.onProgress && this.props.onProgress(event.nativeEvent);
   }
 
-  playVideo(): void {
+  playVideo() {
     NativeModules.YouTubeManager.playVideo(ReactNative.findNodeHandle(this));
   }
 
-  seekTo(seconds: number): void {
+  seekTo(seconds) {
     NativeModules.YouTubeManager.seekTo(ReactNative.findNodeHandle(this), parseInt(seconds, 10));
   }
 
-  loadVideoById(videoId: string): void {
+  loadVideoById(videoId) {
     NativeModules.YouTubeManager.loadVideoById(ReactNative.findNodeHandle(this), videoId);
   }
 
-  playVideoAt(index: number): void {
+  playVideoAt(index) {
     NativeModules.YouTubeManager.playVideoAt(ReactNative.findNodeHandle(this), parseInt(index, 10));
   }
 
-  nextVideo(): void {
+  nextVideo() {
     NativeModules.YouTubeManager.nextVideo(ReactNative.findNodeHandle(this));
   }
 
-  previousVideo(): void {
+  previousVideo() {
     NativeModules.YouTubeManager.previousVideo(ReactNative.findNodeHandle(this));
   }
 
