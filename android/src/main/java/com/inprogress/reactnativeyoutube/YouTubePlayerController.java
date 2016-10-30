@@ -4,9 +4,14 @@ import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
+import android.util.Log;
 
 import com.google.android.youtube.player.YouTubeInitializationResult;
 import com.google.android.youtube.player.YouTubePlayer;
+
+import java.util.List;
+import java.util.Arrays;
+import java.lang.StringBuilder;
 
 
 public class YouTubePlayerController implements
@@ -15,6 +20,8 @@ public class YouTubePlayerController implements
     Context mContext;
 
     String videoId = null;
+    List<String> videoIds = null;
+    String playlist = null;
 
     YouTubePlayer mYouTubePlayer;
     YouTubeView mYouTubeView;
@@ -28,7 +35,6 @@ public class YouTubePlayerController implements
     private boolean showInfo = true;
     private boolean loop = false;
     private boolean playInline = false;
-
 
     public YouTubePlayerController(final Context mContext, YouTubeView youTubeView) {
         this.mContext = mContext;
@@ -45,8 +51,10 @@ public class YouTubePlayerController implements
             updateControls();
             mYouTubeView.playerViewDidBecomeReady();
             setLoaded(true);
-            if (videoId != null && isPlay()) {
-                startVideo();
+            if (isPlay()) {
+                if (videoId != null) startVideo();
+                else if (videoIds != null) startVideos();
+                else if (playlist != null) startPlaylist();
                 mYouTubePlayer.setFullscreen(false);
             }
         }
@@ -56,7 +64,6 @@ public class YouTubePlayerController implements
     public void onInitializationFailure(YouTubePlayer.Provider provider, YouTubeInitializationResult youTubeInitializationResult) {
         mYouTubeView.receivedError(youTubeInitializationResult.toString());
     }
-
 
     @Override
     public void onPlaying() {
@@ -72,7 +79,6 @@ public class YouTubePlayerController implements
     public void onStopped() {
         mYouTubeView.didChangeToState("stopped");
     }
-
 
     @Override
     public void onBuffering(boolean b) {
@@ -143,9 +149,22 @@ public class YouTubePlayerController implements
         }
     }
 
+    // TODO: Handle error of unplayable videos. Currently it shows a generic 400
+    // Error and the whole player becomes inactive, event if only one of the videos
+    // in a playlist is unplayable
     private void startVideo() {
         mYouTubePlayer.loadVideo(videoId);
-        mYouTubePlayer.play();
+        // mYouTubePlayer.play();
+    }
+
+    private void startVideos() {
+        mYouTubePlayer.loadVideos(videoIds);
+        // mYouTubePlayer.play();
+    }
+
+    private void startPlaylist() {
+        mYouTubePlayer.loadPlaylist(playlist);
+        // mYouTubePlayer.play();
     }
 
     @Override
@@ -153,10 +172,21 @@ public class YouTubePlayerController implements
         mYouTubeView.receivedError(errorReason.toString());
     }
 
-
     public void seekTo(int second) {
         if (isLoaded()) {
             mYouTubePlayer.seekToMillis(second * 1000);
+        }
+    }
+
+    public void nextVideo() {
+        if (isLoaded()) {
+            mYouTubePlayer.next();
+        }
+    }
+
+    public void previousVideo() {
+        if (isLoaded()) {
+            mYouTubePlayer.previous();
         }
     }
 
@@ -198,14 +228,31 @@ public class YouTubePlayerController implements
         }
     }
 
+    public void setVideoIds(String str) {
+        if (str != null) {
+          videoIds = Arrays.asList(str.split("\\s*,\\s*"));
+          if (isLoaded()) {
+            startVideos();
+          }
+        }
+    }
+
+    public void setPlaylist(String str) {
+        playlist = str;
+        if (isLoaded()) {
+            startPlaylist();
+        }
+    }
+
     public void setPlay(boolean play) {
         this.play = play;
-        if(mYouTubePlayer!=null)
-            if(this.play && !mYouTubePlayer.isPlaying()){
+        if (mYouTubePlayer != null) {
+            if (this.play && !mYouTubePlayer.isPlaying()) {
                 mYouTubePlayer.play();
-            }else if(!this.play && mYouTubePlayer.isPlaying()){
+            } else if (!this.play && mYouTubePlayer.isPlaying()) {
                 mYouTubePlayer.pause();
-             }
+            }
+        }
     }
 
     public void setLoop(boolean loop) {
@@ -244,7 +291,6 @@ public class YouTubePlayerController implements
     public void setPlayInline(boolean playInline) {
         this.playInline = playInline;
     }
-
 
     public boolean isPlay() {
         return play;

@@ -3,7 +3,7 @@
  * @flow
  */
 
-import React, { Component, PropTypes } from 'react';
+import React from 'react';
 import ReactNative, {
   View,
   StyleSheet,
@@ -22,25 +22,29 @@ const RCTYouTube = requireNativeComponent('ReactYouTube', YouTube, {
   },
 });
 
-export default class YouTube extends Component {
+export default class YouTube extends React.Component {
 
   static propTypes = {
+    // TODO: warn about the importance of apiKey and how to get it from google
+    apiKey: React.PropTypes.string.isRequired,
+    videoId: React.PropTypes.string,
+    videoIds: React.PropTypes.arrayOf(React.PropTypes.string),
+    playlist: React.PropTypes.string,
+    playsInline: React.PropTypes.bool,
+    showinfo: React.PropTypes.bool,
+    modestbranding: React.PropTypes.bool,
+    controls: React.PropTypes.oneOf([0,1,2]),
+    origin: React.PropTypes.string,
+    play: React.PropTypes.bool,
+    rel: React.PropTypes.bool,
+    hidden: React.PropTypes.bool,
+    onReady: React.PropTypes.func,
+    onChangeState: React.PropTypes.func,
+    onChangeQuality: React.PropTypes.func,
+    // TODO: warn about "SERVICE_MISSING" and explain you need to have YouTube app on the device
+    onError: React.PropTypes.func,
+    loop: React.PropTypes.bool,
     style: View.propTypes.style,
-    videoId: PropTypes.string.isRequired,
-    apiKey: PropTypes.string.isRequired,
-    playsInline: PropTypes.bool,
-    showinfo: PropTypes.bool,
-    modestbranding: PropTypes.bool,
-    controls: PropTypes.oneOf([0,1,2]),
-    origin: PropTypes.string,
-    play: PropTypes.bool,
-    rel: PropTypes.bool,
-    hidden: PropTypes.bool,
-    onReady: PropTypes.func,
-    onChangeState: PropTypes.func,
-    onChangeQuality: PropTypes.func,
-    onError: PropTypes.func,
-    loop: PropTypes.bool,
   };
 
   static defaultProps = {
@@ -58,8 +62,16 @@ export default class YouTube extends Component {
 
   _nativeModuleRef = null;
 
-  seekTo(seconds){
-    this._nativeModuleRef.seekTo(parseInt(seconds, 10));
+  seekTo(seconds) {
+    NativeModules.YouTubeModule.seekTo(parseInt(seconds, 10));
+  }
+
+  nextVideo() {
+    NativeModules.YouTubeModule.nextVideo();
+  }
+
+  previousVideo() {
+    NativeModules.YouTubeModule.previousVideo();
   }
 
   _onReady(event) {
@@ -87,6 +99,8 @@ export default class YouTube extends Component {
       <RCTYouTube
         ref={(component) => { this._nativeModuleRef = component; }}
         {...this.props}
+        videoIds={Array.isArray(this.props.videoIds) ? this.props.videoIds.toString() : null}
+        // playlist={typeof this.props.playlist === 'string' ? this.props.playlist : null}
         style={[styles.base, this.props.style]}
         onReady={this._onReady}
         onChangeState={this._onChangeState}

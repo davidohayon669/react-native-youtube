@@ -23,5 +23,14 @@ public class YouTubeModule extends ReactContextBaseJavaModule {
         mYouTubeManager.seekTo(seconds);
     }
 
+    @ReactMethod
+    public void nextVideo() {
+        mYouTubeManager.nextVideo();
+    }
+
+    @ReactMethod
+    public void previousVideo() {
+        mYouTubeManager.previousVideo();
+    }
 
 }

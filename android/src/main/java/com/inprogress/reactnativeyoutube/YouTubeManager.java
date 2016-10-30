@@ -18,8 +18,10 @@ public class YouTubeManager extends SimpleViewManager<YouTubeView> {
 
     public YouTubeView mYouTubeView;
 
-    public static final String PROP_VIDEO_ID = "videoId";
     public static final String PROP_API_KEY = "apiKey";
+    public static final String PROP_VIDEO_ID = "videoId";
+    public static final String PROP_VIDEO_IDS = "videoIds";
+    public static final String PROP_PLAYLIST = "playlist";
     public static final String PROP_INLINE = "playInline";
     public static final String PROP_SHOW_INFO = "showinfo";
     public static final String PROP_MODESTBRANDING = "modestbranding";
@@ -50,91 +52,91 @@ public class YouTubeManager extends SimpleViewManager<YouTubeView> {
     @Nullable
     Map getExportedCustomDirectEventTypeConstants() {
         return MapBuilder.of(
-                "error",
-                MapBuilder.of("registrationName", "onError"),
-                "ready",
-                MapBuilder.of("registrationName", "onReady"),
-                "state",
-                MapBuilder.of("registrationName", "onChangeState"),
-                "quality",
-                MapBuilder.of("registrationName", "onChangeQuality")
+              "error",
+              MapBuilder.of("registrationName", "onError"),
+              "ready",
+              MapBuilder.of("registrationName", "onReady"),
+              "state",
+              MapBuilder.of("registrationName", "onChangeState"),
+              "quality",
+              MapBuilder.of("registrationName", "onChangeQuality"),
+              "process",
+              MapBuilder.of("registrationName", "onProcess")
         );
     }
 
-    @ReactMethod
+    // @ReactMethod
     public void seekTo(Integer seconds) {
         mYouTubeView.seekTo(seconds);
     }
 
-    @ReactProp(name = PROP_VIDEO_ID)
-    public void setPropVideoId(
-            YouTubeView view, @Nullable String param) {
-        //Log.e(PROP_VIDEO_ID,""+param);
-        view.setVideoId(param);
+    // @ReactMethod
+    public void nextVideo() {
+        mYouTubeView.nextVideo();
+    }
+
+    // @ReactMethod
+    public void previousVideo() {
+        mYouTubeView.previousVideo();
     }
 
     @ReactProp(name = PROP_API_KEY)
-    public void setApiKey(
-            YouTubeView view, @Nullable String param) {
-        //Log.e(PROP_API_KEY,""+param);
+    public void setApiKey(YouTubeView view, @Nullable String param) {
         view.setApiKey(param);
     }
 
+    @ReactProp(name = PROP_VIDEO_ID)
+    public void setPropVideoId(YouTubeView view, @Nullable String param) {
+        view.setVideoId(param);
+    }
+
+    @ReactProp(name = PROP_VIDEO_IDS)
+    public void setPropVideoIds(YouTubeView view, @Nullable String param) {
+        view.setVideoIds(param);
+    }
+
+    @ReactProp(name = PROP_PLAYLIST)
+    public void setPropPlaylist(YouTubeView view, @Nullable String param) {
+        view.setPlaylist(param);
+    }
+
     @ReactProp(name = PROP_PLAY)
-    public void setPropPlay(
-            YouTubeView view, @Nullable Boolean param) {
-        Log.e(PROP_PLAY,""+param);
+    public void setPropPlay(YouTubeView view, @Nullable Boolean param) {
         view.setPlay(param);
     }
 
     @ReactProp(name = PROP_HIDDEN)
-    public void setPropHidden(
-            YouTubeView view, @Nullable Boolean param) {
-        //Log.e(PROP_HIDDEN,""+param);
+    public void setPropHidden(YouTubeView view, @Nullable Boolean param) {
         view.setHidden(param);
     }
 
     @ReactProp(name = PROP_INLINE)
-    public void setPropInline(
-            YouTubeView view, @Nullable Boolean param) {
-        //Log.e(PROP_INLINE,""+param);
+    public void setPropInline(YouTubeView view, @Nullable Boolean param) {
         view.setInline(param);
     }
 
     @ReactProp(name = PROP_REL)
-    public void setPropRel(
-            YouTubeView view, @Nullable Boolean param) {
-        //Log.e(PROP_REL,""+param);
+    public void setPropRel(YouTubeView view, @Nullable Boolean param) {
         view.setRelated(param);
     }
 
     @ReactProp(name = PROP_MODESTBRANDING)
-    public void setPropModestbranding(
-            YouTubeView view, @Nullable Boolean param) {
-        //Log.e(PROP_MODESTBRANDING,""+param);
+    public void setPropModestbranding(YouTubeView view, @Nullable Boolean param) {
         view.setModestbranding(param);
     }
 
     @ReactProp(name = PROP_LOOP)
-    public void setPropLoop(
-            YouTubeView view, @Nullable Boolean param) {
-        //Log.e(PROP_LOOP,""+param);
+    public void setPropLoop(YouTubeView view, @Nullable Boolean param) {
         view.setLoop(param);
     }
 
     @ReactProp(name = PROP_CONTROLS)
-    public void setPropControls(
-            YouTubeView view, @Nullable Integer param) {
-        //Log.e(PROP_CONTROLS,""+param);
+    public void setPropControls(YouTubeView view, @Nullable Integer param) {
         view.setControls(param);
     }
 
     @ReactProp(name = PROP_SHOW_INFO)
-    public void setPropShowInfo(
-            YouTubeView view, @Nullable Boolean param) {
-        //Log.e(PROP_SHOW_INFO,""+param);
+    public void setPropShowInfo(YouTubeView view, @Nullable Boolean param) {
         view.setShowInfo(param);
     }
-
-
 }

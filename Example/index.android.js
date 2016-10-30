@@ -2,6 +2,7 @@ import React from 'react';
 import {
   AppRegistry,
   StyleSheet,
+  View,
   Text,
   ScrollView,
   TouchableOpacity,
@@ -20,6 +21,8 @@ class RCTYouTubeExample extends React.Component {
     isPlaying: true,
   };
 
+  _youTubeRef = null;
+
   render() {
     return (
       <ScrollView style={styles.container}>
@@ -31,8 +34,15 @@ class RCTYouTubeExample extends React.Component {
         </Text>
 
         <YouTube
+          ref={(component) => { this._youTubeRef = component }}
+          // You must have an apiKey for the player to load
+          // apiKey=""
+          // Comment out one of videoId / videoIds / playlist
           videoId="KVZ-P-ZI6W4"
+          // videoIds={['0S43IwBF0uM', 'LO2RPDZkY88', 'BC2dRkm8ATU', 'Xu3FTEmN-eg']}
+          // playlist="PLF797E961509B4EB5"
           play={this.state.isPlaying}
+          loop={true}
           hidden={false}
           playsInline={true}
           style={styles.player}
@@ -43,11 +53,28 @@ class RCTYouTubeExample extends React.Component {
           onError={e => this.setState({ error: e.error })}
         />
 
-        <TouchableOpacity onPress={() => this.setState(s => ({ isPlaying: !s.isPlaying }))}>
-          <Text style={[styles.welcome, { color: 'blue' }]}>
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => this.setState(s => ({ isPlaying: !s.isPlaying }))}
+        >
+          <Text style={styles.buttonText}>
             {this.state.status == 'playing' ? 'Pause' : 'Play'}
           </Text>
         </TouchableOpacity>
+        <View style={styles.buttonGroup}>
+          <TouchableOpacity
+            style={styles.button}
+            onPress={() => this._youTubeRef && this._youTubeRef.previousVideo()}
+          >
+            <Text style={styles.buttonText}>Previous Video</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.button}
+            onPress={() => this._youTubeRef && this._youTubeRef.nextVideo()}
+          >
+            <Text style={styles.buttonText}>Next Video</Text>
+          </TouchableOpacity>
+        </View>
 
         <Text style={styles.instructions}>{this.state.isReady ? 'Player is ready.' : 'Player setting up...'}</Text>
         <Text style={styles.instructions}>Status: {this.state.status}</Text>
@@ -69,6 +96,18 @@ const styles = StyleSheet.create({
     fontSize: 20,
     textAlign: 'center',
     margin: 10,
+  },
+  buttonGroup: {
+    flexDirection: 'row',
+    alignSelf: 'center',
+  },
+  button: {
+    padding: 8,
+    alignSelf: 'center',
+  },
+  buttonText: {
+    fontSize: 18,
+    color: 'blue',
   },
   instructions: {
     textAlign: 'center',
