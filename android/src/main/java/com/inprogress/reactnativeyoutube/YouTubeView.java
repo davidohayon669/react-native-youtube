@@ -1,6 +1,7 @@
 package com.inprogress.reactnativeyoutube;
 
 import android.app.Activity;
+import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Context;
 import android.widget.RelativeLayout;
@@ -9,36 +10,39 @@ import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.ReactContext;
 import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.WritableMap;
+import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.uimanager.events.RCTEventEmitter;
 import com.google.android.youtube.player.YouTubePlayerFragment;
 
 
 public class YouTubeView extends RelativeLayout {
 
-    Activity mMainActivity;
     YouTubePlayerController youtubeController;
     private YouTubePlayerFragment youTubePlayerFragment;
     public static String youtube_key;
 
-    public YouTubeView(Context context, Activity mainActivity) {
+    public YouTubeView(ReactContext context) {
         super(context);
-        mMainActivity = mainActivity;
         init();
+    }
+
+    private ReactContext getReactContext() {
+        return (ReactContext)getContext();
     }
 
     public void init() {
         inflate(getContext(), R.layout.youtube_layout, this);
-        youTubePlayerFragment = (YouTubePlayerFragment) mMainActivity.getFragmentManager()
-                .findFragmentById(R.id.youtubeplayerfragment);
-        youtubeController = new YouTubePlayerController(mMainActivity, YouTubeView.this);
+        FragmentManager fragmentManager = getReactContext().getCurrentActivity().getFragmentManager();
+        youTubePlayerFragment = (YouTubePlayerFragment) fragmentManager.findFragmentById(R.id.youtubeplayerfragment);
+        youtubeController = new YouTubePlayerController(YouTubeView.this);
     }
 
     @Override
     protected void onDetachedFromWindow() {
         try {
-            youTubePlayerFragment = (YouTubePlayerFragment) mMainActivity.getFragmentManager()
-                    .findFragmentById(R.id.youtubeplayerfragment);
-            FragmentTransaction ft = mMainActivity.getFragmentManager().beginTransaction();
+            FragmentManager fragmentManager = getReactContext().getCurrentActivity().getFragmentManager();
+            youTubePlayerFragment = (YouTubePlayerFragment) fragmentManager.findFragmentById(R.id.youtubeplayerfragment);
+            FragmentTransaction ft = fragmentManager.beginTransaction();
             ft.remove(youTubePlayerFragment);
             ft.commit();
         } catch (Exception e) {
@@ -98,7 +102,7 @@ public class YouTubeView extends RelativeLayout {
         reactContext.getJSModule(RCTEventEmitter.class).receiveEvent(getId(), "error", event);
     }
 
-    public void setApiKey(String apiKey){
+    public void setApiKey(String apiKey) {
         youtube_key = apiKey;
         youTubePlayerFragment.initialize(youtube_key, youtubeController);
     }
@@ -107,8 +111,8 @@ public class YouTubeView extends RelativeLayout {
         youtubeController.setVideoId(str);
     }
 
-    public void setVideoIds(String str) {
-        youtubeController.setVideoIds(str);
+    public void setVideoIds(ReadableArray arr) {
+        youtubeController.setVideoIds(arr);
     }
 
     public void setPlaylist(String str) {

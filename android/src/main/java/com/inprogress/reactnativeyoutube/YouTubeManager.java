@@ -4,10 +4,12 @@ import android.support.annotation.Nullable;
 import android.util.Log;
 
 import com.facebook.react.bridge.ReactMethod;
+import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.common.MapBuilder;
 import com.facebook.react.uimanager.SimpleViewManager;
 import com.facebook.react.uimanager.ThemedReactContext;
 import com.facebook.react.uimanager.annotations.ReactProp;
+import com.facebook.infer.annotation.Assertions;
 
 import java.util.Map;
 
@@ -17,6 +19,10 @@ public class YouTubeManager extends SimpleViewManager<YouTubeView> {
     public static final String REACT_CLASS = "ReactYouTube";
 
     public YouTubeView mYouTubeView;
+
+    public static final int COMMAND_SEEK_TO = 1;
+    public static final int COMMAND_NEXT_VIDEO = 2;
+    public static final int COMMAND_PREVIOUS_VIDEO = 3;
 
     public static final String PROP_API_KEY = "apiKey";
     public static final String PROP_VIDEO_ID = "videoId";
@@ -31,11 +37,6 @@ public class YouTubeManager extends SimpleViewManager<YouTubeView> {
     public static final String PROP_REL = "rel";
     public static final String PROP_LOOP = "loop";
 
-
-    public YouTubeManager() {
-
-    }
-
     @Override
     public String getName() {
         return REACT_CLASS;
@@ -43,8 +44,44 @@ public class YouTubeManager extends SimpleViewManager<YouTubeView> {
 
     @Override
     protected YouTubeView createViewInstance(ThemedReactContext themedReactContext) {
-        mYouTubeView = new YouTubeView(themedReactContext, themedReactContext.getCurrentActivity());
+        mYouTubeView = new YouTubeView(themedReactContext);
         return mYouTubeView;
+    }
+
+    @Override
+    public Map<String,Integer> getCommandsMap() {
+        return MapBuilder.of(
+            "seekTo",
+            COMMAND_SEEK_TO,
+            "nextVideo",
+            COMMAND_NEXT_VIDEO,
+            "previousVideo",
+            COMMAND_PREVIOUS_VIDEO
+        );
+    }
+
+    @Override
+    public void receiveCommand(YouTubeView view, int commandType, @Nullable ReadableArray args) {
+        Assertions.assertNotNull(view);
+        Assertions.assertNotNull(args);
+        switch (commandType) {
+            case COMMAND_SEEK_TO: {
+                view.seekTo(args.getInt(0));
+                return;
+            }
+            case COMMAND_NEXT_VIDEO: {
+                view.nextVideo();
+                return;
+            }
+            case COMMAND_PREVIOUS_VIDEO: {
+                view.previousVideo();
+                return;
+            }
+            default:
+                throw new IllegalArgumentException(
+                  String.format("Unsupported command %d received by %s.", commandType, getClass().getSimpleName())
+                );
+        }
     }
 
     @Override
@@ -52,32 +89,17 @@ public class YouTubeManager extends SimpleViewManager<YouTubeView> {
     @Nullable
     Map getExportedCustomDirectEventTypeConstants() {
         return MapBuilder.of(
-              "error",
-              MapBuilder.of("registrationName", "onError"),
-              "ready",
-              MapBuilder.of("registrationName", "onReady"),
-              "state",
-              MapBuilder.of("registrationName", "onChangeState"),
-              "quality",
-              MapBuilder.of("registrationName", "onChangeQuality"),
-              "process",
-              MapBuilder.of("registrationName", "onProcess")
+            "error",
+            MapBuilder.of("registrationName", "onError"),
+            "ready",
+            MapBuilder.of("registrationName", "onReady"),
+            "state",
+            MapBuilder.of("registrationName", "onChangeState"),
+            "quality",
+            MapBuilder.of("registrationName", "onChangeQuality"),
+            "process",
+            MapBuilder.of("registrationName", "onProcess")
         );
-    }
-
-    // @ReactMethod
-    public void seekTo(Integer seconds) {
-        mYouTubeView.seekTo(seconds);
-    }
-
-    // @ReactMethod
-    public void nextVideo() {
-        mYouTubeView.nextVideo();
-    }
-
-    // @ReactMethod
-    public void previousVideo() {
-        mYouTubeView.previousVideo();
     }
 
     @ReactProp(name = PROP_API_KEY)
@@ -91,7 +113,7 @@ public class YouTubeManager extends SimpleViewManager<YouTubeView> {
     }
 
     @ReactProp(name = PROP_VIDEO_IDS)
-    public void setPropVideoIds(YouTubeView view, @Nullable String param) {
+    public void setPropVideoIds(YouTubeView view, @Nullable ReadableArray param) {
         view.setVideoIds(param);
     }
 

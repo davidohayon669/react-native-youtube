@@ -8,8 +8,7 @@ import ReactNative, {
   View,
   StyleSheet,
   requireNativeComponent,
-  NativeModules,
-  NativeMethodsMixin,
+  UIManager,
 } from 'react-native';
 
 const RCTYouTube = requireNativeComponent('ReactYouTube', YouTube, {
@@ -41,6 +40,7 @@ export default class YouTube extends React.Component {
     onReady: React.PropTypes.func,
     onChangeState: React.PropTypes.func,
     onChangeQuality: React.PropTypes.func,
+    onProgress: React.PropTypes.func,
     // TODO: warn about "SERVICE_MISSING" and explain you need to have YouTube app on the device
     onError: React.PropTypes.func,
     loop: React.PropTypes.bool,
@@ -58,20 +58,6 @@ export default class YouTube extends React.Component {
     this._onChangeQuality = this._onChangeQuality.bind(this);
     this._onError = this._onError.bind(this);
     this._onProgress = this._onProgress.bind(this);
-  }
-
-  _nativeModuleRef = null;
-
-  seekTo(seconds) {
-    NativeModules.YouTubeModule.seekTo(parseInt(seconds, 10));
-  }
-
-  nextVideo() {
-    NativeModules.YouTubeModule.nextVideo();
-  }
-
-  previousVideo() {
-    NativeModules.YouTubeModule.previousVideo();
   }
 
   _onReady(event) {
@@ -94,13 +80,35 @@ export default class YouTube extends React.Component {
     return this.props.onError && this.props.onError(event.nativeEvent);
   }
 
+  seekTo(seconds) {
+    UIManager.dispatchViewManagerCommand(
+      ReactNative.findNodeHandle(this),
+      UIManager.ReactYouTube.Commands.seekTo,
+      [parseInt(seconds, 10)],
+    );
+  }
+
+  nextVideo() {
+    UIManager.dispatchViewManagerCommand(
+      ReactNative.findNodeHandle(this),
+      UIManager.ReactYouTube.Commands.nextVideo,
+      [],
+    );
+  }
+
+  previousVideo() {
+    UIManager.dispatchViewManagerCommand(
+      ReactNative.findNodeHandle(this),
+      UIManager.ReactYouTube.Commands.previousVideo,
+      [],
+    );
+  }
+
   render() {
     return (
       <RCTYouTube
-        ref={(component) => { this._nativeModuleRef = component; }}
         {...this.props}
-        videoIds={Array.isArray(this.props.videoIds) ? this.props.videoIds.toString() : null}
-        // playlist={typeof this.props.playlist === 'string' ? this.props.playlist : null}
+        // videoIds={Array.isArray(this.props.videoIds) ? this.props.videoIds.toString() : null}
         style={[styles.base, this.props.style]}
         onReady={this._onReady}
         onChangeState={this._onChangeState}

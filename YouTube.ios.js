@@ -3,30 +3,37 @@
  * @flow
  */
 
-import React, { Component, PropTypes } from 'react';
-import ReactNative, { View, requireNativeComponent, NativeModules } from 'react-native';
+import React from 'react';
+import ReactNative, {
+  View,
+  StyleSheet,
+  requireNativeComponent,
+  NativeModules,
+} from 'react-native';
 
 const RCTYouTube = requireNativeComponent('RCTYouTube', null)
 
-export default class YouTube extends Component {
+export default class YouTube extends React.Component {
 
   static propTypes = {
+    videoId: React.PropTypes.string,
+    videoIds: React.PropTypes.arrayOf(React.PropTypes.string),
+    playlist: React.PropTypes.string,
+    playsInline: React.PropTypes.bool,
+    showinfo: React.PropTypes.bool,
+    modestbranding: React.PropTypes.bool,
+    controls: React.PropTypes.oneOf([0, 1, 2]),
+    origin: React.PropTypes.string,
+    play: React.PropTypes.bool,
+    rel: React.PropTypes.bool,
+    hidden: React.PropTypes.bool,
+    onReady: React.PropTypes.func,
+    onChangeState: React.PropTypes.func,
+    onChangeQuality: React.PropTypes.func,
+    onProgress: React.PropTypes.func,
+    onError: React.PropTypes.func,
+    loop: React.PropTypes.bool,
     style: View.propTypes.style,
-    videoId: PropTypes.string.isRequired,
-    playlist: PropTypes.string,
-    playsInline: PropTypes.bool,
-    showinfo: PropTypes.bool,
-    modestbranding: PropTypes.bool,
-    controls: PropTypes.oneOf([0, 1, 2]),
-    origin: PropTypes.string,
-    play: PropTypes.bool,
-    rel: PropTypes.bool,
-    hidden: PropTypes.bool,
-    onReady: PropTypes.func,
-    onChangeState: PropTypes.func,
-    onChangeQuality: PropTypes.func,
-    onError: PropTypes.func,
-    loop: PropTypes.bool,
   }
 
   static defaultProps = {
@@ -97,7 +104,7 @@ export default class YouTube extends Component {
 
   render() {
     const nativeProps = { ...this.props };
-    nativeProps.style = [{ overflow: 'hidden' }, this.props.style];
+    nativeProps.style = [styles.base, this.props.style];
     nativeProps.onYoutubeVideoReady = this._onReady;
     nativeProps.onYoutubeVideoChangeState = this._onChangeState;
     nativeProps.onYoutubeVideoChangeQuality = this._onChangeQuality;
@@ -111,6 +118,13 @@ export default class YouTube extends Component {
       delete nativeProps.videoId;
 
       nativeProps.playerParams.playerVars = {};
+
+      if (this.props.videoIds && Array.isArray(this.props.videoIds)) {
+        nativeProps.playerParams.videoId = this.props.videoIds[0]
+        nativeProps.playerParams.playerVars.playlist = this.props.videoIds[1]
+          ? this.props.videoIds.slice(1).toString() : null;
+        delete nativeProps.videoIds;
+      }
 
       if (this.props.playlist) {
         nativeProps.playerParams.playerVars.playlist = this.props.playlist;
@@ -156,3 +170,9 @@ export default class YouTube extends Component {
     return <RCTYouTube {...nativeProps} />;
   }
 }
+
+const styles = StyleSheet.create({
+  base: {
+    overflow: 'hidden',
+  },
+});

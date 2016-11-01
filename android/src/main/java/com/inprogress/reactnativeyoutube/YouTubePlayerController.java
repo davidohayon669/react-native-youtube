@@ -9,18 +9,19 @@ import android.util.Log;
 import com.google.android.youtube.player.YouTubeInitializationResult;
 import com.google.android.youtube.player.YouTubePlayer;
 
+import com.facebook.react.bridge.ReadableArray;
+
 import java.util.List;
 import java.util.Arrays;
+import java.util.ArrayList;
 import java.lang.StringBuilder;
 
 
 public class YouTubePlayerController implements
         YouTubePlayer.OnInitializedListener, YouTubePlayer.PlayerStateChangeListener, YouTubePlayer.PlaybackEventListener {
 
-    Context mContext;
-
     String videoId = null;
-    List<String> videoIds = null;
+    List<String> videoIds = new ArrayList<String>();
     String playlist = null;
 
     YouTubePlayer mYouTubePlayer;
@@ -36,8 +37,7 @@ public class YouTubePlayerController implements
     private boolean loop = false;
     private boolean playInline = false;
 
-    public YouTubePlayerController(final Context mContext, YouTubeView youTubeView) {
-        this.mContext = mContext;
+    public YouTubePlayerController(YouTubeView youTubeView) {
         this.mYouTubeView = youTubeView;
     }
 
@@ -53,7 +53,7 @@ public class YouTubePlayerController implements
             setLoaded(true);
             if (isPlay()) {
                 if (videoId != null) startVideo();
-                else if (videoIds != null) startVideos();
+                else if (!videoIds.isEmpty()) startVideos();
                 else if (playlist != null) startPlaylist();
                 mYouTubePlayer.setFullscreen(false);
             }
@@ -154,17 +154,14 @@ public class YouTubePlayerController implements
     // in a playlist is unplayable
     private void startVideo() {
         mYouTubePlayer.loadVideo(videoId);
-        // mYouTubePlayer.play();
     }
 
     private void startVideos() {
         mYouTubePlayer.loadVideos(videoIds);
-        // mYouTubePlayer.play();
     }
 
     private void startPlaylist() {
         mYouTubePlayer.loadPlaylist(playlist);
-        // mYouTubePlayer.play();
     }
 
     @Override
@@ -228,9 +225,14 @@ public class YouTubePlayerController implements
         }
     }
 
-    public void setVideoIds(String str) {
-        if (str != null) {
-          videoIds = Arrays.asList(str.split("\\s*,\\s*"));
+    public void setVideoIds(ReadableArray arr) {
+        if (arr != null) {
+          videoIds.clear();
+          for (int i = 1; i < arr.size(); i++) {
+            videoIds.add(arr.getString(i));
+          }
+          // videoIds = Arrays.asList(str.split("\\s*,\\s*"));
+
           if (isLoaded()) {
             startVideos();
           }
