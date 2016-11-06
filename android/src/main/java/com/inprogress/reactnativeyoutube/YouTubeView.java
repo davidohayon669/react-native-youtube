@@ -5,6 +5,7 @@ import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Context;
 import android.widget.RelativeLayout;
+import android.util.Log;
 
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.ReactContext;
@@ -60,6 +61,14 @@ public class YouTubeView extends RelativeLayout {
 
     public void previousVideo() {
         youtubeController.previousVideo();
+    }
+
+    public void playVideoAt(int index) {
+        youtubeController.playVideoAt(index);
+    }
+
+    public int getVideosIndex() {
+        return youtubeController.getVideosIndex();
     }
 
     public void playerViewDidBecomeReady() {

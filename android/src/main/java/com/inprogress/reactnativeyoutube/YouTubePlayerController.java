@@ -12,22 +12,26 @@ import com.google.android.youtube.player.YouTubePlayer;
 import com.facebook.react.bridge.ReadableArray;
 
 import java.util.List;
-import java.util.Arrays;
 import java.util.ArrayList;
-import java.lang.StringBuilder;
 
 
 public class YouTubePlayerController implements
         YouTubePlayer.OnInitializedListener, YouTubePlayer.PlayerStateChangeListener, YouTubePlayer.PlaybackEventListener {
 
     String videoId = null;
-    List<String> videoIds = new ArrayList<String>();
     String playlist = null;
+    List<String> videoIds = new ArrayList<String>();
+    int videosIndex = 0;
 
     YouTubePlayer mYouTubePlayer;
     YouTubeView mYouTubeView;
 
+    private static final int VIDEO_MODE = 0;
+    private static final int VIDEOS_MODE = 1;
+    private static final int PLAYLIST_MODE = 2;
+
     private boolean isLoaded = false;
+    private int playingMode = 0;
     private boolean play = false;
     private boolean hidden = false;
     private boolean related = false;
@@ -117,9 +121,7 @@ public class YouTubePlayerController implements
     }
 
     @Override
-    public void onSeekTo(int i) {
-
-    }
+    public void onSeekTo(int i) { }
 
     @Override
     public void onLoading() {
@@ -127,8 +129,10 @@ public class YouTubePlayerController implements
     }
 
     @Override
-    public void onLoaded(String s) {
-
+    public void onLoaded(String videoId) {
+        if (playingMode == VIDEOS_MODE) {
+            videosIndex = videoIds.indexOf(videoId);
+        }
     }
 
     @Override
@@ -145,23 +149,37 @@ public class YouTubePlayerController implements
     public void onVideoEnded() {
         mYouTubeView.didChangeToState("ended");
         if (isLoop()) {
-            startVideo();
+            if (playingMode == VIDEO_MODE)
+                startVideo();
         }
     }
 
     // TODO: Handle error of unplayable videos. Currently it shows a generic 400
     // Error and the whole player becomes inactive, event if only one of the videos
     // in a playlist is unplayable
+    private void setPlayingMode(int mode) {
+        playingMode = mode;
+    }
+
     private void startVideo() {
         mYouTubePlayer.loadVideo(videoId);
+        videosIndex = 0;
+        setPlayingMode(VIDEO_MODE);
     }
 
     private void startVideos() {
-        mYouTubePlayer.loadVideos(videoIds);
+        if (videosIndex != 0)
+            mYouTubePlayer.loadVideos(videoIds, videosIndex, 0);
+        else
+            mYouTubePlayer.loadVideos(videoIds);
+
+        setPlayingMode(VIDEOS_MODE);
     }
 
     private void startPlaylist() {
         mYouTubePlayer.loadPlaylist(playlist);
+        videosIndex = 0;
+        setPlayingMode(PLAYLIST_MODE);
     }
 
     @Override
@@ -184,6 +202,13 @@ public class YouTubePlayerController implements
     public void previousVideo() {
         if (isLoaded()) {
             mYouTubePlayer.previous();
+        }
+    }
+
+    public void playVideoAt(int index) {
+        if (isLoaded()) {
+            videosIndex = index;
+            startVideos();
         }
     }
 
@@ -214,6 +239,10 @@ public class YouTubePlayerController implements
         return isLoaded;
     }
 
+    public int getVideosIndex() {
+        return videosIndex;
+    }
+
     /**
      * PROPS
      */
@@ -227,12 +256,11 @@ public class YouTubePlayerController implements
 
     public void setVideoIds(ReadableArray arr) {
         if (arr != null) {
+          videosIndex = 0;
           videoIds.clear();
-          for (int i = 1; i < arr.size(); i++) {
-            videoIds.add(arr.getString(i));
+          for (int i = 0; i < arr.size(); i++) {
+              videoIds.add(arr.getString(i));
           }
-          // videoIds = Arrays.asList(str.split("\\s*,\\s*"));
-
           if (isLoaded()) {
             startVideos();
           }

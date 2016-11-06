@@ -35,7 +35,9 @@ class RCTYouTubeExample extends React.Component {
           ref={(component) => { this._youTubeRef = component }}
           // You must have an apiKey for the player to load in Android. Prop is ignored in iOS
           // apiKey=""
-          // Un-comment one of videoId / videoIds / playlist
+          // Un-comment one of videoId / videoIds / playlist.
+          // You can also play with these props while Hot-Loading in development to see how
+          // it affect a loaded native module
           videoId="KVZ-P-ZI6W4"
           // videoIds={['HcXNPI-IPPM', 'uLyhb5iG-5g', 'XXlZfc1TrD0', 'zV2aYno9xGc']}
           // playlist="PLF797E961509B4EB5"
@@ -59,6 +61,8 @@ class RCTYouTubeExample extends React.Component {
             {this.state.status == 'playing' ? 'Pause' : 'Play'}
           </Text>
         </TouchableOpacity>
+
+        {/* Previous / Next video (Ignored when only one video) */}
         <View style={styles.buttonGroup}>
           <TouchableOpacity
             style={styles.button}
@@ -73,6 +77,8 @@ class RCTYouTubeExample extends React.Component {
             <Text style={styles.buttonText}>Next Video</Text>
           </TouchableOpacity>
         </View>
+
+        {/* Go To Specific time in played video with seekTo() */}
         <View style={styles.buttonGroup}>
           <TouchableOpacity
             style={styles.button}
@@ -91,6 +97,35 @@ class RCTYouTubeExample extends React.Component {
             onPress={() => this._youTubeRef && this._youTubeRef.seekTo(15 * 60)}
           >
             <Text style={styles.buttonText}>15 Minutes</Text>
+          </TouchableOpacity>
+        </View>
+
+        {/* Play specific video in a videoIds array by index */}
+        {this.props.videoIds && Array.isArray(this.props.videoIds) &&
+          <View style={styles.buttonGroup}>
+            {this.props.videoIds.map((videoId, i) => (
+              <TouchableOpacity
+                key={i}
+                style={styles.button}
+                onPress={() => this._youTubeRef && this._youTubeRef.playVideoAt(i)}
+              >
+                <Text style={[styles.buttonText, styles.buttonTextSmall]}>{`Video ${i}`}</Text>
+              </TouchableOpacity>
+            ))}
+          </View>
+        }
+
+        {/* Go To Specific time in played video with seekTo() */}
+        <View style={styles.buttonGroup}>
+          <TouchableOpacity
+            style={styles.button}
+            onPress={
+              () => this._youTubeRef && this._youTubeRef.playlistIndex()
+                .then(index => this.setState({ playlistIndex: index }))
+                .catch(errorMessage => this.setState({ error: errorMessage }))
+            }
+          >
+            <Text style={styles.buttonText}>Get Playlist Index: {this.state.playlistIndex}</Text>
           </TouchableOpacity>
         </View>
 
@@ -128,6 +163,9 @@ const styles = StyleSheet.create({
   buttonText: {
     fontSize: 18,
     color: 'blue',
+  },
+  buttonTextSmall: {
+    fontSize: 15,
   },
   instructions: {
     textAlign: 'center',

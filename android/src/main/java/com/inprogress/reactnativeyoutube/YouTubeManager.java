@@ -23,6 +23,7 @@ public class YouTubeManager extends SimpleViewManager<YouTubeView> {
     public static final int COMMAND_SEEK_TO = 1;
     public static final int COMMAND_NEXT_VIDEO = 2;
     public static final int COMMAND_PREVIOUS_VIDEO = 3;
+    public static final int COMMAND_PLAY_VIDEO_AT = 4;
 
     public static final String PROP_API_KEY = "apiKey";
     public static final String PROP_VIDEO_ID = "videoId";
@@ -56,7 +57,9 @@ public class YouTubeManager extends SimpleViewManager<YouTubeView> {
             "nextVideo",
             COMMAND_NEXT_VIDEO,
             "previousVideo",
-            COMMAND_PREVIOUS_VIDEO
+            COMMAND_PREVIOUS_VIDEO,
+            "playVideoAt",
+            COMMAND_PLAY_VIDEO_AT
         );
     }
 
@@ -77,6 +80,10 @@ public class YouTubeManager extends SimpleViewManager<YouTubeView> {
                 view.previousVideo();
                 return;
             }
+            case COMMAND_PLAY_VIDEO_AT: {
+                view.playVideoAt(args.getInt(0));
+                return;
+            }
             default:
                 throw new IllegalArgumentException(
                   String.format("Unsupported command %d received by %s.", commandType, getClass().getSimpleName())
@@ -84,21 +91,26 @@ public class YouTubeManager extends SimpleViewManager<YouTubeView> {
         }
     }
 
+    public int getVideosIndex(YouTubeView view) {
+        // Log.i("DAVIDTEST/YouTubeManager", str);
+        return view.getVideosIndex();
+    }
+
     @Override
     public
     @Nullable
-    Map getExportedCustomDirectEventTypeConstants() {
+    Map <String,Object> getExportedCustomDirectEventTypeConstants() {
         return MapBuilder.of(
             "error",
-            MapBuilder.of("registrationName", "onError"),
+            (Object) MapBuilder.of("registrationName", "onError"),
             "ready",
-            MapBuilder.of("registrationName", "onReady"),
+            (Object) MapBuilder.of("registrationName", "onReady"),
             "state",
-            MapBuilder.of("registrationName", "onChangeState"),
+            (Object) MapBuilder.of("registrationName", "onChangeState"),
             "quality",
-            MapBuilder.of("registrationName", "onChangeQuality"),
+            (Object) MapBuilder.of("registrationName", "onChangeQuality"),
             "process",
-            MapBuilder.of("registrationName", "onProcess")
+            (Object) MapBuilder.of("registrationName", "onProcess")
         );
     }
 

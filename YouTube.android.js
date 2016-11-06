@@ -9,6 +9,7 @@ import ReactNative, {
   StyleSheet,
   requireNativeComponent,
   UIManager,
+  NativeModules,
 } from 'react-native';
 
 const RCTYouTube = requireNativeComponent('ReactYouTube', YouTube, {
@@ -104,11 +105,25 @@ export default class YouTube extends React.Component {
     );
   }
 
+  playVideoAt(index) {
+    UIManager.dispatchViewManagerCommand(
+      ReactNative.findNodeHandle(this),
+      UIManager.ReactYouTube.Commands.playVideoAt,
+      [parseInt(index, 10)],
+    );
+  }
+
+  playlistIndex() {
+    return new Promise((resolve, reject) =>
+      NativeModules.YouTubeModule.playlistIndex(ReactNative.findNodeHandle(this))
+        .then(index => resolve(index))
+        .catch(errorMessage => reject(errorMessage)));
+  }
+
   render() {
     return (
       <RCTYouTube
         {...this.props}
-        // videoIds={Array.isArray(this.props.videoIds) ? this.props.videoIds.toString() : null}
         style={[styles.base, this.props.style]}
         onReady={this._onReady}
         onChangeState={this._onChangeState}
