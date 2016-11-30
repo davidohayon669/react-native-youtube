@@ -33,11 +33,11 @@ class RCTYouTubeExample extends React.Component {
 
         <YouTube
           ref={(component) => { this._youTubeRef = component }}
-          // You must have an apiKey for the player to load in Android. Prop is ignored in iOS
-          // apiKey=""
+          // You must have an apiKey for the player to load in Android
+          apiKey=""
           // Un-comment one of videoId / videoIds / playlist.
-          // You can also play with these props while Hot-Loading in development to see how
-          // it affect a loaded native module
+          // You can also edit these props while Hot-Loading in development mode to see how
+          // it affects the loaded native module
           videoId="KVZ-P-ZI6W4"
           // videoIds={['HcXNPI-IPPM', 'uLyhb5iG-5g', 'XXlZfc1TrD0', 'zV2aYno9xGc']}
           // playlist="PLF797E961509B4EB5"
@@ -46,11 +46,11 @@ class RCTYouTubeExample extends React.Component {
           hidden={false}
           playsInline={true}
           style={styles.player}
+          onError={e => this.setState({ error: e.error })}
           onReady={e => this.setState({ isReady: true })}
           onChangeState={e => this.setState({ status: e.state })}
           onChangeQuality={e => this.setState({ quality: e.quality })}
           onProgress={e => this.setState({ progress: e.progress })}
-          onError={e => this.setState({ error: e.error })}
         />
 
         <TouchableOpacity
@@ -62,7 +62,7 @@ class RCTYouTubeExample extends React.Component {
           </Text>
         </TouchableOpacity>
 
-        {/* Previous / Next video (Ignored when only one video) */}
+        {/* Previous / Next video */}
         <View style={styles.buttonGroup}>
           <TouchableOpacity
             style={styles.button}
@@ -101,9 +101,9 @@ class RCTYouTubeExample extends React.Component {
         </View>
 
         {/* Play specific video in a videoIds array by index */}
-        {this.props.videoIds && Array.isArray(this.props.videoIds) &&
+        {this._youTubeRef && this._youTubeRef.props.videoIds && Array.isArray(this._youTubeRef.props.videoIds) &&
           <View style={styles.buttonGroup}>
-            {this.props.videoIds.map((videoId, i) => (
+            {this._youTubeRef.props.videoIds.map((videoId, i) => (
               <TouchableOpacity
                 key={i}
                 style={styles.button}
@@ -115,25 +115,25 @@ class RCTYouTubeExample extends React.Component {
           </View>
         }
 
-        {/* Go To Specific time in played video with seekTo() */}
+        {/* Get current played video's position index when playing videoIds (and playlist in iOS) */}
         <View style={styles.buttonGroup}>
           <TouchableOpacity
             style={styles.button}
             onPress={
-              () => this._youTubeRef && this._youTubeRef.playlistIndex()
-                .then(index => this.setState({ playlistIndex: index }))
+              () => this._youTubeRef && this._youTubeRef.videosIndex()
+                .then(index => this.setState({ videosIndex: index }))
                 .catch(errorMessage => this.setState({ error: errorMessage }))
             }
           >
-            <Text style={styles.buttonText}>Get Playlist Index: {this.state.playlistIndex}</Text>
+            <Text style={styles.buttonText}>Get Videos Index: {this.state.videosIndex}</Text>
           </TouchableOpacity>
         </View>
 
-        <Text style={styles.instructions}>{this.state.isReady ? 'Player is ready.' : 'Player setting up...'}</Text>
+        <Text style={styles.instructions}>{this.state.isReady ? 'Player is ready' : 'Player setting up...'}</Text>
         <Text style={styles.instructions}>Status: {this.state.status}</Text>
         <Text style={styles.instructions}>Quality: {this.state.quality}</Text>
         <Text style={styles.instructions}>Progress: {this.state.progress}</Text>
-        <Text style={styles.instructions}>{this.state.error ? 'Error: ' + this.state.error : ' '}</Text>
+        <Text style={styles.instructions}>{this.state.error ? 'Error: ' + this.state.error : ''}</Text>
 
       </ScrollView>
     );

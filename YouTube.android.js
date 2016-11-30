@@ -6,7 +6,7 @@
 import React from 'react';
 import ReactNative, {
   View,
-  StyleSheet,
+  Text,
   requireNativeComponent,
   UIManager,
   NativeModules,
@@ -18,7 +18,6 @@ const RCTYouTube = requireNativeComponent('ReactYouTube', YouTube, {
     onReady: true,
     onChangeState: true,
     onChangeQuality: true,
-    onProgress: true,
   },
 });
 
@@ -38,12 +37,11 @@ export default class YouTube extends React.Component {
     play: React.PropTypes.bool,
     rel: React.PropTypes.bool,
     hidden: React.PropTypes.bool,
+    // TODO: warn about "SERVICE_MISSING" and explain you need to have YouTube app on the device
+    onError: React.PropTypes.func,
     onReady: React.PropTypes.func,
     onChangeState: React.PropTypes.func,
     onChangeQuality: React.PropTypes.func,
-    onProgress: React.PropTypes.func,
-    // TODO: warn about "SERVICE_MISSING" and explain you need to have YouTube app on the device
-    onError: React.PropTypes.func,
     loop: React.PropTypes.bool,
     style: View.propTypes.style,
   };
@@ -54,31 +52,26 @@ export default class YouTube extends React.Component {
 
   constructor(props) {
     super(props);
+    this._onError = this._onError.bind(this);
     this._onReady = this._onReady.bind(this);
     this._onChangeState = this._onChangeState.bind(this);
     this._onChangeQuality = this._onChangeQuality.bind(this);
-    this._onError = this._onError.bind(this);
-    this._onProgress = this._onProgress.bind(this);
-  }
-
-  _onReady(event) {
-    return this.props.onReady && this.props.onReady(event.nativeEvent);
-  }
-
-  _onChangeState(event) {
-    return this.props.onChangeState && this.props.onChangeState(event.nativeEvent);
-  }
-
-  _onChangeQuality(event) {
-    return this.props.onChangeQuality && this.props.onChangeQuality(event.nativeEvent);
-  }
-
-  _onProgress(event){
-    return this.props.onProgress && this.props.onProgress(event.nativeEvent);
   }
 
   _onError(event) {
-    return this.props.onError && this.props.onError(event.nativeEvent);
+    if (this.props.onError) this.props.onError(event.nativeEvent);
+  }
+
+  _onReady(event) {
+    if (this.props.onReady) this.props.onReady(event.nativeEvent);
+  }
+
+  _onChangeState(event) {
+    if (this.props.onChangeState) this.props.onChangeState(event.nativeEvent);
+  }
+
+  _onChangeQuality(event) {
+    if (this.props.onChangeQuality) this.props.onChangeQuality(event.nativeEvent);
   }
 
   seekTo(seconds) {
@@ -113,9 +106,9 @@ export default class YouTube extends React.Component {
     );
   }
 
-  playlistIndex() {
+  videosIndex() {
     return new Promise((resolve, reject) =>
-      NativeModules.YouTubeModule.playlistIndex(ReactNative.findNodeHandle(this))
+      NativeModules.YouTubeModule.videosIndex(ReactNative.findNodeHandle(this))
         .then(index => resolve(index))
         .catch(errorMessage => reject(errorMessage)));
   }
@@ -124,19 +117,12 @@ export default class YouTube extends React.Component {
     return (
       <RCTYouTube
         {...this.props}
-        style={[styles.base, this.props.style]}
+        style={[{ overflow: 'hidden' }, this.props.style]}
+        onError={this._onError}
         onReady={this._onReady}
         onChangeState={this._onChangeState}
         onChangeQuality={this._onChangeQuality}
-        onProgress={this._onProgress}
-        onError={this._onError}
       />
     )
   }
 }
-
-const styles = StyleSheet.create({
-  base: {
-    overflow: 'hidden',
-  },
-});

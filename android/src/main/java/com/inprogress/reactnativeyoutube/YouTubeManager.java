@@ -91,15 +91,8 @@ public class YouTubeManager extends SimpleViewManager<YouTubeView> {
         }
     }
 
-    public int getVideosIndex(YouTubeView view) {
-        // Log.i("DAVIDTEST/YouTubeManager", str);
-        return view.getVideosIndex();
-    }
-
     @Override
-    public
-    @Nullable
-    Map <String,Object> getExportedCustomDirectEventTypeConstants() {
+    public @Nullable Map <String,Object> getExportedCustomDirectEventTypeConstants() {
         return MapBuilder.of(
             "error",
             (Object) MapBuilder.of("registrationName", "onError"),
@@ -108,10 +101,12 @@ public class YouTubeManager extends SimpleViewManager<YouTubeView> {
             "state",
             (Object) MapBuilder.of("registrationName", "onChangeState"),
             "quality",
-            (Object) MapBuilder.of("registrationName", "onChangeQuality"),
-            "process",
-            (Object) MapBuilder.of("registrationName", "onProcess")
+            (Object) MapBuilder.of("registrationName", "onChangeQuality")
         );
+    }
+
+    public int getVideosIndex(YouTubeView view) {
+        return view.getVideosIndex();
     }
 
     @ReactProp(name = PROP_API_KEY)

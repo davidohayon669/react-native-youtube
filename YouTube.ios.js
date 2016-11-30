@@ -6,7 +6,6 @@
 import React from 'react';
 import ReactNative, {
   View,
-  StyleSheet,
   requireNativeComponent,
   NativeModules,
 } from 'react-native';
@@ -27,11 +26,11 @@ export default class YouTube extends React.Component {
     play: React.PropTypes.bool,
     rel: React.PropTypes.bool,
     hidden: React.PropTypes.bool,
+    onError: React.PropTypes.func,
     onReady: React.PropTypes.func,
     onChangeState: React.PropTypes.func,
     onChangeQuality: React.PropTypes.func,
     onProgress: React.PropTypes.func,
-    onError: React.PropTypes.func,
     loop: React.PropTypes.bool,
     style: View.propTypes.style,
   }
@@ -47,28 +46,27 @@ export default class YouTube extends React.Component {
     this._onChangeQuality = this._onChangeQuality.bind(this);
     this._onError = this._onError.bind(this);
     this._onProgress = this._onProgress.bind(this);
-    this._exportedProps = NativeModules.YouTubeManager
-      && NativeModules.YouTubeManager.exportedProps;
-  }
-
-  _onReady(event) {
-    return this.props.onReady && this.props.onReady(event.nativeEvent)
-  }
-
-  _onChangeState(event) {
-    return this.props.onChangeState && this.props.onChangeState(event.nativeEvent);
-  }
-
-  _onChangeQuality(event) {
-    return this.props.onChangeQuality && this.props.onChangeQuality(event.nativeEvent);
+    this._exportedProps = NativeModules.YouTubeManager && NativeModules.YouTubeManager.exportedProps;
   }
 
   _onError(event) {
-    return this.props.onError && this.props.onError(event.nativeEvent);
+    if (this.props.onError) this.props.onError(event.nativeEvent);
+  }
+
+  _onReady(event) {
+    if (this.props.onReady) this.props.onReady(event.nativeEvent)
+  }
+
+  _onChangeState(event) {
+    if (this.props.onChangeState) this.props.onChangeState(event.nativeEvent);
+  }
+
+  _onChangeQuality(event) {
+    if (this.props.onChangeQuality) this.props.onChangeQuality(event.nativeEvent);
   }
 
   _onProgress(event) {
-    return this.props.onProgress && this.props.onProgress(event.nativeEvent);
+    if (this.props.onProgress) this.props.onProgress(event.nativeEvent);
   }
 
   playVideo() {
@@ -90,25 +88,25 @@ export default class YouTube extends React.Component {
   previousVideo() {
     NativeModules.YouTubeManager.previousVideo(ReactNative.findNodeHandle(this));
   }
-  
+
   playVideoAt(index) {
     NativeModules.YouTubeManager.playVideoAt(ReactNative.findNodeHandle(this), parseInt(index, 10));
   }
 
-  playlistIndex() {
+  videosIndex() {
     return new Promise((resolve, reject) =>
-      NativeModules.YouTubeManager.playlistIndex(ReactNative.findNodeHandle(this))
+      NativeModules.YouTubeManager.videosIndex(ReactNative.findNodeHandle(this))
         .then(index => resolve(index))
         .catch(errorMessage => reject(errorMessage)));
   }
 
   render() {
     const nativeProps = { ...this.props };
-    nativeProps.style = [styles.base, this.props.style];
+    nativeProps.style = [{ overflow: 'hidden' }, this.props.style];
+    nativeProps.onYoutubeVideoError = this._onError;
     nativeProps.onYoutubeVideoReady = this._onReady;
     nativeProps.onYoutubeVideoChangeState = this._onChangeState;
     nativeProps.onYoutubeVideoChangeQuality = this._onChangeQuality;
-    nativeProps.onYoutubeVideoError = this._onError;
     nativeProps.onYoutubeProgress = this._onProgress;
 
     if (this._exportedProps.playerParams) {
@@ -170,9 +168,3 @@ export default class YouTube extends React.Component {
     return <RCTYouTube {...nativeProps} />;
   }
 }
-
-const styles = StyleSheet.create({
-  base: {
-    overflow: 'hidden',
-  },
-});

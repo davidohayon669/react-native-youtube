@@ -4,7 +4,6 @@ import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
-import android.util.Log;
 
 import com.google.android.youtube.player.YouTubeInitializationResult;
 import com.google.android.youtube.player.YouTubePlayer;
@@ -21,7 +20,6 @@ public class YouTubePlayerController implements
     String videoId = null;
     String playlist = null;
     List<String> videoIds = new ArrayList<String>();
-    int videosIndex = 0;
 
     YouTubePlayer mYouTubePlayer;
     YouTubeView mYouTubeView;
@@ -31,7 +29,8 @@ public class YouTubePlayerController implements
     private static final int PLAYLIST_MODE = 2;
 
     private boolean isLoaded = false;
-    private int playingMode = 0;
+    private int videosIndex = 0;
+    private int mode = 0;
     private boolean play = false;
     private boolean hidden = false;
     private boolean related = false;
@@ -51,7 +50,6 @@ public class YouTubePlayerController implements
             mYouTubePlayer = youTubePlayer;
             mYouTubePlayer.setPlayerStateChangeListener(this);
             mYouTubePlayer.setPlaybackEventListener(this);
-            mYouTubePlayer.setFullscreen(true);
             updateControls();
             mYouTubeView.playerViewDidBecomeReady();
             setLoaded(true);
@@ -59,7 +57,6 @@ public class YouTubePlayerController implements
                 if (videoId != null) startVideo();
                 else if (!videoIds.isEmpty()) startVideos();
                 else if (playlist != null) startPlaylist();
-                mYouTubePlayer.setFullscreen(false);
             }
         }
     }
@@ -86,8 +83,7 @@ public class YouTubePlayerController implements
 
     @Override
     public void onBuffering(boolean b) {
-        if (b)
-            mYouTubeView.didChangeToState("buffering");
+        if (b) mYouTubeView.didChangeToState("buffering");
 
         //Trick to remove when YouTube will patch it
         ProgressBar progressBar;
@@ -102,9 +98,7 @@ public class YouTubePlayerController implements
         }
 
         int visibility = b ? View.VISIBLE : View.INVISIBLE;
-        if (progressBar != null) {
-            progressBar.setVisibility(visibility);
-        }
+        if (progressBar != null) progressBar.setVisibility(visibility);
     }
 
     private ProgressBar findProgressBar(View view) {
@@ -130,7 +124,7 @@ public class YouTubePlayerController implements
 
     @Override
     public void onLoaded(String videoId) {
-        if (playingMode == VIDEOS_MODE) {
+        if (mode == VIDEOS_MODE) {
             videosIndex = videoIds.indexOf(videoId);
         }
     }
@@ -142,44 +136,41 @@ public class YouTubePlayerController implements
 
     @Override
     public void onVideoStarted() {
-        mYouTubeView.didChangeToState("videoStarted");
+        mYouTubeView.didChangeToState("started");
     }
 
     @Override
     public void onVideoEnded() {
         mYouTubeView.didChangeToState("ended");
         if (isLoop()) {
-            if (playingMode == VIDEO_MODE)
-                startVideo();
+            if (mode == VIDEO_MODE) startVideo();
+            else if (mode == VIDEOS_MODE && videosIndex == videoIds.size() - 1) playVideoAt(0);
         }
     }
 
     // TODO: Handle error of unplayable videos. Currently it shows a generic 400
     // Error and the whole player becomes inactive, event if only one of the videos
     // in a playlist is unplayable
-    private void setPlayingMode(int mode) {
-        playingMode = mode;
+    private void setMode(int mode) {
+        this.mode = mode;
     }
 
     private void startVideo() {
         mYouTubePlayer.loadVideo(videoId);
         videosIndex = 0;
-        setPlayingMode(VIDEO_MODE);
+        setMode(VIDEO_MODE);
     }
 
     private void startVideos() {
-        if (videosIndex != 0)
-            mYouTubePlayer.loadVideos(videoIds, videosIndex, 0);
-        else
-            mYouTubePlayer.loadVideos(videoIds);
-
-        setPlayingMode(VIDEOS_MODE);
+        if (videosIndex != 0) mYouTubePlayer.loadVideos(videoIds, videosIndex, 0);
+        else mYouTubePlayer.loadVideos(videoIds);
+        setMode(VIDEOS_MODE);
     }
 
     private void startPlaylist() {
         mYouTubePlayer.loadPlaylist(playlist);
         videosIndex = 0;
-        setPlayingMode(PLAYLIST_MODE);
+        setMode(PLAYLIST_MODE);
     }
 
     @Override
@@ -188,28 +179,30 @@ public class YouTubePlayerController implements
     }
 
     public void seekTo(int second) {
-        if (isLoaded()) {
-            mYouTubePlayer.seekToMillis(second * 1000);
-        }
+        if (isLoaded()) mYouTubePlayer.seekToMillis(second * 1000);
     }
 
     public void nextVideo() {
         if (isLoaded()) {
-            mYouTubePlayer.next();
+            if (mYouTubePlayer.hasNext()) mYouTubePlayer.next();
+            else if (mode == VIDEOS_MODE) playVideoAt(0);
+            else if (mode == PLAYLIST_MODE) startPlaylist();
+            else startVideo();
         }
     }
 
     public void previousVideo() {
         if (isLoaded()) {
-            mYouTubePlayer.previous();
+            if (mYouTubePlayer.hasPrevious()) mYouTubePlayer.previous();
+            else if (mode == VIDEOS_MODE) playVideoAt(videoIds.size() - 1);
+            else if (mode == PLAYLIST_MODE) startPlaylist();
+            else startVideo();
         }
     }
 
     public void playVideoAt(int index) {
-        if (isLoaded()) {
-            videosIndex = index;
-            startVideos();
-        }
+        videosIndex = index;
+        if (isLoaded()) startVideos();
     }
 
     public void updateControls() {
@@ -228,7 +221,7 @@ public class YouTubePlayerController implements
 
 
     /**
-     * GETTER &SETTER
+     * GETTER & SETTER
      **/
 
     public void setLoaded(boolean loaded) {
@@ -244,44 +237,35 @@ public class YouTubePlayerController implements
     }
 
     /**
-     * PROPS
+     * React Props
      */
 
-    public void setVideoId(String str) {
-        videoId = str;
-        if (isLoaded()) {
-            startVideo();
-        }
+    public void setVideoId(String videoId) {
+        this.videoId = videoId;
+        if (isLoaded()) startVideo();
     }
 
-    public void setVideoIds(ReadableArray arr) {
-        if (arr != null) {
+    public void setVideoIds(ReadableArray videoIds) {
+        if (videoIds != null) {
           videosIndex = 0;
-          videoIds.clear();
-          for (int i = 0; i < arr.size(); i++) {
-              videoIds.add(arr.getString(i));
+          this.videoIds.clear();
+          for (int i = 0; i < videoIds.size(); i++) {
+              this.videoIds.add(videoIds.getString(i));
           }
-          if (isLoaded()) {
-            startVideos();
-          }
+          if (isLoaded()) startVideos();
         }
     }
 
-    public void setPlaylist(String str) {
-        playlist = str;
-        if (isLoaded()) {
-            startPlaylist();
-        }
+    public void setPlaylist(String playlist) {
+        this.playlist = playlist;
+        if (isLoaded()) startPlaylist();
     }
 
     public void setPlay(boolean play) {
         this.play = play;
-        if (mYouTubePlayer != null) {
-            if (this.play && !mYouTubePlayer.isPlaying()) {
-                mYouTubePlayer.play();
-            } else if (!this.play && mYouTubePlayer.isPlaying()) {
-                mYouTubePlayer.pause();
-            }
+        if (isLoaded()) {
+            if (this.play && !mYouTubePlayer.isPlaying()) mYouTubePlayer.play();
+            else if (!this.play && mYouTubePlayer.isPlaying()) mYouTubePlayer.pause();
         }
     }
 
@@ -292,8 +276,7 @@ public class YouTubePlayerController implements
     public void setControls(Integer controls) {
         if (controls >= 0 && controls <= 2) {
             this.controls = Integer.valueOf(controls);
-            if (isLoaded())
-                updateControls();
+            if (isLoaded()) updateControls();
         }
     }
 
@@ -353,5 +336,4 @@ public class YouTubePlayerController implements
     public boolean isPlayInline() {
         return playInline;
     }
-
 }

@@ -27,7 +27,7 @@ public class YouTubeModule extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod
-    public void playlistIndex(final int reactTag, final Promise promise) {
+    public void videosIndex(final int reactTag, final Promise promise) {
         try {
             UIManagerModule uiManager = mReactContext.getNativeModule(UIManagerModule.class);
             uiManager.addUIBlock(new UIBlock() {
@@ -39,7 +39,7 @@ public class YouTubeModule extends ReactContextBaseJavaModule {
                 }
             });
         } catch (IllegalViewOperationException e) {
-            promise.reject("YouTubeView Error", e);
+            promise.reject("YouTubeModule.videosIndex() failed", e);
         }
     }
 }
