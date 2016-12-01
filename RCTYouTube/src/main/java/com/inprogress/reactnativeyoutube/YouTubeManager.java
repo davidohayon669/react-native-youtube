@@ -57,7 +57,9 @@ public class YouTubeManager extends SimpleViewManager<YouTubeView> {
                 "state",
                 MapBuilder.of("registrationName", "onChangeState"),
                 "quality",
-                MapBuilder.of("registrationName", "onChangeQuality")
+                MapBuilder.of("registrationName", "onChangeQuality"),
+                "progress",
+                MapBuilder.of("registrationName", "onProgress")
         );
     }
 
