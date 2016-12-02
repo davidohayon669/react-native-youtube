@@ -19,7 +19,8 @@ const RCTYouTube = requireNativeComponent('ReactYouTube', YouTube,
   nativeOnly: {onError:true,
               onReady:true,
               onChangeState:true,
-              onChangeQuality:true
+              onChangeQuality:true,
+              onProgress:true
               }
 });
 
@@ -82,11 +83,11 @@ export default class YouTube extends Component {
     var style = [styles.base, this.props.style];
     var nativeProps = Object.assign({}, this.props);
     nativeProps.style = style;
-    nativeProps.onYoutubeVideoReady = this._onReady.bind(this);
-    nativeProps.onYoutubeVideoChangeState = this._onChangeState.bind(this);
-    nativeProps.onYoutubeVideoChangeQuality = this._onChangeQuality.bind(this);
-    nativeProps.onYoutubeVideoError = this._onError.bind(this);
-    nativeProps.onYoutubeProgress = this._onProgress.bind(this);
+    nativeProps.onReady = this._onReady.bind(this);
+    nativeProps.onChangeState = this._onChangeState.bind(this);
+    nativeProps.onChangeQuality = this._onChangeQuality.bind(this);
+    nativeProps.onError = this._onError.bind(this);
+    nativeProps.onProgress = this._onProgress.bind(this);
 
     /*
      * Try to use `playerParams` instead of settings `playsInline` and
