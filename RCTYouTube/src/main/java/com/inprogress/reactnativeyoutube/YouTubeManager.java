@@ -51,13 +51,13 @@ public class YouTubeManager extends SimpleViewManager<YouTubeView> {
     Map getExportedCustomDirectEventTypeConstants() {
         return MapBuilder.of(
                 "error",
-                MapBuilder.of("registrationName", "onError"),
+                MapBuilder.of("registrationName", "onYoutubeVideoError"),
                 "ready",
-                MapBuilder.of("registrationName", "onReady"),
+                MapBuilder.of("registrationName", "onYoutubeVideoReady"),
                 "state",
-                MapBuilder.of("registrationName", "onChangeState"),
+                MapBuilder.of("registrationName", "onYoutubeVideoChangeState"),
                 "quality",
-                MapBuilder.of("registrationName", "onChangeQuality")
+                MapBuilder.of("registrationName", "onYoutubeVideoChangeQuality")
         );
     }
 
