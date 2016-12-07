@@ -8,6 +8,7 @@ import {
   TouchableOpacity,
   PixelRatio,
   Dimensions,
+  Platform,
 } from 'react-native';
 import YouTube from 'react-native-youtube';
 
@@ -19,6 +20,8 @@ class RCTYouTubeExample extends React.Component {
     quality: null,
     error: null,
     isPlaying: true,
+    duration: 0,
+    currentTime: 0,
   };
 
   render() {
@@ -38,8 +41,9 @@ class RCTYouTubeExample extends React.Component {
           // Un-comment one of videoId / videoIds / playlist.
           // You can also edit these props while Hot-Loading in development mode to see how
           // it affects the loaded native module
-          videoId="KVZ-P-ZI6W4"
-          // videoIds={['HcXNPI-IPPM', 'uLyhb5iG-5g', 'XXlZfc1TrD0', 'zV2aYno9xGc']}
+          // videoId="KVZ-P-ZI6W4"
+          // videoId="XXlZfc1TrD0"
+          videoIds={['HcXNPI-IPPM', 'uLyhb5iG-5g', 'XXlZfc1TrD0', 'zV2aYno9xGc']}
           // playlist="PLF797E961509B4EB5"
           play={this.state.isPlaying}
           loop={true}
@@ -50,7 +54,12 @@ class RCTYouTubeExample extends React.Component {
           onReady={e => this.setState({ isReady: true })}
           onChangeState={e => this.setState({ status: e.state })}
           onChangeQuality={e => this.setState({ quality: e.quality })}
-          onProgress={e => this.setState({ progress: e.progress })}
+          // onProgress={e => this.setState({ progress: e.currentTime })}
+          onProgress={
+            Platform.OS === 'ios'
+              ? e => this.setState({ duration: e.duration, currentTime: e.currentTime })
+              : undefined
+          }
         />
 
         <TouchableOpacity
@@ -132,7 +141,12 @@ class RCTYouTubeExample extends React.Component {
         <Text style={styles.instructions}>{this.state.isReady ? 'Player is ready' : 'Player setting up...'}</Text>
         <Text style={styles.instructions}>Status: {this.state.status}</Text>
         <Text style={styles.instructions}>Quality: {this.state.quality}</Text>
-        <Text style={styles.instructions}>Progress: {this.state.progress}</Text>
+        {Platform.OS === 'ios' &&
+          <Text style={styles.instructions}>
+            Progress: {Math.trunc(this.state.currentTime)}s
+            ({Math.trunc(this.state.duration / 60)}:{Math.trunc(this.state.duration % 60)}s)
+          </Text>
+        }
         <Text style={styles.instructions}>{this.state.error ? 'Error: ' + this.state.error : ''}</Text>
 
       </ScrollView>

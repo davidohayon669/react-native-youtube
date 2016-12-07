@@ -7,39 +7,47 @@
 //
 
 #import "RCTYouTube.h"
-#import "RCTBridgeModule.h"
-#import "RCTEventDispatcher.h"
+#import "RCTBridge.h"
 #import "UIView+React.h"
 
-@implementation RCTYouTube
-{
+@interface RCTYouTube ()
+
+@property (nonatomic, copy) RCTDirectEventBlock onError;
+@property (nonatomic, copy) RCTDirectEventBlock onReady;
+@property (nonatomic, copy) RCTDirectEventBlock onChangeState;
+@property (nonatomic, copy) RCTDirectEventBlock onChangeQuality;
+@property (nonatomic, copy) RCTDirectEventBlock onProgress;
+
+@end
+
+@implementation RCTYouTube {
+    __weak RCTBridge *_bridge;
+
     NSString *_videoId;
     BOOL _playsInline;
     NSDictionary *_playerParams;
     BOOL _isPlaying;
 
-    /* Check to see if commands can
-     * be sent to the player
-     */
+    // Check to see if commands can be sent to the player
     BOOL _isReady;
     BOOL _playsOnLoad;
-
-    /* Required to publish events */
-    RCTEventDispatcher *_eventDispatcher;
 }
 
-- (instancetype)initWithEventDispatcher:(RCTEventDispatcher *)eventDispatcher
-{
-    if ((self = [super init])) {
-        _eventDispatcher = eventDispatcher;
-        _playsInline = NO;
-        _isPlaying = NO;
+- (instancetype)initWithBridge:(RCTBridge *)bridge {
+    if ((self = [super initWithFrame:CGRectZero])) {
+      _bridge = bridge;
 
-        self.delegate = self;
+      _playsInline = NO;
+      _isPlaying = NO;
+
+      self.delegate = self;
     }
-
     return self;
 }
+
+- (instancetype)initWithFrame:(CGRect)frame { @throw nil; }
+
+- (instancetype)initWithCoder:(NSCoder *)aDecoder { @throw nil; }
 
 - (void)layoutSubviews {
     [super layoutSubviews];
@@ -52,7 +60,6 @@
 #pragma mark - YTPlayer control methods
 
 - (void)setPlay:(BOOL)play {
-
     // if not ready, configure for later
     if (!_isReady) {
         _playsOnLoad = play;
@@ -106,21 +113,48 @@
     }
     _isReady = YES;
 
-    [_eventDispatcher sendInputEventWithName:@"youtubeVideoReady"
-                                        body:@{
-                                               @"target": self.reactTag
-                                               }];
+    if (_onReady) {
+        _onReady(@{
+            @"target": self.reactTag
+        });
+    }
 }
 
 - (void)playerView:(YTPlayerView *)playerView didChangeToState:(YTPlayerState)state {
 
-    NSNumber *stateNumber = [NSNumber numberWithInt:state];
+    NSString *playerState;
+    switch (state) {
+        case kYTPlayerStateUnknown:
+            playerState = @"unknown";
+            break;
+        case kYTPlayerStateUnstarted:
+            playerState = @"unstarted";
+            break;
+        case kYTPlayerStateQueued:
+            playerState = @"queued";
+            break;
+        case kYTPlayerStateBuffering:
+            playerState = @"buffering";
+            break;
+        case kYTPlayerStatePlaying:
+            playerState = @"playing";
+            break;
+        case kYTPlayerStatePaused:
+            playerState = @"paused";
+            break;
+        case kYTPlayerStateEnded:
+            playerState = @"ended";
+            break;
+        default:
+            break;
+    }
 
-    [_eventDispatcher sendInputEventWithName:@"youtubeVideoChangeState"
-                                        body:@{
-                                               @"data": stateNumber,
-                                               @"target": self.reactTag
-                                               }];
+    if (_onChangeState) {
+        _onChangeState(@{
+            @"state": playerState,
+            @"target": self.reactTag
+        });
+    }
 }
 
 - (void)playerView:(YTPlayerView *)playerView didChangeToQuality:(YTPlaybackQuality)quality {
@@ -158,38 +192,59 @@
             break;
     }
 
-    [_eventDispatcher sendInputEventWithName:@"youtubeVideoChangeQuality"
-                                        body:@{
-                                               @"quality": playerQuality,
-                                               @"target": self.reactTag
-                                               }];
+    if (_onChangeQuality) {
+        _onChangeQuality(@{
+            @"quality": playerQuality,
+            @"target": self.reactTag
+        });
+    }
 }
 
 - (void)playerView:(YTPlayerView *)playerView didPlayTime:(float)currentTime {
 
-    [_eventDispatcher sendInputEventWithName:@"youtubeProgress"
-                                        body:@{
-                                               @"currentTime": @(currentTime),
-                                               @"duration": @(self.duration),
-                                               @"target": self.reactTag
-                                               }];
+    if (_onProgress) {
+        _onProgress(@{
+            @"currentTime": @(currentTime),
+            @"duration": @(self.duration),
+            @"target": self.reactTag
+        });
+    }
 }
 
 - (void)playerView:(YTPlayerView *)playerView receivedError:(YTPlayerError)error {
 
-    NSNumber *errorNumber = [NSNumber numberWithInt:error];
+    NSString *playerError;
+    switch (error) {
+        case kYTPlayerErrorInvalidParam:
+            playerError = @"invalid_param";
+            break;
+        case kYTPlayerErrorHTML5Error:
+            playerError = @"html5_error";
+            break;
+        case kYTPlayerErrorVideoNotFound:
+            playerError = @"video_not_found";
+            break;
+        case kYTPlayerErrorNotEmbeddable:
+            playerError = @"not_embeddable";
+            break;
+        case kYTPlayerErrorUnknown:
+            playerError = @"unknown";
+            break;
+        default:
+            break;
+    }
 
-    [_eventDispatcher sendInputEventWithName:@"youtubeVideoError"
-                                        body:@{
-                                               @"data": errorNumber,
-                                               @"target": self.reactTag
-                                               }];
+    if (_onError) {
+        _onError(@{
+            @"error": playerError,
+            @"target": self.reactTag
+        });
+    }
 }
 
 #pragma mark - Lifecycle
 
-- (void)removeFromSuperview
-{
+- (void)removeFromSuperview {
     [self removeWebView];
     [super removeFromSuperview];
 }

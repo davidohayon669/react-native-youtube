@@ -10,7 +10,7 @@ import ReactNative, {
   NativeModules,
 } from 'react-native';
 
-const RCTYouTube = requireNativeComponent('RCTYouTube', null)
+const RCTYouTube = requireNativeComponent('RCTYouTube', null);
 
 export default class YouTube extends React.Component {
 
@@ -33,11 +33,11 @@ export default class YouTube extends React.Component {
     onProgress: React.PropTypes.func,
     loop: React.PropTypes.bool,
     style: View.propTypes.style,
-  }
+  };
 
   static defaultProps = {
     loop: false,
-  }
+  };
 
   constructor(props) {
     super(props);
@@ -46,7 +46,6 @@ export default class YouTube extends React.Component {
     this._onChangeQuality = this._onChangeQuality.bind(this);
     this._onError = this._onError.bind(this);
     this._onProgress = this._onProgress.bind(this);
-    this._exportedProps = NativeModules.YouTubeManager && NativeModules.YouTubeManager.exportedProps;
   }
 
   _onError(event) {
@@ -54,7 +53,7 @@ export default class YouTube extends React.Component {
   }
 
   _onReady(event) {
-    if (this.props.onReady) this.props.onReady(event.nativeEvent)
+    if (this.props.onReady) this.props.onReady(event.nativeEvent);
   }
 
   _onChangeState(event) {
@@ -69,16 +68,8 @@ export default class YouTube extends React.Component {
     if (this.props.onProgress) this.props.onProgress(event.nativeEvent);
   }
 
-  playVideo() {
-    NativeModules.YouTubeManager.playVideo(ReactNative.findNodeHandle(this));
-  }
-
   seekTo(seconds) {
     NativeModules.YouTubeManager.seekTo(ReactNative.findNodeHandle(this), parseInt(seconds, 10));
-  }
-
-  loadVideoById(videoId) {
-    NativeModules.YouTubeManager.loadVideoById(ReactNative.findNodeHandle(this), videoId);
   }
 
   nextVideo() {
@@ -102,69 +93,71 @@ export default class YouTube extends React.Component {
 
   render() {
     const nativeProps = { ...this.props };
-    nativeProps.style = [{ overflow: 'hidden' }, this.props.style];
-    nativeProps.onYoutubeVideoError = this._onError;
-    nativeProps.onYoutubeVideoReady = this._onReady;
-    nativeProps.onYoutubeVideoChangeState = this._onChangeState;
-    nativeProps.onYoutubeVideoChangeQuality = this._onChangeQuality;
-    nativeProps.onYoutubeProgress = this._onProgress;
 
-    if (this._exportedProps.playerParams) {
-      nativeProps.playerParams = {
-        videoId: this.props.videoId,
-      }
-      delete nativeProps.videoId;
+    nativeProps.playerParams = {
+      videoId: this.props.videoId,
+    };
+    delete nativeProps.videoId;
 
-      nativeProps.playerParams.playerVars = {};
+    nativeProps.playerParams.playerVars = {};
 
-      if (this.props.videoIds && Array.isArray(this.props.videoIds)) {
-        nativeProps.playerParams.videoId = this.props.videoIds[0]
-        nativeProps.playerParams.playerVars.playlist = this.props.videoIds[1]
-          ? this.props.videoIds.slice(1).toString() : null;
-        delete nativeProps.videoIds;
-      }
-
-      if (this.props.playlist) {
-        nativeProps.playerParams.playerVars.playlist = this.props.playlist;
-        delete nativeProps.playlist;
-      }
-
-      if (this.props.playsInline) {
-        nativeProps.playerParams.playerVars.playsinline = 1;
-        delete nativeProps.playsInline;
-      }
-
-      if (this.props.modestbranding) {
-        nativeProps.playerParams.playerVars.modestbranding = 1;
-        delete nativeProps.modestbranding;
-      }
-
-      if (this.props.showinfo !== undefined) {
-        nativeProps.playerParams.playerVars.showinfo = this.props.showinfo ? 1 : 0;
-        delete nativeProps.showinfo;
-      }
-
-      if (this.props.controls !== undefined) {
-        nativeProps.playerParams.playerVars.controls = this.props.controls;
-        delete nativeProps.controls;
-      }
-
-      if (this.props.loop !== undefined) {
-        nativeProps.playerParams.playerVars.loop = this.props.loop ? 1 : 0;
-        delete nativeProps.loop;
-      }
-
-      if (this.props.origin !== undefined) {
-        nativeProps.playerParams.playerVars.origin = this.props.origin;
-        delete nativeProps.origin;
-      }
-
-      if (this.props.rel !== undefined) {
-        nativeProps.playerParams.playerVars.rel = this.props.rel ? 1 : 0;
-        delete nativeProps.rel;
-      }
+    if (this.props.videoIds && Array.isArray(this.props.videoIds)) {
+      nativeProps.playerParams.videoId = this.props.videoIds[0];
+      nativeProps.playerParams.playerVars.playlist = this.props.videoIds[1]
+        ? this.props.videoIds.slice(1).toString() : null;
+      delete nativeProps.videoIds;
     }
 
-    return <RCTYouTube {...nativeProps} />;
+    if (this.props.playlist) {
+      nativeProps.playerParams.playerVars.playlist = this.props.playlist;
+      delete nativeProps.playlist;
+    }
+
+    if (this.props.playsInline) {
+      nativeProps.playerParams.playerVars.playsinline = 1;
+      delete nativeProps.playsInline;
+    }
+
+    if (this.props.modestbranding) {
+      nativeProps.playerParams.playerVars.modestbranding = 1;
+      delete nativeProps.modestbranding;
+    }
+
+    if (this.props.showinfo !== undefined) {
+      nativeProps.playerParams.playerVars.showinfo = this.props.showinfo ? 1 : 0;
+      delete nativeProps.showinfo;
+    }
+
+    if (this.props.controls !== undefined) {
+      nativeProps.playerParams.playerVars.controls = this.props.controls;
+      delete nativeProps.controls;
+    }
+
+    if (this.props.loop !== undefined) {
+      nativeProps.playerParams.playerVars.loop = this.props.loop ? 1 : 0;
+      delete nativeProps.loop;
+    }
+
+    if (this.props.origin !== undefined) {
+      nativeProps.playerParams.playerVars.origin = this.props.origin;
+      delete nativeProps.origin;
+    }
+
+    if (this.props.rel !== undefined) {
+      nativeProps.playerParams.playerVars.rel = this.props.rel ? 1 : 0;
+      delete nativeProps.rel;
+    }
+
+    return (
+      <RCTYouTube
+        {...nativeProps}
+        style={[{ overflow: 'hidden' }, this.props.style]}
+        onError={this._onError}
+        onReady={this._onReady}
+        onChangeState={this._onChangeState}
+        onChangeQuality={this._onChangeQuality}
+        onProgress={this._onProgress}
+      />
+    );
   }
 }
