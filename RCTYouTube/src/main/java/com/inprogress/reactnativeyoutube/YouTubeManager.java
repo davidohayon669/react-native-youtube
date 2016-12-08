@@ -140,7 +140,7 @@ public class YouTubeManager extends SimpleViewManager<YouTubeView> {
     @ReactProp(name = PROP_FULLSCREEN)
     public void setPropFullscreen(
             YouTubeView view, @Nullable Boolean param) {
-        Log.e(PROP_FULLSCREEN,""+param);
+        //Log.e(PROP_FULLSCREEN,""+param);
         view.setFullscreen(param);
     }
 }
