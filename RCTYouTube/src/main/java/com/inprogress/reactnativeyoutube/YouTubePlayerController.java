@@ -176,6 +176,7 @@ public class YouTubePlayerController implements
 
     @Override
     public void onFullscreen(boolean isFullscreen) {
+        mYouTubeView.didChangeToState(isFullscreen ? "fullscreenMode" : "windowMode");
 
         // When exiting full-screen mode and inline playback is not enabled
         // then pause the video playback.
