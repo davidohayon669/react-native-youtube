@@ -35,7 +35,7 @@
     <div class="embed-container">
         <div id="player"></div>
     </div>
-    <script src="https://www.youtube.com/iframe_api"></script>
+    <script src="https://www.youtube.com/iframe_api" onerror="window.location.href='ytplayer://onYouTubeIframeAPIFailedToLoad'"></script>
     <script>
     var player;
     var error = false;
@@ -53,9 +53,9 @@
                  window.location.href = 'ytplayer://onPlayTime?data=' + time;
              }
         }
-        
-        window.setInterval(getCurrentTime, 250);
-             
+
+        window.setInterval(getCurrentTime, 500);
+
     });
 
     function onReady(event) {
@@ -63,7 +63,7 @@
     }
 
     function onStateChange(event) {
-        if (!error) {            
+        if (!error) {
             window.location.href = 'ytplayer://onStateChange?data=' + event.data;
         }
         else {
@@ -81,7 +81,7 @@
         }
         window.location.href = 'ytplayer://onError?data=' + event.data;
     }
-    
+
     window.onresize = function() {
         player.setSize(window.innerWidth, window.innerHeight);
     }

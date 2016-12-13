@@ -28,7 +28,7 @@ class RCTYouTubeExample extends React.Component {
     return (
       <ScrollView style={styles.container}>
         <Text style={styles.welcome}>
-          {"<Youtube /> component for\n React Native."}
+          {"<YouTube /> component for\n React Native."}
         </Text>
         <Text style={styles.instructions}>
           http://github.com/inProgress-team/react-native-youtube
@@ -36,30 +36,31 @@ class RCTYouTubeExample extends React.Component {
 
         <YouTube
           ref={(component) => { this._youTubeRef = component }}
+
           // You must have an apiKey for the player to load in Android
           apiKey=""
+
           // Un-comment one of videoId / videoIds / playlist.
           // You can also edit these props while Hot-Loading in development mode to see how
           // it affects the loaded native module
-          // videoId="KVZ-P-ZI6W4"
-          // videoId="XXlZfc1TrD0"
-          videoIds={['HcXNPI-IPPM', 'uLyhb5iG-5g', 'XXlZfc1TrD0', 'zV2aYno9xGc']}
+          videoId="KVZ-P-ZI6W4"
+          // videoIds={['HcXNPI-IPPM', 'uLyhb5iG-5g', 'XXlZfc1TrD0', 'zV2aYno9xGc']}
           // playlist="PLF797E961509B4EB5"
+
           play={this.state.isPlaying}
           loop={true}
-          hidden={false}
           playsInline={true}
+          showinfo={true}
+          modestbranding={true}
+          controls={1}
           style={styles.player}
           onError={e => this.setState({ error: e.error })}
           onReady={e => this.setState({ isReady: true })}
           onChangeState={e => this.setState({ status: e.state })}
           onChangeQuality={e => this.setState({ quality: e.quality })}
-          // onProgress={e => this.setState({ progress: e.currentTime })}
-          onProgress={
-            Platform.OS === 'ios'
-              ? e => this.setState({ duration: e.duration, currentTime: e.currentTime })
-              : undefined
-          }
+          onProgress={Platform.OS === 'ios'
+            ? e => this.setState({ duration: e.duration, currentTime: e.currentTime })
+            : undefined}
         />
 
         <TouchableOpacity

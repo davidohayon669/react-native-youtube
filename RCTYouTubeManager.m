@@ -24,9 +24,13 @@ RCT_EXPORT_MODULE();
     return _bridge.uiManager.methodQueue;
 }
 
-RCT_EXPORT_VIEW_PROPERTY(videoId, NSString);
-RCT_EXPORT_VIEW_PROPERTY(play, BOOL);
 RCT_EXPORT_VIEW_PROPERTY(playerParams, NSDictionary);
+RCT_EXPORT_VIEW_PROPERTY(videoId, NSString);
+RCT_EXPORT_VIEW_PROPERTY(videoIds, NSArray);
+RCT_EXPORT_VIEW_PROPERTY(playlistId, NSString);
+RCT_EXPORT_VIEW_PROPERTY(play, BOOL);
+RCT_EXPORT_VIEW_PROPERTY(loopProp, BOOL);
+
 RCT_EXPORT_VIEW_PROPERTY(onError, RCTDirectEventBlock);
 RCT_EXPORT_VIEW_PROPERTY(onReady, RCTDirectEventBlock);
 RCT_EXPORT_VIEW_PROPERTY(onChangeState, RCTDirectEventBlock);

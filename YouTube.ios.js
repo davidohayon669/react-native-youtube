@@ -41,11 +41,25 @@ export default class YouTube extends React.Component {
 
   constructor(props) {
     super(props);
+    this._onError = this._onError.bind(this);
     this._onReady = this._onReady.bind(this);
     this._onChangeState = this._onChangeState.bind(this);
     this._onChangeQuality = this._onChangeQuality.bind(this);
-    this._onError = this._onError.bind(this);
     this._onProgress = this._onProgress.bind(this);
+    this.reloadIframe = this.reloadIframe.bind(this);
+
+    // iOS uses a YouTube iframe under the hood. We need to create its initial params
+    // for a quick and clean load. After the initial loading, props changes will interact
+    // with the iframe via its instance's methods so it won't need to load the iframe again.
+    this.state = {
+      playerParams: this._createPlayerParams(props),
+    };
+  }
+
+  shouldComponentUpdate() {
+    // Prevent unnecessary renders before the native component is ready to accept them
+    if (this._isReady) return true;
+    else return false;
   }
 
   _onError(event) {
@@ -53,6 +67,9 @@ export default class YouTube extends React.Component {
   }
 
   _onReady(event) {
+    // Render if any props have changed, and let the component know it can render any future change
+    this.forceUpdate();
+    this._isReady = true;
     if (this.props.onReady) this.props.onReady(event.nativeEvent);
   }
 
@@ -66,6 +83,32 @@ export default class YouTube extends React.Component {
 
   _onProgress(event) {
     if (this.props.onProgress) this.props.onProgress(event.nativeEvent);
+  }
+
+  _createPlayerParams(props) {
+    return {
+      videoId: props.videoIds && Array.isArray(props.videoIds)
+        ? props.videoIds[0] : props.videoId,
+      playlistId: props.playlist,
+      playerVars: {
+        // videoIds are split to videoId and playlist (comma separated videoIds).
+        // Also, looping a single video is unsupported by the iframe player so we
+        // must load the video as a 2 videos playlist, as suggested here:
+        // https://developers.google.com/youtube/player_parameters#loop
+        playlist: props.videoIds && Array.isArray(props.videoIds)
+          ? props.videoIds.slice(1).toString()
+          : props.loop && props.videoId
+            ? props.videoId
+            : undefined,
+        playsinline: props.playsInline ? 1 : 0,
+        modestbranding: props.modestbranding ? 1 : 0,
+        showinfo: props.showinfo ? 1 : 0,
+        loop: props.loop ? 1 : 0,
+        rel: props.rel ? 1 : 0,
+        controls: props.controls,
+        origin: props.origin,
+      },
+    };
   }
 
   seekTo(seconds) {
@@ -91,67 +134,23 @@ export default class YouTube extends React.Component {
         .catch(errorMessage => reject(errorMessage)));
   }
 
+  // iframe vars like `playsInline`, `showinfo` etc. are set only on iframe load.
+  // This method will force a reload on the inner iframe. Use it if you know the cost
+  // and still wants to refresh the iframe's vars
+  reloadIframe() {
+    this.setState({ playerParams: this._createPlayerParams(this.props) });
+  }
+
   render() {
-    const nativeProps = { ...this.props };
-
-    nativeProps.playerParams = {
-      videoId: this.props.videoId,
-    };
-    delete nativeProps.videoId;
-
-    nativeProps.playerParams.playerVars = {};
-
-    if (this.props.videoIds && Array.isArray(this.props.videoIds)) {
-      nativeProps.playerParams.videoId = this.props.videoIds[0];
-      nativeProps.playerParams.playerVars.playlist = this.props.videoIds[1]
-        ? this.props.videoIds.slice(1).toString() : null;
-      delete nativeProps.videoIds;
-    }
-
-    if (this.props.playlist) {
-      nativeProps.playerParams.playerVars.playlist = this.props.playlist;
-      delete nativeProps.playlist;
-    }
-
-    if (this.props.playsInline) {
-      nativeProps.playerParams.playerVars.playsinline = 1;
-      delete nativeProps.playsInline;
-    }
-
-    if (this.props.modestbranding) {
-      nativeProps.playerParams.playerVars.modestbranding = 1;
-      delete nativeProps.modestbranding;
-    }
-
-    if (this.props.showinfo !== undefined) {
-      nativeProps.playerParams.playerVars.showinfo = this.props.showinfo ? 1 : 0;
-      delete nativeProps.showinfo;
-    }
-
-    if (this.props.controls !== undefined) {
-      nativeProps.playerParams.playerVars.controls = this.props.controls;
-      delete nativeProps.controls;
-    }
-
-    if (this.props.loop !== undefined) {
-      nativeProps.playerParams.playerVars.loop = this.props.loop ? 1 : 0;
-      delete nativeProps.loop;
-    }
-
-    if (this.props.origin !== undefined) {
-      nativeProps.playerParams.playerVars.origin = this.props.origin;
-      delete nativeProps.origin;
-    }
-
-    if (this.props.rel !== undefined) {
-      nativeProps.playerParams.playerVars.rel = this.props.rel ? 1 : 0;
-      delete nativeProps.rel;
-    }
-
     return (
       <RCTYouTube
-        {...nativeProps}
         style={[{ overflow: 'hidden' }, this.props.style]}
+        playerParams={this.state.playerParams}
+        play={this.props.play}
+        videoId={this.props.videoId}
+        videoIds={this.props.videoIds}
+        playlistId={this.props.playlist}
+        loopProp={this.props.loop}
         onError={this._onError}
         onReady={this._onReady}
         onChangeState={this._onChangeState}

@@ -23,22 +23,18 @@
 @implementation RCTYouTube {
     __weak RCTBridge *_bridge;
 
-    NSString *_videoId;
-    BOOL _playsInline;
-    NSDictionary *_playerParams;
-    BOOL _isPlaying;
-
-    // Check to see if commands can be sent to the player
     BOOL _isReady;
-    BOOL _playsOnLoad;
+    BOOL _playOnLoad;
+    BOOL _loop;
 }
 
 - (instancetype)initWithBridge:(RCTBridge *)bridge {
     if ((self = [super initWithFrame:CGRectZero])) {
       _bridge = bridge;
 
-      _playsInline = NO;
-      _isPlaying = NO;
+      _isReady = NO;
+      _playOnLoad = NO;
+      _loop = NO;
 
       self.delegate = self;
     }
@@ -57,66 +53,86 @@
     }
 }
 
+
 #pragma mark - YTPlayer control methods
 
-- (void)setPlay:(BOOL)play {
-    // if not ready, configure for later
-    if (!_isReady) {
-        _playsOnLoad = play;
-        return;
-    }
-
-    if (!_isPlaying && play) {
-        [self playVideo];
-        _isPlaying = YES;
-    } else if (_isPlaying && !play) {
-        [self pauseVideo];
-        _isPlaying = NO;
+- (void)setPlayerParams:(NSDictionary *)playerParams {
+    if (playerParams[@"videoId"]) {
+        [self loadWithVideoId:playerParams[@"videoId"]
+                   playerVars:playerParams[@"playerVars"]];
+    } else if (playerParams[@"playlistId"]) {
+        [self loadWithPlaylistId:playerParams[@"playlistId"]
+                      playerVars:playerParams[@"playerVars"]];
+    } else {
+        // if no videos info provided, we would still want to initiate an iframe instance
+        // so it'll be available for future method calls with the initial vars
+        [self loadWithVideoId:@""
+                   playerVars:playerParams[@"playerVars"]];
     }
 }
 
-- (void)setPlaysInline:(BOOL)playsInline {
-    if (_videoId && playsInline) {
-        [self loadWithVideoId:_videoId playerVars:@{@"playsinline": @1}];
-    } else if (_videoId && !playsInline){
-        [self loadWithVideoId:_videoId];
+- (void)setPlay:(BOOL)play {
+    if (!_isReady) {
+        _playOnLoad = play;
     } else {
-        // will get set when videoId is set
+        if (play) [self playVideo];
+        else [self pauseVideo];
     }
-
-    _playsInline = playsInline;
 }
 
 - (void)setVideoId:(NSString *)videoId {
-    if (_videoId) {
-        [self cueVideoById:videoId startSeconds:0 suggestedQuality:kYTPlaybackQualityDefault];
-    } else if (_playsInline) {
-        [self loadWithVideoId:videoId playerVars:@{@"playsinline": @1}];
-    } else {
-        // will get set when playsInline is set
+    if (videoId && _isReady) {
+        if (_loop) {
+            // Looping a single video is unsupported by the iframe player so we
+            // must load the video as a 2 videos playlist, as suggested here:
+            // https://developers.google.com/youtube/player_parameters#loop
+            [self loadPlaylistByVideos:@[videoId, videoId]
+                                 index:0
+                          startSeconds:0
+                      suggestedQuality:kYTPlaybackQualityDefault];
+        } else {
+            [self loadVideoById:videoId
+                   startSeconds:0
+               suggestedQuality:kYTPlaybackQualityDefault];
+        }
     }
-
-    _videoId = videoId;
 }
 
-- (void)setPlayerParams:(NSDictionary *)playerParams {
-    _playerParams = playerParams;
-    [self loadWithPlayerParams:playerParams];
+- (void)setVideoIds:(NSArray *)videoIds {
+    if (_isReady) {
+        [self loadPlaylistByVideos:videoIds
+                             index:0
+                      startSeconds:0
+                  suggestedQuality:kYTPlaybackQualityDefault];
+        [self setLoopProp:_loop];
+    }
 }
+
+- (void)setPlaylistId:(NSString *)playlistId {
+    if (playlistId && _isReady) {
+        // TODO: there is an unidentifiable error with this method when using a playlist's id
+        [self loadPlaylistByPlaylistId:playlistId
+                                 index:0
+                          startSeconds:0
+                      suggestedQuality:kYTPlaybackQualityDefault];
+    }
+}
+
+- (void)setLoopProp:(BOOL)loop {
+    _loop = loop;
+    if (_isReady) [self setLoop:loop];
+}
+
 
 #pragma mark - YTPlayer delegate methods
 
 - (void)playerViewDidBecomeReady:(YTPlayerView *)playerView {
-    if (_playsOnLoad) {
-        [self playVideo];
-        _isPlaying = YES;
-    }
+    if (_playOnLoad) [self playVideo];
+
     _isReady = YES;
 
     if (_onReady) {
-        _onReady(@{
-            @"target": self.reactTag
-        });
+        _onReady(@{@"target": self.reactTag});
     }
 }
 
@@ -241,6 +257,7 @@
         });
     }
 }
+
 
 #pragma mark - Lifecycle
 
