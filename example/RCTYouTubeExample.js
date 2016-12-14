@@ -45,7 +45,7 @@ class RCTYouTubeExample extends React.Component {
           // it affects the loaded native module
           videoId="KVZ-P-ZI6W4"
           // videoIds={['HcXNPI-IPPM', 'uLyhb5iG-5g', 'XXlZfc1TrD0', 'zV2aYno9xGc']}
-          // playlist="PLF797E961509B4EB5"
+          // playlistId="PLF797E961509B4EB5"
 
           play={this.state.isPlaying}
           loop={true}
@@ -129,11 +129,9 @@ class RCTYouTubeExample extends React.Component {
         <View style={styles.buttonGroup}>
           <TouchableOpacity
             style={styles.button}
-            onPress={
-              () => this._youTubeRef && this._youTubeRef.videosIndex()
-                .then(index => this.setState({ videosIndex: index }))
-                .catch(errorMessage => this.setState({ error: errorMessage }))
-            }
+            onPress={() => this._youTubeRef && this._youTubeRef.videosIndex()
+              .then(index => this.setState({ videosIndex: index }))
+              .catch(errorMessage => this.setState({ error: errorMessage }))}
           >
             <Text style={styles.buttonText}>Get Videos Index: {this.state.videosIndex}</Text>
           </TouchableOpacity>
@@ -152,7 +150,7 @@ class RCTYouTubeExample extends React.Component {
 
       </ScrollView>
     );
-  };
+  }
 };
 
 const styles = StyleSheet.create({

@@ -113,8 +113,8 @@ public class YouTubeView extends FrameLayout {
         youtubeController.setVideoIds(arr);
     }
 
-    public void setPlaylist(String str) {
-        youtubeController.setPlaylist(str);
+    public void setPlaylistId(String str) {
+        youtubeController.setPlaylistId(str);
     }
 
     public void setInline(Boolean bool) {

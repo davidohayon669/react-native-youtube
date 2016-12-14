@@ -17,7 +17,7 @@ export default class YouTube extends React.Component {
   static propTypes = {
     videoId: React.PropTypes.string,
     videoIds: React.PropTypes.arrayOf(React.PropTypes.string),
-    playlist: React.PropTypes.string,
+    playlistId: React.PropTypes.string,
     playsInline: React.PropTypes.bool,
     showinfo: React.PropTypes.bool,
     modestbranding: React.PropTypes.bool,
@@ -89,7 +89,7 @@ export default class YouTube extends React.Component {
     return {
       videoId: props.videoIds && Array.isArray(props.videoIds)
         ? props.videoIds[0] : props.videoId,
-      playlistId: props.playlist,
+      playlistId: props.playlistId,
       playerVars: {
         // videoIds are split to videoId and playlist (comma separated videoIds).
         // Also, looping a single video is unsupported by the iframe player so we
@@ -149,7 +149,7 @@ export default class YouTube extends React.Component {
         play={this.props.play}
         videoId={this.props.videoId}
         videoIds={this.props.videoIds}
-        playlistId={this.props.playlist}
+        playlistId={this.props.playlistId}
         loopProp={this.props.loop}
         onError={this._onError}
         onReady={this._onReady}

@@ -28,7 +28,7 @@ public class YouTubeManager extends SimpleViewManager<YouTubeView> {
     public static final String PROP_API_KEY = "apiKey";
     public static final String PROP_VIDEO_ID = "videoId";
     public static final String PROP_VIDEO_IDS = "videoIds";
-    public static final String PROP_PLAYLIST = "playlist";
+    public static final String PROP_PLAYLIST_ID = "playlistId";
     public static final String PROP_INLINE = "playInline";
     public static final String PROP_SHOW_INFO = "showinfo";
     public static final String PROP_MODESTBRANDING = "modestbranding";
@@ -124,9 +124,9 @@ public class YouTubeManager extends SimpleViewManager<YouTubeView> {
         view.setVideoIds(param);
     }
 
-    @ReactProp(name = PROP_PLAYLIST)
-    public void setPropPlaylist(YouTubeView view, @Nullable String param) {
-        view.setPlaylist(param);
+    @ReactProp(name = PROP_PLAYLIST_ID)
+    public void setPropPlaylistId(YouTubeView view, @Nullable String param) {
+        view.setPlaylistId(param);
     }
 
     @ReactProp(name = PROP_PLAY)

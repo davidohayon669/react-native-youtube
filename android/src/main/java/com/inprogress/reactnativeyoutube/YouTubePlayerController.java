@@ -18,7 +18,7 @@ public class YouTubePlayerController implements
         YouTubePlayer.OnInitializedListener, YouTubePlayer.PlayerStateChangeListener, YouTubePlayer.PlaybackEventListener {
 
     String videoId = null;
-    String playlist = null;
+    String playlistId = null;
     List<String> videoIds = new ArrayList<String>();
 
     YouTubePlayer mYouTubePlayer;
@@ -56,7 +56,7 @@ public class YouTubePlayerController implements
             if (isPlay()) {
                 if (videoId != null) startVideo();
                 else if (!videoIds.isEmpty()) startVideos();
-                else if (playlist != null) startPlaylist();
+                else if (playlistId != null) startPlaylist();
             }
         }
     }
@@ -168,7 +168,7 @@ public class YouTubePlayerController implements
     }
 
     private void startPlaylist() {
-        mYouTubePlayer.loadPlaylist(playlist);
+        mYouTubePlayer.loadPlaylist(playlistId);
         videosIndex = 0;
         setMode(PLAYLIST_MODE);
     }
@@ -256,8 +256,8 @@ public class YouTubePlayerController implements
         }
     }
 
-    public void setPlaylist(String playlist) {
-        this.playlist = playlist;
+    public void setPlaylistId(String playlistId) {
+        this.playlistId = playlistId;
         if (isLoaded()) startPlaylist();
     }
 

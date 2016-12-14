@@ -28,7 +28,7 @@ export default class YouTube extends React.Component {
     apiKey: React.PropTypes.string.isRequired,
     videoId: React.PropTypes.string,
     videoIds: React.PropTypes.arrayOf(React.PropTypes.string),
-    playlist: React.PropTypes.string,
+    playlistId: React.PropTypes.string,
     playsInline: React.PropTypes.bool,
     showinfo: React.PropTypes.bool,
     modestbranding: React.PropTypes.bool,
