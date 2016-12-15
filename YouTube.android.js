@@ -16,10 +16,10 @@ import ReactNative, {
 
 const RCTYouTube = requireNativeComponent('ReactYouTube', YouTube,
 {
-  nativeOnly: {onError:true,
-              onReady:true,
-              onChangeState:true,
-              onChangeQuality:true
+  nativeOnly: {onYoutubeVideoError:true,
+              onYoutubeVideoReady:true,
+              onYoutubeVideoChangeState:true,
+              onYoutubeVideoChangeQuality:true
               }
 });
 
