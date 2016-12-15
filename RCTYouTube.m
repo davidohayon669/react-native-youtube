@@ -36,9 +36,23 @@
         _isPlaying = NO;
         
         self.delegate = self;
+
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(handleWhenDoneButtonClick:)
+                                                     name:UIWindowDidBecomeHiddenNotification
+                                                   object:self.webView.window];
     }
     
     return self;
+}
+
+- (void) handleWhenDoneButtonClick:(NSNotification *) notification {
+    NSString *playerState = @"done";
+    [_eventDispatcher sendInputEventWithName:@"youtubeVideoChangeState"
+                                        body:@{
+                                               @"state": playerState,
+                                               @"target": self.reactTag
+                                               }];
 }
 
 - (void)layoutSubviews {
