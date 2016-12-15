@@ -66,6 +66,14 @@ this.refs.youtubePlayer.seekTo(20);
 
 `$ add YTPlayerView-iframe-player.html from Assets to your xcode project`
 
+##### OPTIONAL : Activated sound when phone is on vibrate mode
+
+Open AppDelegate.m and add :
+
+* `#import <AVFoundation/AVFoundation.h>`
+
+* `[[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayback error: nil];` in your didFinishLaunchingWithOptions method
+
 ##### Android : rnpm is not working yet !!
 
 In node_module :
@@ -102,14 +110,6 @@ import com.inprogress.reactnativeyoutube.ReactNativeYouTube;
       );
     }
  ```
-
-##### OPTIONAL : Activated sound when phone is on vibrate mode
-
-Open AppDelegate.m and add :
-
-* `#import <AVFoundation/AVFoundation.h>`
-
-* `[[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayback error: nil];` in your didFinishLaunchingWithOptions method
 
 ## Example
 Try the included `RCTYouTubeExample`:
