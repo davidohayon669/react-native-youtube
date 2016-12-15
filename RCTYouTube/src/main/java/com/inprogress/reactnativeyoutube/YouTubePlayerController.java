@@ -10,7 +10,7 @@ import com.google.android.youtube.player.YouTubePlayer;
 
 
 public class YouTubePlayerController implements
-        YouTubePlayer.OnInitializedListener, YouTubePlayer.PlayerStateChangeListener, YouTubePlayer.PlaybackEventListener {
+        YouTubePlayer.OnInitializedListener, YouTubePlayer.PlayerStateChangeListener, YouTubePlayer.PlaybackEventListener, YouTubePlayer.OnFullscreenListener {
 
     Context mContext;
 
