@@ -77,7 +77,7 @@ Then add in settings.gradle :
 include ':RCTYouTube', ':app'
 project(':RCTYouTube').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-youtube/RCTYouTube')
  ```
-In build.gradle :
+In build.gradle : ( The one inside android/app . **NOT** android/build.gradle )
 
  ```
  dependencies {
