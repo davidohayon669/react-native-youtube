@@ -1,21 +1,22 @@
 package com.inprogress.reactnativeyoutube;
 
 import android.app.FragmentManager;
+import android.util.Log;
 import android.widget.FrameLayout;
+
+import com.google.android.youtube.player.YouTubePlayerFragment;
 
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.ReactContext;
-import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.bridge.ReadableArray;
+import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.uimanager.events.RCTEventEmitter;
-
-import com.google.android.youtube.player.YouTubePlayerFragment;
 
 
 public class YouTubeView extends FrameLayout {
 
-    YouTubePlayerController youtubeController;
-    private YouTubePlayerFragment youTubePlayerFragment;
+    private YouTubePlayerController mYoutubeController;
+    private YouTubePlayerFragment mYouTubePlayerFragment;
 
     public YouTubeView(ReactContext context) {
         super(context);
@@ -28,42 +29,42 @@ public class YouTubeView extends FrameLayout {
 
     public void init() {
         inflate(getContext(), R.layout.youtube_layout, this);
-        youTubePlayerFragment = YouTubePlayerFragment.newInstance();
-        youtubeController = new YouTubePlayerController(this);
+        mYouTubePlayerFragment = YouTubePlayerFragment.newInstance();
+        mYoutubeController = new YouTubePlayerController(this);
     }
 
     @Override
     protected void onAttachedToWindow() {
         FragmentManager fragmentManager = getReactContext().getCurrentActivity().getFragmentManager();
-        fragmentManager.beginTransaction().add(getId(), youTubePlayerFragment).commit();
+        fragmentManager.beginTransaction().add(getId(), mYouTubePlayerFragment).commit();
     }
 
     @Override
     protected void onDetachedFromWindow() {
         FragmentManager fragmentManager = getReactContext().getCurrentActivity().getFragmentManager();
-        if (youTubePlayerFragment != null) {
-            fragmentManager.beginTransaction().remove(youTubePlayerFragment).commit();
+        if (mYouTubePlayerFragment != null) {
+            fragmentManager.beginTransaction().remove(mYouTubePlayerFragment).commit();
         }
     }
 
     public void seekTo(int second) {
-        youtubeController.seekTo(second);
+        mYoutubeController.seekTo(second);
     }
 
     public void nextVideo() {
-        youtubeController.nextVideo();
+        mYoutubeController.nextVideo();
     }
 
     public void previousVideo() {
-        youtubeController.previousVideo();
+        mYoutubeController.previousVideo();
     }
 
     public void playVideoAt(int index) {
-        youtubeController.playVideoAt(index);
+        mYoutubeController.playVideoAt(index);
     }
 
     public int getVideosIndex() {
-        return youtubeController.getVideosIndex();
+        return mYoutubeController.getVideosIndex();
     }
 
     public void receivedError(String param) {
@@ -99,53 +100,41 @@ public class YouTubeView extends FrameLayout {
 
     public void setApiKey(String apiKey) {
         try {
-            youTubePlayerFragment.initialize(apiKey, youtubeController);
+            mYouTubePlayerFragment.initialize(apiKey, mYoutubeController);
         } catch (Exception e) {
             receivedError(e.getMessage());
         }
     }
 
     public void setVideoId(String str) {
-        youtubeController.setVideoId(str);
+        mYoutubeController.setVideoId(str);
     }
 
     public void setVideoIds(ReadableArray arr) {
-        youtubeController.setVideoIds(arr);
+        mYoutubeController.setVideoIds(arr);
     }
 
     public void setPlaylistId(String str) {
-        youtubeController.setPlaylistId(str);
+        mYoutubeController.setPlaylistId(str);
     }
 
-    public void setInline(Boolean bool) {
-        youtubeController.setPlayInline(bool);
+    public void setPlay(boolean bool) {
+        mYoutubeController.setPlay(bool);
     }
 
-    public void setShowInfo(Boolean bool) {
-        youtubeController.setShowInfo(bool);
+    public void setLoop(boolean bool) {
+        mYoutubeController.setLoop(bool);
     }
 
-    public void setModestbranding(Boolean bool) {
-        youtubeController.setModestBranding(bool);
+    public void setPlaysInline(boolean bool) {
+        mYoutubeController.setPlaysInline(bool);
     }
 
-    public void setControls(Integer nb) {
-        youtubeController.setControls(nb);
+    public void setControls(int nb) {
+        mYoutubeController.setControls(nb);
     }
 
-    public void setPlay(Boolean bool) {
-        youtubeController.setPlay(bool);
-    }
-
-    public void setHidden(Boolean bool) {
-        youtubeController.setHidden(bool);
-    }
-
-    public void setLoop(Boolean loop) {
-        youtubeController.setLoop(loop);
-    }
-
-    public void setRelated(Boolean related) {
-        youtubeController.setRelated(related);
+    public void setShowFullscreenButton(boolean bool) {
+        mYoutubeController.setShowFullscreenButton(bool);
     }
 }

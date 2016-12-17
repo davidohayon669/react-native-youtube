@@ -49,18 +49,6 @@ RCT_EXPORT_METHOD(seekTo:(nonnull NSNumber *)reactTag seconds:(nonnull NSNumber 
     }];
 }
 
-RCT_EXPORT_METHOD(playVideoAt:(nonnull NSNumber *)reactTag index:(nonnull NSNumber *)index)
-{
-    [self.bridge.uiManager addUIBlock:^(__unused RCTUIManager *uiManager, NSDictionary<NSNumber *, UIView *> *viewRegistry) {
-        RCTYouTube *youtube = (RCTYouTube*)viewRegistry[reactTag];
-        if ([youtube isKindOfClass:[RCTYouTube class]]) {
-            [youtube playVideoAt:(int)[index integerValue]];
-        } else {
-            RCTLogError(@"Cannot playVideoAt: %@ (tag #%@) is not RCTYouTube", youtube, reactTag);
-        }
-    }];
-}
-
 RCT_EXPORT_METHOD(nextVideo:(nonnull NSNumber *)reactTag)
 {
     [self.bridge.uiManager addUIBlock:^(__unused RCTUIManager *uiManager, NSDictionary<NSNumber *, UIView *> *viewRegistry) {
@@ -81,6 +69,18 @@ RCT_EXPORT_METHOD(previousVideo:(nonnull NSNumber *)reactTag)
             [youtube previousVideo];
         } else {
             RCTLogError(@"Cannot previousVideo: %@ (tag #%@) is not RCTYouTube", youtube, reactTag);
+        }
+    }];
+}
+
+RCT_EXPORT_METHOD(playVideoAt:(nonnull NSNumber *)reactTag index:(nonnull NSNumber *)index)
+{
+    [self.bridge.uiManager addUIBlock:^(__unused RCTUIManager *uiManager, NSDictionary<NSNumber *, UIView *> *viewRegistry) {
+        RCTYouTube *youtube = (RCTYouTube*)viewRegistry[reactTag];
+        if ([youtube isKindOfClass:[RCTYouTube class]]) {
+            [youtube playVideoAt:(int)[index integerValue]];
+        } else {
+            RCTLogError(@"Cannot playVideoAt: %@ (tag #%@) is not RCTYouTube", youtube, reactTag);
         }
     }];
 }

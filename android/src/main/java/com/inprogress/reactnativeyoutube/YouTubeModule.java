@@ -1,20 +1,18 @@
 package com.inprogress.reactnativeyoutube;
 
-import android.util.Log;
-
+import com.facebook.react.bridge.Promise;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
-import com.facebook.react.bridge.Promise;
-import com.facebook.react.uimanager.UIManagerModule;
-import com.facebook.react.uimanager.UIBlock;
-import com.facebook.react.uimanager.NativeViewHierarchyManager;
 import com.facebook.react.uimanager.IllegalViewOperationException;
+import com.facebook.react.uimanager.NativeViewHierarchyManager;
+import com.facebook.react.uimanager.UIBlock;
+import com.facebook.react.uimanager.UIManagerModule;
 
 
 public class YouTubeModule extends ReactContextBaseJavaModule {
 
-    ReactApplicationContext mReactContext;
+    private ReactApplicationContext mReactContext;
 
     public YouTubeModule(ReactApplicationContext reactContext) {
         super(reactContext);

@@ -29,6 +29,6 @@
     "android": {
       "packageInstance": "new ReactNativeYouTube()"
     },
-    "assets": ["Assets"]
+    "assets": ["assets"]
   }
 }

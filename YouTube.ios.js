@@ -1,6 +1,5 @@
 /**
  * @providesModule YouTube
- * @flow
  */
 
 import React from 'react';
@@ -18,25 +17,20 @@ export default class YouTube extends React.Component {
     videoId: React.PropTypes.string,
     videoIds: React.PropTypes.arrayOf(React.PropTypes.string),
     playlistId: React.PropTypes.string,
+    play: React.PropTypes.bool,
+    loop: React.PropTypes.bool,
     playsInline: React.PropTypes.bool,
+    controls: React.PropTypes.oneOf([0, 1, 2]),
     showinfo: React.PropTypes.bool,
     modestbranding: React.PropTypes.bool,
-    controls: React.PropTypes.oneOf([0, 1, 2]),
-    origin: React.PropTypes.string,
-    play: React.PropTypes.bool,
     rel: React.PropTypes.bool,
-    hidden: React.PropTypes.bool,
+    origin: React.PropTypes.string,
     onError: React.PropTypes.func,
     onReady: React.PropTypes.func,
     onChangeState: React.PropTypes.func,
     onChangeQuality: React.PropTypes.func,
     onProgress: React.PropTypes.func,
-    loop: React.PropTypes.bool,
     style: View.propTypes.style,
-  };
-
-  static defaultProps = {
-    loop: false,
   };
 
   constructor(props) {
@@ -48,7 +42,7 @@ export default class YouTube extends React.Component {
     this._onProgress = this._onProgress.bind(this);
     this.reloadIframe = this.reloadIframe.bind(this);
 
-    // iOS uses a YouTube iframe under the hood. We need to create its initial params
+    // iOS uses a YouTube iFrame under the hood. We need to create its initial params
     // for a quick and clean load. After the initial loading, props changes will interact
     // with the iframe via its instance's methods so it won't need to load the iframe again.
     this.state = {
@@ -88,11 +82,13 @@ export default class YouTube extends React.Component {
   _createPlayerParams(props) {
     return {
       videoId: props.videoIds && Array.isArray(props.videoIds)
-        ? props.videoIds[0] : props.videoId,
+        ? props.videoIds[0]
+        : props.videoId,
       playlistId: props.playlistId,
       playerVars: {
+
         // videoIds are split to videoId and playlist (comma separated videoIds).
-        // Also, looping a single video is unsupported by the iframe player so we
+        // Also, looping a single video is unsupported by the iFrame player so we
         // must load the video as a 2 videos playlist, as suggested here:
         // https://developers.google.com/youtube/player_parameters#loop
         playlist: props.videoIds && Array.isArray(props.videoIds)
@@ -100,12 +96,15 @@ export default class YouTube extends React.Component {
           : props.loop && props.videoId
             ? props.videoId
             : undefined,
-        playsinline: props.playsInline ? 1 : 0,
-        modestbranding: props.modestbranding ? 1 : 0,
-        showinfo: props.showinfo ? 1 : 0,
-        loop: props.loop ? 1 : 0,
-        rel: props.rel ? 1 : 0,
+
+        // No need to explicitly pass positive or negative defaults
+        loop: props.loop === true ? 1 : undefined,
+        playsinline: props.playsInline === true ? 1 : undefined,
         controls: props.controls,
+        fs: props.showFullscreenButton === false ? 0 : undefined,
+        showinfo: props.showinfo === false ? 0 : undefined,
+        modestbranding: props.modestbranding === true ? 1 : undefined,
+        rel: props.rel === false ? 0 : undefined,
         origin: props.origin,
       },
     };
@@ -134,9 +133,9 @@ export default class YouTube extends React.Component {
         .catch(errorMessage => reject(errorMessage)));
   }
 
-  // iframe vars like `playsInline`, `showinfo` etc. are set only on iframe load.
-  // This method will force a reload on the inner iframe. Use it if you know the cost
-  // and still wants to refresh the iframe's vars
+  // iFrame vars like `playsInline`, `showinfo` etc. are set only on iFrame load.
+  // This method will force a reload on the inner iFrame. Use it if you know the cost
+  // and still wants to refresh the iFrame's vars
   reloadIframe() {
     this.setState({ playerParams: this._createPlayerParams(this.props) });
   }

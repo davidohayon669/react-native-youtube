@@ -1,12 +1,12 @@
 /**
  * @providesModule YouTube
- * @flow
  */
 
 import React from 'react';
 import ReactNative, {
   View,
   Text,
+  StyleSheet,
   requireNativeComponent,
   UIManager,
   NativeModules,
@@ -24,34 +24,31 @@ const RCTYouTube = requireNativeComponent('ReactYouTube', YouTube, {
 export default class YouTube extends React.Component {
 
   static propTypes = {
-    // TODO: warn about the importance of apiKey and how to get it from google
     apiKey: React.PropTypes.string.isRequired,
     videoId: React.PropTypes.string,
     videoIds: React.PropTypes.arrayOf(React.PropTypes.string),
     playlistId: React.PropTypes.string,
-    playsInline: React.PropTypes.bool,
-    showinfo: React.PropTypes.bool,
-    modestbranding: React.PropTypes.bool,
-    controls: React.PropTypes.oneOf([0,1,2]),
-    origin: React.PropTypes.string,
     play: React.PropTypes.bool,
-    rel: React.PropTypes.bool,
-    hidden: React.PropTypes.bool,
-    // TODO: warn about "SERVICE_MISSING" and explain you need to have YouTube app on the device
+    loop: React.PropTypes.bool,
+    playsInline: React.PropTypes.bool,
+    controls: React.PropTypes.oneOf([0,1,2]),
+    showFullscreenButton: React.PropTypes.bool,
     onError: React.PropTypes.func,
     onReady: React.PropTypes.func,
     onChangeState: React.PropTypes.func,
     onChangeQuality: React.PropTypes.func,
-    loop: React.PropTypes.bool,
     style: View.propTypes.style,
   };
 
   static defaultProps = {
-    loop: false,
+    showFullscreenButton: true,
   };
 
   constructor(props) {
     super(props);
+    this.state = {
+      hiddenRenderText: 'o',
+    };
     this._onError = this._onError.bind(this);
     this._onReady = this._onReady.bind(this);
     this._onChangeState = this._onChangeState.bind(this);
@@ -63,6 +60,8 @@ export default class YouTube extends React.Component {
   }
 
   _onReady(event) {
+    // Look at the JSX for info about this
+    this.setState({ hiddenRenderText: 'x' })
     if (this.props.onReady) this.props.onReady(event.nativeEvent);
   }
 
@@ -76,7 +75,7 @@ export default class YouTube extends React.Component {
 
   seekTo(seconds) {
     UIManager.dispatchViewManagerCommand(
-      ReactNative.findNodeHandle(this),
+      ReactNative.findNodeHandle(this._nativeComponentRef),
       UIManager.ReactYouTube.Commands.seekTo,
       [parseInt(seconds, 10)],
     );
@@ -84,7 +83,7 @@ export default class YouTube extends React.Component {
 
   nextVideo() {
     UIManager.dispatchViewManagerCommand(
-      ReactNative.findNodeHandle(this),
+      ReactNative.findNodeHandle(this._nativeComponentRef),
       UIManager.ReactYouTube.Commands.nextVideo,
       [],
     );
@@ -92,7 +91,7 @@ export default class YouTube extends React.Component {
 
   previousVideo() {
     UIManager.dispatchViewManagerCommand(
-      ReactNative.findNodeHandle(this),
+      ReactNative.findNodeHandle(this._nativeComponentRef),
       UIManager.ReactYouTube.Commands.previousVideo,
       [],
     );
@@ -100,7 +99,7 @@ export default class YouTube extends React.Component {
 
   playVideoAt(index) {
     UIManager.dispatchViewManagerCommand(
-      ReactNative.findNodeHandle(this),
+      ReactNative.findNodeHandle(this._nativeComponentRef),
       UIManager.ReactYouTube.Commands.playVideoAt,
       [parseInt(index, 10)],
     );
@@ -108,21 +107,40 @@ export default class YouTube extends React.Component {
 
   videosIndex() {
     return new Promise((resolve, reject) =>
-      NativeModules.YouTubeModule.videosIndex(ReactNative.findNodeHandle(this))
+      NativeModules.YouTubeModule.videosIndex(ReactNative.findNodeHandle(this._nativeComponentRef))
         .then(index => resolve(index))
         .catch(errorMessage => reject(errorMessage)));
   }
 
   render() {
     return (
-      <RCTYouTube
-        {...this.props}
-        style={[{ overflow: 'hidden' }, this.props.style]}
-        onError={this._onError}
-        onReady={this._onReady}
-        onChangeState={this._onChangeState}
-        onChangeQuality={this._onChangeQuality}
-      />
+      <View>
+        <RCTYouTube
+          ref={(component) => { this._nativeComponentRef = component }}
+          {...this.props}
+          style={[{ overflow: 'hidden' }, this.props.style]}
+          onError={this._onError}
+          onReady={this._onReady}
+          onChangeState={this._onChangeState}
+          onChangeQuality={this._onChangeQuality}
+        />
+        {/*
+          The Android YouTube native player is pretty problematic when it comes to
+          mounting correctly and rendering inside React-Native's views hierarchy.
+          For now we must force a real render of one of its ancestors, right after
+          the onReady event, to make it smoothly appear after ready.
+          */}
+        <Text style={styles.hiddenRenderText}>{this.state.hiddenRenderText}</Text>
+      </View>
     )
   }
 }
+
+const styles = StyleSheet.create({
+  hiddenRenderText: {
+    position: 'absolute',
+    top: 10,
+    left: 0,
+    zIndex: -10000,
+  },
+});

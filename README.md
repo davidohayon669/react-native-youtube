@@ -36,19 +36,20 @@ this._youTubePlayer.playVideoAt(2);
 
 ## Properties
 
-* `apiKey`: This parameter is required on Android for the YouTube API to work. [More Info](https://developers.google.com/youtube/android/player/register).
+* `apiKey` *(Android)*: This parameter is required on Android for the YouTube API to work. [More Info](https://developers.google.com/youtube/android/player/register).
 * `videoId`: The YouTube video ID to play. Can be changed while mounted to change the video playing.
 * `videoIds`: An array of YouTube video IDs to be played as an interactive playlist. Can be changed while mounted. Overridden at start by `videoId`.
 * `playlistId`: A YouTube Playlist's ID to play as an interactive playlist.
 Can be changed while mounted. Overridden at start by `videoId` and `videoIds`.
-* `play`: Controls playback of video with `true`/`false`. Setting it as `true` in the beginning itself makes the video autoplay on loading.
+* `play`: Controls playback of video with `true`/`false`. Setting it as `true` in the beginning itself makes the video autoplay on loading. Default `false`.
 * `loop`: Loops the video. Default `false`.
 * `playsInline`: Controls whether the video should play inline, or in full-screen. Default `false`.
-* `rel` *(iOS)*: Hides related videos at the end of the video. Default `false`.
+* `controls`: A number parameter to decide on the player's controls scheme. Supported values are `0`, `1`, `2`. Default `1`. On iOS the numbers conform to [These Parameters](https://developers.google.com/youtube/player_parameters?hl=en#controls). On Android the mapping is `0` = `CHROMELSEE`, `1` = `DEFAULT`, `2` = `MINIMAL` ([More Info](https://developers.google.com/youtube/android/player/reference/com/google/android/youtube/player/YouTubePlayer.PlayerStyle)).
+* `showFullscreenButton`: Show or hide Fullscreen button. Default `true`.
+* `showinfo` *(iOS)*: Setting the parameter's value to false causes the player to not display information like the video title and uploader before the video starts playing. Default `true`.
 * `modestbranding` *(iOS)*: This parameter lets you use a YouTube player that does not show a YouTube logo. Default `false`.
-* `controls`: This number parameter indicates whether the video player controls are displayed. Supported values are `0`, `1`, `2`. Default `1`. [More information](https://developers.google.com/youtube/player_parameters?hl=en#controls)
-* `showinfo` *(iOS)*: Setting the parameter's value to false causes the player to not display information like the video title and uploader before the video starts playing. Default `false`.
-* `origin` *(iOS)*: This string parameter provides an extra security measure for the IFrame API.
+* `origin` *(iOS)*: This string parameter provides an extra security measure for the iFrame API.
+* `rel` *(iOS)*: Hides related videos at the end of the video. Default `true`.
 
 The iOS implementation of this player uses the official YouTube iFrame under the hood, so most parameters behavior [can be further understood here.](https://developers.google.com/youtube/player_parameters)
 
@@ -93,6 +94,8 @@ This component is fully tried on react-native >= 0.37.0. Lower versions should w
 `$ rnpm link`
 
 (This step can also be done manually by adding `../node_modules/react-native-youtube/Assets/YTPlayerView-iframe-player.html` to your root Xcode project's directory)
+
+**IMPORTANT! (Android Only)**: The Android implementation of this component needs to have the official YouTube app installed on the device. Otherwise, and error event will trigger with `SERVICE_MISSING`.
 
 ##### OPTIONAL: Activated sound when phone is on vibrate mode
 

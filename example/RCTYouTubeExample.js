@@ -20,6 +20,7 @@ class RCTYouTubeExample extends React.Component {
     quality: null,
     error: null,
     isPlaying: true,
+    isLooping: true,
     duration: 0,
     currentTime: 0,
   };
@@ -48,10 +49,8 @@ class RCTYouTubeExample extends React.Component {
           // playlistId="PLF797E961509B4EB5"
 
           play={this.state.isPlaying}
-          loop={true}
+          loop={this.state.isLooping}
           playsInline={true}
-          showinfo={true}
-          modestbranding={true}
           controls={1}
           style={styles.player}
           onError={e => this.setState({ error: e.error })}
@@ -63,14 +62,25 @@ class RCTYouTubeExample extends React.Component {
             : undefined}
         />
 
-        <TouchableOpacity
-          style={styles.button}
-          onPress={() => this.setState(s => ({ isPlaying: !s.isPlaying }))}
-        >
-          <Text style={styles.buttonText}>
-            {this.state.status == 'playing' ? 'Pause' : 'Play'}
-          </Text>
-        </TouchableOpacity>
+        {/* Playing / Looping */}
+        <View style={styles.buttonGroup}>
+          <TouchableOpacity
+            style={styles.button}
+            onPress={() => this.setState(s => ({ isPlaying: !s.isPlaying }))}
+          >
+            <Text style={styles.buttonText}>
+              {this.state.status == 'playing' ? 'Pause' : 'Play'}
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.button}
+            onPress={() => this.setState(s => ({ isLooping: !s.isLooping }))}
+          >
+            <Text style={styles.buttonText}>
+              {this.state.isLooping ? 'Looping' : 'Not Looping'}
+            </Text>
+          </TouchableOpacity>
+        </View>
 
         {/* Previous / Next video */}
         <View style={styles.buttonGroup}>
