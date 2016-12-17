@@ -69,7 +69,7 @@ The iOS implementation of this player uses the official YouTube iFrame under the
 * `previousVideo()`: opposite of `nextVideo()`.
 * `playVideoAt(index)`: Will start playing the video at `index` (zero-based) position in a playlist (`videoIds` or `playlistId`. Not supported for `playlistId` on Android).
 * `videosIndex()`: A Promise that returns the `index` (zero-based) of the video currently played in a playlist (`videoIds` or `playlistId`. Not supported for `playlistId` on Android).
-* `reloadIframe()` *(iOS)*: iFrame specific parameters (`playsinline`, `modestbranding`, `showinfo`, `rel`, `controls`, `origin`) can only be set at mounting and initial loading of the underlying iFrame. If you want to changed one of them during the lifecycle of the component you should know the UX cost of loading the iFrame again and use this method right after the component was rendered with the updated prop.
+* `reloadIframe()` *(iOS)*: Specific props (`playsinline`, `modestbranding`, `showinfo`, `rel`, `controls`, `origin`) can only be set at mounting and initial loading of the underlying WebView that holds the YouTube iFrame (Those are `<iframe>` parameters). If you want to changed one of them during the lifecycle of the component you should know the usability cost of loading the WebView again and use this method right after the component was rendered with the updated prop.
 
 ## Installation
 
@@ -83,7 +83,7 @@ This component is fully tried on react-native >= 0.37.0. Lower versions should w
 
 `$ react-native link`
 
-**IMPORTANT! (iOS Only)**: To link Assets/YTPlayerView-iframe-player.html to your project `react-native link` is not enough (As of RN ~0.37). You will need to *also* use the older tool it is based on, `rnpm` (This step must be done *in conjunction, and after* `react-native link`):
+**IMPORTANT! (iOS Only)**: To link assets/YTPlayerView-iframe-player.html to your project `react-native link` is not enough (As of RN ~0.37). You will need to *also* use the older tool it is based on, `rnpm` (This step must be done *in conjunction, and after* `react-native link`):
 
 * First, if you don't have it installed, globally install `rnpm` (Version 1.9.0):
 
@@ -93,7 +93,7 @@ This component is fully tried on react-native >= 0.37.0. Lower versions should w
 
 `$ rnpm link`
 
-(This step can also be done manually by adding `../node_modules/react-native-youtube/Assets/YTPlayerView-iframe-player.html` to your root Xcode project's directory)
+(This step can also be done manually by adding `../node_modules/react-native-youtube/assets/YTPlayerView-iframe-player.html` to your root Xcode project's directory)
 
 **IMPORTANT! (Android Only)**: The Android implementation of this component needs to have the official YouTube app installed on the device. Otherwise, and error event will trigger with `SERVICE_MISSING`.
 
