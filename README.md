@@ -16,7 +16,7 @@ Uses Google's official [youtube-ios-player-helper](https://github.com/youtube/yo
   playlist="PLF797E961509B4EB5"   // A playlist's ID, overridden by `videoId`
   play={true}                     // control playback of video with true/false
   playsInline={true}              // control whether the video should play full-screen or inline
-  loop={false}                    // control whether the video should loop when ended
+  loop={true}                    // control whether the video should loop when ended
 
   onReady={e => this.setState({ isReady: true })}
   onChangeState={e => this.setState({ status: e.state })}
@@ -79,25 +79,25 @@ This component is fully tried on react-native >= 0.37.0. Lower versions should w
 
 `$ npm install react-native-youtube -S`
 
-* Link the library to your project with:
+* Link the library to your iOS and Android projects with:
 
 `$ react-native link`
 
-**IMPORTANT! (iOS Only)**: To link assets/YTPlayerView-iframe-player.html to your project `react-native link` is not enough (As of RN ~0.37). You will need to *also* use the older tool it is based on, `rnpm` (This step must be done *in conjunction, and after* `react-native link`):
+**IMPORTANT! (iOS Only)**: To link assets/YTPlayerView-iframe-player.html to your project `react-native link` is not enough (As of RN ~0.37). You will need to *also* use the older tool it is based on, `rnpm` (This step must be done **after** `react-native link`):
 
 * First, if you don't have it installed, globally install `rnpm` (Version 1.9.0):
 
 `$ npm install -g rnpm`
 
-* Then back inside the the project's root folder type:
+* Then at the project's root folder type:
 
 `$ rnpm link`
 
-(This step can also be done manually by adding `../node_modules/react-native-youtube/assets/YTPlayerView-iframe-player.html` to your root Xcode project's directory)
+(This step can also be done manually by adding `../node_modules/react-native-youtube/assets/YTPlayerView-iframe-player.html` to your Xcode project's root directory)
 
-**IMPORTANT! (Android Only)**: The Android implementation of this component needs to have the official YouTube app installed on the device. Otherwise, and error event will trigger with `SERVICE_MISSING`.
+**IMPORTANT! (Android Only)**: The Android implementation of this component needs to have the official YouTube app installed on the device. Otherwise an error event will trigger with `SERVICE_MISSING`.
 
-##### OPTIONAL: Activated sound when iPhone (iOS) is on vibrate mode
+#### OPTIONAL: Activated sound when iPhone (iOS) is on vibrate mode
 
 Open AppDelegate.m and add :
 
@@ -116,7 +116,7 @@ These behaviors can be pretty worrisome, and wrongfully get you to think the lib
 These possible irregularities should be further taken care of by maintainers.
 
 ## Example and Development
-This library comes with an example project that can be used for viewing, developing and testing all functionalities on a dedicated clean app project.
+This repository includes an example project that can be used for viewing, developing and testing all functionalities on a dedicated clean app project.
 
 First copy the git repository and install the React-Native project inside `example`
 
@@ -131,7 +131,7 @@ rnpm link
 Then build and run with `react-native run-ios` / `react-native run-android` or your favorite IDE.
 
 #### For Developers
-The `react-native-youtube` dependency in the example's `package.json` points back to the working folder at `file:../` so you can re-install it with `npm install react-native-youtube@file:../` (inside `example` folder) and test your changes on the example app right on the spot.
+The `react-native-youtube` dependency in the example's `package.json` points back to the working directory root at `file:../` so you can re-install it with `npm install react-native-youtube@file:../` (type this inside `example` directory) and test your changes on the example app right on the spot.
 
 
 ## Author
