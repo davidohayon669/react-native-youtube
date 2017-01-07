@@ -33,16 +33,18 @@ this.refs.youtubePlayer.seekTo(20);
 
 ## Properties
 
-* `videoID`: The YouTube video ID to play, can be changed to change the video playing.
+* `videoId`: The YouTube video ID to play, can be changed to change the video playing.
 * `play`: Controls playback of video with `true`/`false`. Setting it as `true` in the beginning itself makes the video autoplay on loading.
 * `hidden`: Controls the `view.hidden` native property. For example, use this to hide player while it loads.
 * `playsInline`: Controls whether the video should play inline, or in full screen.
+* `fs`: Controls whether the full screen button is shown. Default `true`.
 * `rel`: Hides related videos at the end of the video. Default `false`.
 * `loop`: Loops the video. Default `false`.
 * `modestbranding`: This parameter lets you use a YouTube player that does not show a YouTube logo. Default `false`.
 * `controls`: This parameter indicates whether the video player controls are displayed. Supported values are `0`, `1`, `2`. Default `1`. [More information](https://developers.google.com/youtube/player_parameters?hl=en#controls)
 * `showinfo`: Setting the parameter's value to false causes the player to not display information like the video title and uploader before the video starts playing. Default `true`.
 * `origin`: This parameter provides an extra security measure for the IFrame API.
+* `apiKey`: This parameter is required on Android for the YouTube API to work.
 
 ## Events
 
@@ -58,6 +60,7 @@ this.refs.youtubePlayer.seekTo(20);
 
 ### Installation
 
+##### IOS
 (requires react-native >= 0.6.0)
 
 `$ rnpm install react-native-youtube`
@@ -71,6 +74,43 @@ Open AppDelegate.m and add :
 * `#import <AVFoundation/AVFoundation.h>`
 
 * `[[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayback error: nil];` in your didFinishLaunchingWithOptions method
+
+##### Android : rnpm is not working yet !!
+
+In node_module :
+
+`$ git clone https://github.com/inProgress-team/react-native-youtube.git`
+
+Then add in settings.gradle :
+ ```
+include ':RCTYouTube', ':app'
+project(':RCTYouTube').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-youtube/RCTYouTube')
+ ```
+In build.gradle : ( The one inside android/app . **NOT** android/build.gradle )
+
+ ```
+ dependencies {
+    [...]
+    compile project(':RCTYouTube')     // From node_modules
+   
+} 
+```
+
+In MainApplication.java :
+
+```
+import com.inprogress.reactnativeyoutube.ReactNativeYouTube;
+
+[...]
+
+ @Override
+    protected List<ReactPackage> getPackages() {
+      return Arrays.<ReactPackage>asList(
+          new MainReactPackage(),
+              new ReactNativeYouTube()
+      );
+    }
+ ```
 
 ## Example
 Try the included `RCTYouTubeExample`:
