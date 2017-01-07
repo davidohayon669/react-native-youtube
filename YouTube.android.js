@@ -17,13 +17,12 @@ import {
 
 const RCTYouTube = requireNativeComponent('ReactYouTube', YouTube,
 {
-  nativeOnly: {
-    onError: true,
-    onReady: true,
-    onChangeState: true,
-    onChangeQuality: true,
-    onProgress: true,
-  },
+  nativeOnly: {onYoutubeVideoError:true,
+              onYoutubeVideoReady:true,
+              onYoutubeVideoChangeState:true,
+              onYoutubeVideoChangeQuality:true,
+              onYoutubeVideoProgress:true,
+              }
 });
 
 export default class YouTube extends Component {
@@ -38,6 +37,7 @@ export default class YouTube extends Component {
     origin: PropTypes.string,
     play: PropTypes.bool,
     rel: PropTypes.bool,
+    fs: PropTypes.bool,
     hidden: PropTypes.bool,
     onReady: PropTypes.func,
     onChangeState: PropTypes.func,
@@ -135,6 +135,10 @@ export default class YouTube extends Component {
         if (this.props.rel!==undefined) {
           nativeProps.playerParams.playerVars.rel = this.props.rel ? 1 : 0;
           delete nativeProps.rel;
+        };
+        if (this.props.fs!==undefined) {
+          nativeProps.playerParams.playerVars.fs = this.props.fs ? 1 : 0;
+          delete nativeProps.fs;
         };
       };
     } else {
