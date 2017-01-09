@@ -23,6 +23,9 @@
      */
     BOOL _isReady;
     BOOL _playsOnLoad;
+
+    /* StatusBar visibility status before the player changed to fullscreen */
+    BOOL _isStatusBarHidden;
     
     /* Required to publish events */
     RCTEventDispatcher *_eventDispatcher;
@@ -36,9 +39,28 @@
         _isPlaying = NO;
         
         self.delegate = self;
+        [self addFullScreenObserver];
     }
     
     return self;
+}
+
+- (void)addFullScreenObserver
+{
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(playerFullScreenStateChange:)
+                                                 name:UIWindowDidResignKeyNotification
+                                               object:self.window];
+}
+
+- (void)removeFullScreenObserver
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIWindowDidResignKeyNotification object:self.window];
+}
+
+- (void)dealloc
+{
+    [self removeFullScreenObserver];
 }
 
 - (void)layoutSubviews {
@@ -46,6 +68,24 @@
     
     if (self.webView) {
         self.webView.frame = self.bounds;
+    }
+}
+
+- (void)playerFullScreenStateChange:(NSNotification*)notification
+{
+    if((UIWindow*)notification.object == self.window) {
+        [_eventDispatcher sendInputEventWithName:@"youtubeVideoEnterFullScreen"
+                                            body:@{
+                                                   @"target": self.reactTag
+                                                   }];
+        _isStatusBarHidden = [[UIApplication sharedApplication] isStatusBarHidden];
+    } else {
+        [_eventDispatcher sendInputEventWithName:@"youtubeVideoExitFullScreen"
+                                            body:@{
+                                                   @"target": self.reactTag
+                                                   }];
+        [[UIApplication sharedApplication] setStatusBarHidden:_isStatusBarHidden
+                                                withAnimation:UIStatusBarAnimationFade];
     }
 }
 
