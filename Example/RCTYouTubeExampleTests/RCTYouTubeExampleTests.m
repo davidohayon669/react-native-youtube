@@ -10,9 +10,9 @@
 #import <UIKit/UIKit.h>
 #import <XCTest/XCTest.h>
 
-#import "RCTAssert.h"
-#import "RCTRedBox.h"
-#import "RCTRootView.h"
+#import <React/RCTAssert.h>
+#import <React/RCTRedBox.h>
+#import <React/RCTRootView.h>
 
 #define TIMEOUT_SECONDS 240
 #define TEXT_TO_LOOK_FOR @"Welcome to React Native!"

@@ -6,7 +6,7 @@
 //  Copyright (c) 2015 Myntra Designs. All rights reserved.
 //
 
-#import "RCTViewManager.h"
+#import <React/RCTViewManager.h>
 
 @interface RCTYouTubeManager : RCTViewManager
 
