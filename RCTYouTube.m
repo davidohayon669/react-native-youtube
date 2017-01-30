@@ -7,8 +7,8 @@
 //
 
 #import "RCTYouTube.h"
-#import "RCTBridgeModule.h"
-#import "RCTEventDispatcher.h"
+#import "React/RCTBridgeModule.h"
+#import "React/RCTEventDispatcher.h"
 #import "UIView+React.h"
 
 @implementation RCTYouTube
@@ -17,13 +17,13 @@
     BOOL _playsInline;
     NSDictionary *_playerParams;
     BOOL _isPlaying;
-    
+
     /* Check to see if commands can
      * be sent to the player
      */
     BOOL _isReady;
     BOOL _playsOnLoad;
-    
+
     /* Required to publish events */
     RCTEventDispatcher *_eventDispatcher;
 }
@@ -34,16 +34,16 @@
         _eventDispatcher = eventDispatcher;
         _playsInline = NO;
         _isPlaying = NO;
-        
+
         self.delegate = self;
     }
-    
+
     return self;
 }
 
 - (void)layoutSubviews {
     [super layoutSubviews];
-    
+
     if (self.webView) {
         self.webView.frame = self.bounds;
     }
@@ -52,13 +52,13 @@
 #pragma mark - YTPlayer control methods
 
 - (void)setPlay:(BOOL)play {
-    
+
     // if not ready, configure for later
     if (!_isReady) {
         _playsOnLoad = play;
         return;
     }
-    
+
     if (!_isPlaying && play) {
         [self playVideo];
         _isPlaying = YES;
@@ -88,7 +88,7 @@
     } else {
         // will get set when playsInline is set
     }
-    
+
     _videoId = videoId;
 }
 
@@ -113,7 +113,7 @@
 }
 
 - (void)playerView:(YTPlayerView *)playerView didChangeToState:(YTPlayerState)state {
-    
+
     NSString *playerState;
     switch (state) {
         case kYTPlayerStateUnknown:
@@ -140,7 +140,7 @@
         default:
             break;
     }
-    
+
     [_eventDispatcher sendInputEventWithName:@"youtubeVideoChangeState"
                                         body:@{
                                                @"state": playerState,
@@ -150,7 +150,7 @@
 }
 
 - (void)playerView:(YTPlayerView *)playerView didChangeToQuality:(YTPlaybackQuality)quality {
-    
+
     NSString *playerQuality;
     switch (quality) {
         case kYTPlaybackQualitySmall:
@@ -224,7 +224,7 @@
         default:
             break;
     }
-    
+
     [_eventDispatcher sendInputEventWithName:@"youtubeVideoError"
                                         body:@{
                                                @"error": playerError,
