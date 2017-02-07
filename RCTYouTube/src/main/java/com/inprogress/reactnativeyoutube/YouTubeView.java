@@ -139,4 +139,8 @@ public class YouTubeView extends RelativeLayout {
     public void setRelated(Boolean related) {
         youtubeController.setRelated(related);
     }
+
+    public void setFullscreen(Boolean bool) {
+        youtubeController.setFullscreen(bool);
+    }
 }
