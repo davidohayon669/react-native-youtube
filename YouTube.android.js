@@ -103,7 +103,7 @@ export default class YouTube extends Component {
         nativeProps.playerParams.playerVars = {};
 
         if (this.props.playsInline) {
-          nativeProps.playerParams.playerVars.playsinline = 1;
+          nativeProps.playerParams.playerVars.playsInline = 1;
           delete nativeProps.playsInline;
         };
         if (this.props.modestbranding) {
@@ -132,13 +132,6 @@ export default class YouTube extends Component {
           delete nativeProps.fs;
         };
       };
-    } else {
-      /*
-       * For compatibility issues with an older version where setting both
-       * `playsInline` and `videoId` in quick succession would cause the video
-       * to sometimes not play.
-       */
-      delete nativeProps.playsInline;
     }
 
     return <RCTYouTube {... nativeProps} />;

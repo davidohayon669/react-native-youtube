@@ -39,21 +39,33 @@ public class YouTubePlayerController implements
     @Override
     public void onInitializationSuccess(YouTubePlayer.Provider provider, YouTubePlayer youTubePlayer, boolean wasRestored) {
         if (!wasRestored) {
+
+            // Intall listeners on the youtube player
             mYouTubePlayer = youTubePlayer;
             mYouTubePlayer.setPlayerStateChangeListener(this);
             mYouTubePlayer.setPlaybackEventListener(this);
+            mYouTubePlayer.setOnFullscreenListener(this);
 
             // Update config
             mYouTubePlayer.setShowFullscreenButton(fullscreen);
 
-            mYouTubePlayer.setFullscreen(true);
-            updateControls();
+            // Emit 'onReady' event for player
             mYouTubeView.playerViewDidBecomeReady();
             setLoaded(true);
-            if (videoId != null && isPlay()) {
-                startVideo();
-                mYouTubePlayer.setFullscreen(false);
+
+            // Load/start the video in case it was initially provided
+            if (videoId != null) {
+                if (isPlay()) {
+                    mYouTubePlayer.loadVideo(videoId);
+                    if (!isPlayInline()) {
+                        mYouTubePlayer.setFullscreen(true);
+                    }
+                }
+                else {
+                    mYouTubePlayer.cueVideo(videoId);
+                }
             }
+            updateControls();
         }
     }
 
@@ -66,6 +78,12 @@ public class YouTubePlayerController implements
     @Override
     public void onPlaying() {
         mYouTubeView.didChangeToState("playing");
+
+        // When inline playback is not allowed, transition the 
+        // player to full-screen.
+        if (!isPlayInline()) {
+            mYouTubePlayer.setFullscreen(true);
+        }
     }
 
     @Override
@@ -127,7 +145,7 @@ public class YouTubePlayerController implements
 
     @Override
     public void onLoaded(String s) {
-
+        mYouTubeView.didChangeToState("loaded");
     }
 
     @Override
@@ -144,13 +162,12 @@ public class YouTubePlayerController implements
     public void onVideoEnded() {
         mYouTubeView.didChangeToState("ended");
         if (isLoop()) {
-            startVideo();
+            mYouTubePlayer.loadVideo(videoId);
+            mYouTubePlayer.play();
         }
-    }
-
-    private void startVideo() {
-        mYouTubePlayer.loadVideo(videoId);
-        mYouTubePlayer.play();
+        else {
+            mYouTubePlayer.setFullscreen(false);
+        }
     }
 
     @Override
@@ -160,6 +177,7 @@ public class YouTubePlayerController implements
 
     @Override
     public void onFullscreen(boolean isFullscreen) {
+        mYouTubeView.didChangeToState(isFullscreen ? "fullscreenMode" : "windowMode");
 
         // When exiting full-screen mode and inline playback is not enabled
         // then pause the video playback.
@@ -208,18 +226,34 @@ public class YouTubePlayerController implements
     public void setVideoId(String str) {
         videoId = str;
         if (isLoaded()) {
-            startVideo();
+            if (videoId == null) {
+                mYouTubePlayer.pause();
+            }
+            else if (isPlay()) {
+                mYouTubePlayer.loadVideo(videoId);
+                mYouTubePlayer.play();
+            }
+            else {
+                mYouTubePlayer.cueVideo(videoId);
+            }
         }
     }
 
     public void setPlay(boolean play) {
         this.play = play;
-        if(mYouTubePlayer!=null)
-            if(this.play && !mYouTubePlayer.isPlaying()){
+
+        if (isLoaded()) {
+            if (this.play && !mYouTubePlayer.isPlaying()) {
                 mYouTubePlayer.play();
-            }else if(!this.play && mYouTubePlayer.isPlaying()){
+                if (!isPlayInline()) {
+                    mYouTubePlayer.setFullscreen(true);
+                }
+            }
+            else if (!this.play && mYouTubePlayer.isPlaying()){
                 mYouTubePlayer.pause();
-             }
+                mYouTubePlayer.setFullscreen(false);
+            }
+        }
     }
 
     public void setLoop(boolean loop) {

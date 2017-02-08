@@ -36,7 +36,7 @@ this.refs.youtubePlayer.seekTo(20);
 * `videoId`: The YouTube video ID to play, can be changed to change the video playing.
 * `play`: Controls playback of video with `true`/`false`. Setting it as `true` in the beginning itself makes the video autoplay on loading.
 * `hidden`: Controls the `view.hidden` native property. For example, use this to hide player while it loads.
-* `playsInline`: Controls whether the video should play inline, or in full screen.
+* `playsInline`: Controls whether the video should play inline, or in full screen. Default `false`.
 * `fs`: Controls whether the full screen button is shown. Default `true`.
 * `rel`: Hides related videos at the end of the video. Default `false`.
 * `loop`: Loops the video. Default `false`.
