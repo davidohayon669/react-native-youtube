@@ -11,10 +11,16 @@ import ReactNative, {
   StyleSheet,
   requireNativeComponent,
   NativeModules,
-  NativeMethodsMixin
+  NativeMethodsMixin,
+  NativeAppEventEmitter
 } from 'react-native';
 
 const RCTYouTube = requireNativeComponent('RCTYouTube', null);
+
+let readyEvent = null
+let changeEvent = null
+let progressEvent = null
+let errorEvent = null
 
 export default class YouTube extends Component {
   static propTypes = {
@@ -44,40 +50,43 @@ export default class YouTube extends Component {
     super(props);
     this._exportedProps = NativeModules.YouTubeManager && NativeModules.YouTubeManager.exportedProps;
   }
-
-  _onReady(event) {
-    return this.props.onReady && this.props.onReady(event.nativeEvent);
+  stopVideo() {
+    NativeModules.YouTubeManager.stopVideo(ReactNative.findNodeHandle(this));
   }
-
-  _onChangeState(event) {
-    if(event.nativeEvent.state == 'ended' && this.props.loop) {
-      this.seekTo(0);
-    }
-    return this.props.onChangeState && this.props.onChangeState(event.nativeEvent);
-  }
-
-  _onChangeQuality(event) {
-    return this.props.onChangeQuality && this.props.onChangeQuality(event.nativeEvent);
-  }
-
-  _onError(event) {
-    return this.props.onError && this.props.onError(event.nativeEvent);
-  }
-  _onProgress(event){
-      return this.props.onProgress && this.props.onProgress(event.nativeEvent);
+  pauseVideo() {
+    NativeModules.YouTubeManager.pauseVideo(ReactNative.findNodeHandle(this));
   }
   seekTo(seconds){
     NativeModules.YouTubeManager.seekTo(ReactNative.findNodeHandle(this), parseInt(seconds, 10));
+  }
+  componentWillMount() {
+    changeEvent = NativeAppEventEmitter.addListener(
+      'youtubeVideoChangeState',
+      (event) => this.props.onChangeState && this.props.onChangeState(event.state)
+    )
+    readyEvent = NativeAppEventEmitter.addListener(
+      'youtubeVideoReady',
+      (event) => this.props.onReady && this.props.onReady()
+    )
+    progressEvent = NativeAppEventEmitter.addListener(
+      'youtubeProgress',
+      (event) => this.props.onProgress && this.props.onProgress(event)
+    )
+    errorEvent = NativeAppEventEmitter.addListener(
+      'youtubeVideoError',
+      (event) => this.props.onError && this.props.onError(event)
+    )
+  }
+  componentWillUnmount() {
+    changeEvent.remove()
+    readyEvent.remove()
+    progressEvent.remove()
+    errorEvent.remove()
   }
   render() {
     var style = [styles.base, this.props.style];
     var nativeProps = Object.assign({}, this.props);
     nativeProps.style = style;
-    nativeProps.onYoutubeVideoReady = this._onReady.bind(this);
-    nativeProps.onYoutubeVideoChangeState = this._onChangeState.bind(this);
-    nativeProps.onYoutubeVideoChangeQuality = this._onChangeQuality.bind(this);
-    nativeProps.onYoutubeVideoError = this._onError.bind(this);
-    nativeProps.onYoutubeProgress = this._onProgress.bind(this);
 
     /*
      * Try to use `playerParams` instead of settings `playsInline` and
