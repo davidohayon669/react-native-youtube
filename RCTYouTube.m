@@ -30,6 +30,10 @@
     BOOL _isReady;
     BOOL _playsOnLoad;
 
+    /* StatusBar visibility status before the player changed to fullscreen */
+    BOOL _isStatusBarHidden;
+    BOOL _enteredFullScreen;
+    
     /* Required to publish events */
     RCTEventDispatcher *_eventDispatcher;
 }
@@ -40,11 +44,30 @@
         _eventDispatcher = eventDispatcher;
         _playsInline = NO;
         _isPlaying = NO;
-
+        _enteredFullScreen = NO;
         self.delegate = self;
+        [self addFullScreenObserver];
     }
 
     return self;
+}
+
+- (void)addFullScreenObserver
+{
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(playerFullScreenStateChange:)
+                                                 name:UIWindowDidResignKeyNotification
+                                               object:self.window];
+}
+
+- (void)removeFullScreenObserver
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIWindowDidResignKeyNotification object:self.window];
+}
+
+- (void)dealloc
+{
+    [self removeFullScreenObserver];
 }
 
 - (void)layoutSubviews {
@@ -55,11 +78,33 @@
     }
 }
 
+- (void)playerFullScreenStateChange:(NSNotification*)notification
+{
+    if((UIWindow*)notification.object == self.window && !_enteredFullScreen) {
+        [_eventDispatcher sendInputEventWithName:@"youtubeVideoEnterFullScreen"
+                                            body:@{
+                                                   @"target": self.reactTag
+                                                   }];
+        _isStatusBarHidden = [[UIApplication sharedApplication] isStatusBarHidden];
+        _enteredFullScreen = YES;
+    }
+    if ((UIWindow*)notification.object != self.window && _enteredFullScreen) {
+        [_eventDispatcher sendInputEventWithName:@"youtubeVideoExitFullScreen"
+                                            body:@{
+                                                   @"target": self.reactTag
+                                                   }];
+        [[UIApplication sharedApplication] setStatusBarHidden:_isStatusBarHidden
+                                                withAnimation:UIStatusBarAnimationFade];
+        _enteredFullScreen = NO;
+    }
+}
+
 #pragma mark - YTPlayer control methods
 
 - (void)setPlay:(BOOL)play {
-
+  
     // if not ready, configure for later
+    _playsOnLoad = false;
     if (!_isReady) {
         _playsOnLoad = play;
         return;
@@ -75,6 +120,8 @@
 }
 
 - (void)setPlaysInline:(BOOL)playsInline {
+    _isReady = false;
+    _isPlaying = false;
     if (_videoId && playsInline) {
         [self loadWithVideoId:_videoId playerVars:@{@"playsinline": @1}];
     } else if (_videoId && !playsInline){
@@ -87,9 +134,14 @@
 }
 
 - (void)setVideoId:(NSString *)videoId {
+    if (_videoId && [_videoId isEqualToString:videoId]) {
+        return;
+    }
     if (_videoId) {
         [self cueVideoById:videoId startSeconds:0 suggestedQuality:kYTPlaybackQualityDefault];
     } else if (_playsInline) {
+        _isReady = false;
+        _isPlaying = false;
         [self loadWithVideoId:videoId playerVars:@{@"playsinline": @1}];
     } else {
         // will get set when playsInline is set
@@ -100,6 +152,8 @@
 
 - (void)setPlayerParams:(NSDictionary *)playerParams {
     _playerParams = playerParams;
+    _isReady = false;
+    _isPlaying = false;
     [self loadWithPlayerParams:playerParams];
 }
 
@@ -136,12 +190,15 @@
             break;
         case kYTPlayerStatePlaying:
             playerState = @"playing";
+            _isPlaying = YES;
             break;
         case kYTPlayerStatePaused:
             playerState = @"paused";
+            _isPlaying = NO;
             break;
         case kYTPlayerStateEnded:
             playerState = @"ended";
+            _isPlaying = NO;
             break;
         default:
             break;
