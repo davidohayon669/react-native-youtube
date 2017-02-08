@@ -97,8 +97,8 @@
 #pragma mark - YTPlayer control methods
 
 - (void)setPlay:(BOOL)play {
-    
     // if not ready, configure for later
+    _playsOnLoad = false;
     if (!_isReady) {
         _playsOnLoad = play;
         return;
@@ -114,6 +114,8 @@
 }
 
 - (void)setPlaysInline:(BOOL)playsInline {
+    _isReady = false;
+    _isPlaying = false;
     if (_videoId && playsInline) {
         [self loadWithVideoId:_videoId playerVars:@{@"playsinline": @1}];
     } else if (_videoId && !playsInline){
@@ -126,9 +128,14 @@
 }
 
 - (void)setVideoId:(NSString *)videoId {
+    if (_videoId && [_videoId isEqualToString:videoId]) {
+        return;
+    }
     if (_videoId) {
         [self cueVideoById:videoId startSeconds:0 suggestedQuality:kYTPlaybackQualityDefault];
     } else if (_playsInline) {
+        _isReady = false;
+        _isPlaying = false;
         [self loadWithVideoId:videoId playerVars:@{@"playsinline": @1}];
     } else {
         // will get set when playsInline is set
@@ -139,6 +146,8 @@
 
 - (void)setPlayerParams:(NSDictionary *)playerParams {
     _playerParams = playerParams;
+    _isReady = false;
+    _isPlaying = false;
     [self loadWithPlayerParams:playerParams];
 }
 
@@ -175,12 +184,15 @@
             break;
         case kYTPlayerStatePlaying:
             playerState = @"playing";
+            _isPlaying = YES;
             break;
         case kYTPlayerStatePaused:
             playerState = @"paused";
+            _isPlaying = NO;
             break;
         case kYTPlayerStateEnded:
             playerState = @"ended";
+            _isPlaying = NO;
             break;
         default:
             break;
