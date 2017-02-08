@@ -1,6 +1,6 @@
 {
   "name": "react-native-youtube",
-  "version": "0.8.0",
+  "version": "0.8.1",
   "description": "A <YouTube/> component for React Native.",
   "main": "main.js",
   "scripts": {

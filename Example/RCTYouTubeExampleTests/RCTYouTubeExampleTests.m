@@ -9,10 +9,15 @@
 
 #import <UIKit/UIKit.h>
 #import <XCTest/XCTest.h>
-
+#if __has_include(<React/RCTAssert.h>)
+#import <React/RCTAssert.h>
+#import <React/RCTRedBox.h>
+#import <React/RCTRootView.h>
+#else
 #import "RCTAssert.h"
 #import "RCTRedBox.h"
 #import "RCTRootView.h"
+#endif
 
 #define TIMEOUT_SECONDS 240
 #define TEXT_TO_LOOK_FOR @"Welcome to React Native!"
