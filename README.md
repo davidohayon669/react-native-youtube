@@ -53,6 +53,8 @@ this.refs.youtubePlayer.seekTo(20);
 * `onChangeQuality`: Sends the current quality of video playback on `e.quality`.
 * `onError`: Sends any errors during video playback on `e.error`.
 * `onProgress`: Sends any time progress made on `e.currentTime` and `e.duration`.
+* `onFullScreenEnter` (ios only): This function is called when the video player enters full screen mode.
+* `onFullScreenExit` (ios only): This function is called when the video player exits full screen mode.
 
 ## Methods
 
