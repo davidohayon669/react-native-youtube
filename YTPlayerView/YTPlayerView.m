@@ -99,7 +99,7 @@ NSString static *const kYTPlayerStaticProxyRegexPattern = @"^https://content.goo
 #pragma mark - Player methods
 
 - (void)playVideo {
-  [self stringFromEvaluatingJavaScript:@"player.playVideo();"];
+    [self stringFromEvaluatingJavaScript:@"player.playVideo();"];
 }
 
 - (void)pauseVideo {
@@ -114,8 +114,8 @@ NSString static *const kYTPlayerStaticProxyRegexPattern = @"^https://content.goo
 - (void)seekToSeconds:(float)seekToSeconds allowSeekAhead:(BOOL)allowSeekAhead {
   NSNumber *secondsValue = [NSNumber numberWithFloat:seekToSeconds];
   NSString *allowSeekAheadValue = [self stringForJSBoolean:allowSeekAhead];
-  NSString *command = [NSString stringWithFormat:@"player.seekTo(%@, %@);", secondsValue, allowSeekAheadValue];
-  [self stringFromEvaluatingJavaScript:command];
+  NSString *command = [NSString stringWithFormat:@"player.seekTo(%@, false);", secondsValue];
+    [self stringFromEvaluatingJavaScript:command];
 }
 
 - (void)clearVideo {

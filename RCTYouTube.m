@@ -33,7 +33,7 @@
     /* StatusBar visibility status before the player changed to fullscreen */
     BOOL _isStatusBarHidden;
     BOOL _enteredFullScreen;
-    
+
     /* Required to publish events */
     RCTEventDispatcher *_eventDispatcher;
 }
@@ -45,6 +45,7 @@
         _playsInline = NO;
         _isPlaying = NO;
         _enteredFullScreen = NO;
+
         self.delegate = self;
         [self addFullScreenObserver];
     }
@@ -102,7 +103,6 @@
 #pragma mark - YTPlayer control methods
 
 - (void)setPlay:(BOOL)play {
-  
     // if not ready, configure for later
     _playsOnLoad = false;
     if (!_isReady) {
@@ -166,7 +166,7 @@
     }
     _isReady = YES;
 
-    [_eventDispatcher sendInputEventWithName:@"youtubeVideoReady"
+    [_eventDispatcher sendAppEventWithName:@"youtubeVideoReady"
                                         body:@{
                                                @"target": self.reactTag
                                                }];
@@ -204,7 +204,7 @@
             break;
     }
 
-    [_eventDispatcher sendInputEventWithName:@"youtubeVideoChangeState"
+    [_eventDispatcher sendAppEventWithName:@"youtubeVideoChangeState"
                                         body:@{
                                                @"state": playerState,
                                                @"target": self.reactTag
@@ -247,7 +247,7 @@
             break;
     }
 
-    [_eventDispatcher sendInputEventWithName:@"youtubeVideoChangeQuality"
+    [_eventDispatcher sendAppEventWithName:@"youtubeVideoChangeQuality"
                                         body:@{
                                                @"quality": playerQuality,
                                                @"target": self.reactTag
@@ -256,7 +256,7 @@
 
 - (void)playerView:(YTPlayerView *)playerView didPlayTime:(float)currentTime {
 
-    [_eventDispatcher sendInputEventWithName:@"youtubeProgress"
+    [_eventDispatcher sendAppEventWithName:@"youtubeProgress"
                                         body:@{
                                                @"currentTime": @(currentTime),
                                                @"duration": @(self.duration),
@@ -288,7 +288,8 @@
             break;
     }
 
-    [_eventDispatcher sendInputEventWithName:@"youtubeVideoError"
+
+    [_eventDispatcher sendAppEventWithName:@"youtubeVideoError"
                                         body:@{
                                                @"error": playerError,
                                                @"target": self.reactTag
