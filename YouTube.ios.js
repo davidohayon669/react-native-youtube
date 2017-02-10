@@ -74,7 +74,7 @@ export default class YouTube extends Component {
   componentWillMount() {
     changeEvent = NativeAppEventEmitter.addListener(
       'youtubeVideoChangeState',
-      (event) => this.props.onChangeState && this.props.onChangeState(event.state)
+      (event) => this.props.onChangeState && this.props.onChangeState(event)
     );
     readyEvent = NativeAppEventEmitter.addListener(
       'youtubeVideoReady',
