@@ -114,7 +114,7 @@ NSString static *const kYTPlayerStaticProxyRegexPattern = @"^https://content.goo
 - (void)seekToSeconds:(float)seekToSeconds allowSeekAhead:(BOOL)allowSeekAhead {
   NSNumber *secondsValue = [NSNumber numberWithFloat:seekToSeconds];
   NSString *allowSeekAheadValue = [self stringForJSBoolean:allowSeekAhead];
-  NSString *command = [NSString stringWithFormat:@"player.seekTo(%@, false);", secondsValue];
+  NSString *command = [NSString stringWithFormat:@"player.seekTo(%@, %@);", secondsValue, allowSeekAheadValue];
     [self stringFromEvaluatingJavaScript:command];
 }
 
