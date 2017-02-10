@@ -77,4 +77,28 @@ RCT_EXPORT_METHOD(seekTo:(nonnull NSNumber *)reactTag seconds:(nonnull NSNumber 
      }];
 }
 
+RCT_EXPORT_METHOD(stopVideo:(nonnull NSNumber *)reactTag)
+{
+    [self.bridge.uiManager addUIBlock:^(__unused RCTUIManager *uiManager, NSDictionary<NSNumber *, UIView *> *viewRegistry) {
+        RCTYouTube *youtube = viewRegistry[reactTag];
+        if ([youtube isKindOfClass:[RCTYouTube class]]) {
+            [youtube stopVideo];
+        } else {
+            RCTLogError(@"Cannot stop: %@ (tag #%@) is not RCTYouTube", youtube, reactTag);
+        }
+    }];
+}
+
+RCT_EXPORT_METHOD(pauseVideo:(nonnull NSNumber *)reactTag)
+{
+    [self.bridge.uiManager addUIBlock:^(__unused RCTUIManager *uiManager, NSDictionary<NSNumber *, UIView *> *viewRegistry) {
+        RCTYouTube *youtube = viewRegistry[reactTag];
+        if ([youtube isKindOfClass:[RCTYouTube class]]) {
+            [youtube pauseVideo];
+        } else {
+            RCTLogError(@"Cannot pause: %@ (tag #%@) is not RCTYouTube", youtube, reactTag);
+        }
+    }];
+}
+
 @end

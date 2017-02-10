@@ -44,7 +44,7 @@
         _eventDispatcher = eventDispatcher;
         _playsInline = NO;
         _isPlaying = NO;
-        _enteredFullScreen = NO;
+
         self.delegate = self;
         [self addFullScreenObserver];
     }
@@ -81,7 +81,7 @@
 - (void)playerFullScreenStateChange:(NSNotification*)notification
 {
     if((UIWindow*)notification.object == self.window && !_enteredFullScreen) {
-        [_eventDispatcher sendInputEventWithName:@"youtubeVideoEnterFullScreen"
+        [_eventDispatcher sendAppEventWithName:@"youtubeVideoEnterFullScreen"
                                             body:@{
                                                    @"target": self.reactTag
                                                    }];
@@ -89,7 +89,7 @@
         _enteredFullScreen = YES;
     }
     if ((UIWindow*)notification.object != self.window && _enteredFullScreen) {
-        [_eventDispatcher sendInputEventWithName:@"youtubeVideoExitFullScreen"
+        [_eventDispatcher sendAppEventWithName:@"youtubeVideoExitFullScreen"
                                             body:@{
                                                    @"target": self.reactTag
                                                    }];
@@ -102,7 +102,6 @@
 #pragma mark - YTPlayer control methods
 
 - (void)setPlay:(BOOL)play {
-  
     // if not ready, configure for later
     _playsOnLoad = false;
     if (!_isReady) {
@@ -166,7 +165,7 @@
     }
     _isReady = YES;
 
-    [_eventDispatcher sendInputEventWithName:@"youtubeVideoReady"
+    [_eventDispatcher sendAppEventWithName:@"youtubeVideoReady"
                                         body:@{
                                                @"target": self.reactTag
                                                }];
@@ -204,7 +203,7 @@
             break;
     }
 
-    [_eventDispatcher sendInputEventWithName:@"youtubeVideoChangeState"
+    [_eventDispatcher sendAppEventWithName:@"youtubeVideoChangeState"
                                         body:@{
                                                @"state": playerState,
                                                @"target": self.reactTag
@@ -247,7 +246,7 @@
             break;
     }
 
-    [_eventDispatcher sendInputEventWithName:@"youtubeVideoChangeQuality"
+    [_eventDispatcher sendAppEventWithName:@"youtubeVideoChangeQuality"
                                         body:@{
                                                @"quality": playerQuality,
                                                @"target": self.reactTag
@@ -256,7 +255,7 @@
 
 - (void)playerView:(YTPlayerView *)playerView didPlayTime:(float)currentTime {
 
-    [_eventDispatcher sendInputEventWithName:@"youtubeProgress"
+    [_eventDispatcher sendAppEventWithName:@"youtubeProgress"
                                         body:@{
                                                @"currentTime": @(currentTime),
                                                @"duration": @(self.duration),
@@ -288,7 +287,8 @@
             break;
     }
 
-    [_eventDispatcher sendInputEventWithName:@"youtubeVideoError"
+
+    [_eventDispatcher sendAppEventWithName:@"youtubeVideoError"
                                         body:@{
                                                @"error": playerError,
                                                @"target": self.reactTag
