@@ -44,6 +44,7 @@
         _eventDispatcher = eventDispatcher;
         _playsInline = NO;
         _isPlaying = NO;
+        _enteredFullScreen = NO;
 
         self.delegate = self;
         [self addFullScreenObserver];
