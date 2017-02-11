@@ -73,7 +73,7 @@ The iOS implementation of this player uses the official YouTube iFrame under the
 
 ## Installation
 
-This component is fully tried on react-native >= 0.37.0. Lower versions should work but are not guaranteed.
+This component is confirmed to be working on react-native ~0.37 - ~0.41
 
 * Install the latest version to your `package.json`:
 
