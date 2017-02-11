@@ -76,13 +76,13 @@ public class YouTubeManager extends SimpleViewManager<YouTubeView> {
     public @Nullable Map <String,Object> getExportedCustomDirectEventTypeConstants() {
         return MapBuilder.of(
             "error",
-            (Object) MapBuilder.of("registrationName", "onError"),
+            (Object) MapBuilder.of("registrationName", "onYouTubeError"),
             "ready",
-            (Object) MapBuilder.of("registrationName", "onReady"),
+            (Object) MapBuilder.of("registrationName", "onYouTubeReady"),
             "state",
-            (Object) MapBuilder.of("registrationName", "onChangeState"),
+            (Object) MapBuilder.of("registrationName", "onYouTubeChangeState"),
             "quality",
-            (Object) MapBuilder.of("registrationName", "onChangeQuality")
+            (Object) MapBuilder.of("registrationName", "onYouTubeChangeQuality")
         );
     }
 

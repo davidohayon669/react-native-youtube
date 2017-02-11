@@ -1,14 +1,11 @@
-//
-//  MYNReactYouTubeView.m
-//  Myntra
-//
-//  Created by Param Aggarwal on 15/06/15.
-//  Copyright (c) 2015 Myntra Designs. All rights reserved.
-//
-
 #import "RCTYouTube.h"
+#if __has_include(<React/RCTAssert.h>)
+#import <React/RCTBridge.h>
+#import <React/UIView+React.h>
+#else // backwards compatibility for RN < 0.40
 #import "RCTBridge.h"
 #import "UIView+React.h"
+#endif
 
 @interface RCTYouTube ()
 

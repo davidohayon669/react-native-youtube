@@ -14,10 +14,10 @@ import ReactNative, {
 
 const RCTYouTube = requireNativeComponent('ReactYouTube', YouTube, {
   nativeOnly: {
-    onError: true,
-    onReady: true,
-    onChangeState: true,
-    onChangeQuality: true,
+    onYouTubeError: true,
+    onYouTubeErrorReady: true,
+    onYouTubeErrorChangeState: true,
+    onYouTubeErrorChangeQuality: true,
   },
 });
 
@@ -119,10 +119,10 @@ export default class YouTube extends React.Component {
           ref={(component) => { this._nativeComponentRef = component }}
           {...this.props}
           style={[{ overflow: 'hidden' }, this.props.style]}
-          onError={this._onError}
-          onReady={this._onReady}
-          onChangeState={this._onChangeState}
-          onChangeQuality={this._onChangeQuality}
+          onYouTubeError={this._onError}
+          onYouTubeReady={this._onReady}
+          onYouTubeChangeState={this._onChangeState}
+          onYouTubeChangeQuality={this._onChangeQuality}
         />
         {/*
           The Android YouTube native player is pretty problematic when it comes to
