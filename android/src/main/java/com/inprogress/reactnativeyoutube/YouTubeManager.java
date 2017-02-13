@@ -30,11 +30,6 @@ public class YouTubeManager extends SimpleViewManager<YouTubeView> {
     public static final String PROP_LOOP = "loop";
     public static final String PROP_FULLSCREEN = "fs";
 
-
-    public YouTubeManager() {
-
-    }
-
     @Override
     public String getName() {
         return REACT_CLASS;
@@ -42,7 +37,7 @@ public class YouTubeManager extends SimpleViewManager<YouTubeView> {
 
     @Override
     protected YouTubeView createViewInstance(ThemedReactContext themedReactContext) {
-        mYouTubeView = new YouTubeView(themedReactContext, themedReactContext.getCurrentActivity());
+        mYouTubeView = new YouTubeView(themedReactContext);
         return mYouTubeView;
     }
 

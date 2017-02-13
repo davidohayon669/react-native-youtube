@@ -12,8 +12,6 @@ import com.google.android.youtube.player.YouTubePlayer;
 public class YouTubePlayerController implements
         YouTubePlayer.OnInitializedListener, YouTubePlayer.PlayerStateChangeListener, YouTubePlayer.PlaybackEventListener, YouTubePlayer.OnFullscreenListener {
 
-    Context mContext;
-
     String videoId = null;
 
     YouTubePlayer mYouTubePlayer;
@@ -31,8 +29,7 @@ public class YouTubePlayerController implements
     private boolean fullscreen = true;
 
 
-    public YouTubePlayerController(final Context mContext, YouTubeView youTubeView) {
-        this.mContext = mContext;
+    public YouTubePlayerController(YouTubeView youTubeView) {
         this.mYouTubeView = youTubeView;
     }
 

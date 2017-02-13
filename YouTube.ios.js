@@ -17,12 +17,13 @@ import ReactNative, {
 
 const RCTYouTube = requireNativeComponent('RCTYouTube', null);
 
-let readyEvent = null
-let changeEvent = null
-let progressEvent = null
-let errorEvent = null
-let enterFullScreen = null
-let exitFullScreen = null
+let changeEvent = null;
+let changeQualityEvent = null;
+let readyEvent = null;
+let progressEvent = null;
+let errorEvent = null;
+let enterFullScreen = null;
+let exitFullScreen = null;
 
 export default class YouTube extends Component {
   static propTypes = {
@@ -51,15 +52,16 @@ export default class YouTube extends Component {
   };
 
   _root: any;
-  _exportedProps: any;
 
-  setNativeProps(nativeProps: any) {
-    this._root.setNativeProps(nativeProps);
-  }
+  _exportedProps: any;
 
   constructor(props: any) {
     super(props);
     this._exportedProps = NativeModules.YouTubeManager && NativeModules.YouTubeManager.exportedProps;
+  }
+
+  setNativeProps(nativeProps: any) {
+    this._root.setNativeProps(nativeProps);
   }
 
   stopVideo() {
@@ -74,7 +76,16 @@ export default class YouTube extends Component {
   componentWillMount() {
     changeEvent = NativeAppEventEmitter.addListener(
       'youtubeVideoChangeState',
-      (event) => this.props.onChangeState && this.props.onChangeState(event)
+      (event) => {
+        if (event.state === 'ended' && this.props.loop) {
+          this.seekTo(0);
+        }
+        return this.props.onChangeState && this.props.onChangeState(event);
+      }
+    );
+    changeQualityEvent = NativeAppEventEmitter.addListener(
+      'youtubeVideoChangeQuality',
+      (event) => this.props.onChangeQuality && this.props.onChangeQuality(event)
     );
     readyEvent = NativeAppEventEmitter.addListener(
       'youtubeVideoReady',
@@ -100,6 +111,7 @@ export default class YouTube extends Component {
 
   componentWillUnmount() {
     changeEvent.remove();
+    changeQualityEvent.remove();
     readyEvent.remove();
     progressEvent.remove();
     errorEvent.remove();

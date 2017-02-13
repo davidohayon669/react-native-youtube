@@ -6,22 +6,13 @@
 'use strict';
 
 import React, { Component, PropTypes } from 'react';
-import ReactNative, {
+import {
   View,
   StyleSheet,
   requireNativeComponent,
   NativeModules,
   NativeMethodsMixin
 } from 'react-native';
-
-const RCTYouTube = requireNativeComponent('ReactYouTube', YouTube,
-{
-  nativeOnly: {onYoutubeVideoError:true,
-              onYoutubeVideoReady:true,
-              onYoutubeVideoChangeState:true,
-              onYoutubeVideoChangeQuality:true
-              }
-});
 
 export default class YouTube extends Component {
   static propTypes = {
@@ -41,16 +32,31 @@ export default class YouTube extends Component {
     onChangeState: PropTypes.func,
     onChangeQuality: PropTypes.func,
     onError: PropTypes.func,
+    // TODO: Make this work on android, the native player doesn't support it right now...
+    onProgress: PropTypes.func,
     loop: PropTypes.bool,
+     ...View.propTypes,
   };
 
   static defaultProps = {
-    loop: false
+    loop: false,
   };
+
+  _root: any;
 
   constructor(props) {
     super(props);
     this._exportedProps = NativeModules.YouTubeManager && NativeModules.YouTubeManager.exportedProps;
+
+    this._onReady = this._onReady.bind(this);
+    this._onChangeState = this._onChangeState.bind(this);
+    this._onChangeQuality = this._onChangeQuality.bind(this);
+    this._onError = this._onError.bind(this);
+    this._onProgress = this._onProgress.bind(this);
+  }
+
+  setNativeProps(nativeProps: any) {
+    this._root.setNativeProps(nativeProps);
   }
 
   _onReady(event) {
@@ -72,22 +78,16 @@ export default class YouTube extends Component {
     return this.props.onError && this.props.onError(event.nativeEvent);
   }
   _onProgress(event){
-      return this.props.onProgress && this.props.onProgress(event.nativeEvent);
+    return this.props.onProgress && this.props.onProgress(event.nativeEvent);
   }
   seekTo(seconds){
-    NativeModules.YouTubeModule.seekTo(parseInt(seconds, 10));
-    //this.refs.youtubePlayer.seekTo(ReactNative.findNodeHandle(this), parseInt(seconds, 10));
+    this.refs.youtubePlayer.seekTo(parseInt(seconds, 10));
   }
 
   render() {
     var style = [styles.base, this.props.style];
     var nativeProps = Object.assign({}, this.props);
     nativeProps.style = style;
-    nativeProps.onYoutubeVideoReady = this._onReady.bind(this);
-    nativeProps.onYoutubeVideoChangeState = this._onChangeState.bind(this);
-    nativeProps.onYoutubeVideoChangeQuality = this._onChangeQuality.bind(this);
-    nativeProps.onYoutubeVideoError = this._onError.bind(this);
-    nativeProps.onYoutubeProgress = this._onProgress.bind(this);
 
     /*
      * Try to use `playerParams` instead of settings `playsInline` and
@@ -134,9 +134,29 @@ export default class YouTube extends Component {
       };
     }
 
-    return <RCTYouTube {... nativeProps} />;
+    return <RCTYouTube
+      ref={component => { this._root = component; }}
+      onReady={this._onReady}
+      {...nativeProps}
+      // These override and delegate to the this.props functions
+      onYoutubeVideoReady={this._onReady}
+      onYoutubeVideoChangeState={this._onChangeState}
+      onYoutubeVideoChangeQuality={this._onChangeQuality}
+      onYoutubeVideoError={this._onError}
+      onYoutubeVideoProgress={this._onProgress}
+      />;
   }
 }
+
+const RCTYouTube = requireNativeComponent('ReactYouTube', YouTube,
+{
+  nativeOnly: {onYoutubeVideoError:true,
+              onYoutubeVideoReady:true,
+              onYoutubeVideoChangeState:true,
+              onYoutubeVideoChangeQuality:true,
+              onYoutubeVideoProgress:true,
+              }
+});
 
 const styles = StyleSheet.create({
   base: {
