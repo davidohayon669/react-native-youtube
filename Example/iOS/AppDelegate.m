@@ -8,8 +8,11 @@
  */
 
 #import "AppDelegate.h"
-
+#if __has_include(<React/RCTAssert.h>)
+#import <React/RCTRootView.h>
+#else
 #import "RCTRootView.h"
+#endif
 
 @implementation AppDelegate
 

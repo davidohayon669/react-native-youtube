@@ -20,7 +20,7 @@ public class YouTubeManager extends SimpleViewManager<YouTubeView> {
 
     public static final String PROP_VIDEO_ID = "videoId";
     public static final String PROP_API_KEY = "apiKey";
-    public static final String PROP_INLINE = "playInline";
+    public static final String PROP_INLINE = "playsInline";
     public static final String PROP_SHOW_INFO = "showinfo";
     public static final String PROP_MODESTBRANDING = "modestbranding";
     public static final String PROP_CONTROLS = "controls";

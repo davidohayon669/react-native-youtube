@@ -7,9 +7,15 @@
 //
 
 #import "RCTYouTube.h"
+#if __has_include(<React/RCTAssert.h>)
+#import <React/RCTBridgeModule.h>
+#import <React/RCTEventDispatcher.h>
+#import <React/UIView+React.h>
+#else // backwards compatibility for RN < 0.40
 #import "RCTBridgeModule.h"
 #import "RCTEventDispatcher.h"
 #import "UIView+React.h"
+#endif
 
 @implementation RCTYouTube
 {
@@ -17,12 +23,16 @@
     BOOL _playsInline;
     NSDictionary *_playerParams;
     BOOL _isPlaying;
-    
+
     /* Check to see if commands can
      * be sent to the player
      */
     BOOL _isReady;
     BOOL _playsOnLoad;
+
+    /* StatusBar visibility status before the player changed to fullscreen */
+    BOOL _isStatusBarHidden;
+    BOOL _enteredFullScreen;
     
     /* Required to publish events */
     RCTEventDispatcher *_eventDispatcher;
@@ -34,18 +44,59 @@
         _eventDispatcher = eventDispatcher;
         _playsInline = NO;
         _isPlaying = NO;
-        
+        _enteredFullScreen = NO;
+
         self.delegate = self;
+        [self addFullScreenObserver];
     }
-    
+
     return self;
+}
+
+- (void)addFullScreenObserver
+{
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(playerFullScreenStateChange:)
+                                                 name:UIWindowDidResignKeyNotification
+                                               object:self.window];
+}
+
+- (void)removeFullScreenObserver
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIWindowDidResignKeyNotification object:self.window];
+}
+
+- (void)dealloc
+{
+    [self removeFullScreenObserver];
 }
 
 - (void)layoutSubviews {
     [super layoutSubviews];
-    
+
     if (self.webView) {
         self.webView.frame = self.bounds;
+    }
+}
+
+- (void)playerFullScreenStateChange:(NSNotification*)notification
+{
+    if((UIWindow*)notification.object == self.window && !_enteredFullScreen) {
+        [_eventDispatcher sendAppEventWithName:@"youtubeVideoEnterFullScreen"
+                                            body:@{
+                                                   @"target": self.reactTag
+                                                   }];
+        _isStatusBarHidden = [[UIApplication sharedApplication] isStatusBarHidden];
+        _enteredFullScreen = YES;
+    }
+    if ((UIWindow*)notification.object != self.window && _enteredFullScreen) {
+        [_eventDispatcher sendAppEventWithName:@"youtubeVideoExitFullScreen"
+                                            body:@{
+                                                   @"target": self.reactTag
+                                                   }];
+        [[UIApplication sharedApplication] setStatusBarHidden:_isStatusBarHidden
+                                                withAnimation:UIStatusBarAnimationFade];
+        _enteredFullScreen = NO;
     }
 }
 
@@ -58,7 +109,7 @@
         _playsOnLoad = play;
         return;
     }
-    
+
     if (!_isPlaying && play) {
         [self playVideo];
         _isPlaying = YES;
@@ -95,7 +146,7 @@
     } else {
         // will get set when playsInline is set
     }
-    
+
     _videoId = videoId;
 }
 
@@ -115,14 +166,14 @@
     }
     _isReady = YES;
 
-    [_eventDispatcher sendInputEventWithName:@"youtubeVideoReady"
+    [_eventDispatcher sendAppEventWithName:@"youtubeVideoReady"
                                         body:@{
                                                @"target": self.reactTag
                                                }];
 }
 
 - (void)playerView:(YTPlayerView *)playerView didChangeToState:(YTPlayerState)state {
-    
+
     NSString *playerState;
     switch (state) {
         case kYTPlayerStateUnknown:
@@ -152,8 +203,8 @@
         default:
             break;
     }
-    
-    [_eventDispatcher sendInputEventWithName:@"youtubeVideoChangeState"
+
+    [_eventDispatcher sendAppEventWithName:@"youtubeVideoChangeState"
                                         body:@{
                                                @"state": playerState,
                                                @"target": self.reactTag
@@ -162,7 +213,7 @@
 }
 
 - (void)playerView:(YTPlayerView *)playerView didChangeToQuality:(YTPlaybackQuality)quality {
-    
+
     NSString *playerQuality;
     switch (quality) {
         case kYTPlaybackQualitySmall:
@@ -196,7 +247,7 @@
             break;
     }
 
-    [_eventDispatcher sendInputEventWithName:@"youtubeVideoChangeQuality"
+    [_eventDispatcher sendAppEventWithName:@"youtubeVideoChangeQuality"
                                         body:@{
                                                @"quality": playerQuality,
                                                @"target": self.reactTag
@@ -205,7 +256,7 @@
 
 - (void)playerView:(YTPlayerView *)playerView didPlayTime:(float)currentTime {
 
-    [_eventDispatcher sendInputEventWithName:@"youtubeProgress"
+    [_eventDispatcher sendAppEventWithName:@"youtubeProgress"
                                         body:@{
                                                @"currentTime": @(currentTime),
                                                @"duration": @(self.duration),
@@ -236,8 +287,9 @@
         default:
             break;
     }
-    
-    [_eventDispatcher sendInputEventWithName:@"youtubeVideoError"
+
+
+    [_eventDispatcher sendAppEventWithName:@"youtubeVideoError"
                                         body:@{
                                                @"error": playerError,
                                                @"target": self.reactTag
