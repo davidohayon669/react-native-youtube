@@ -17,12 +17,13 @@ import ReactNative, {
 
 const RCTYouTube = requireNativeComponent('RCTYouTube', null);
 
-let readyEvent = null
-let changeEvent = null
-let progressEvent = null
-let errorEvent = null
-let enterFullScreen = null
-let exitFullScreen = null
+let changeEvent = null;
+let changeQualityEvent = null;
+let readyEvent = null;
+let progressEvent = null;
+let errorEvent = null;
+let enterFullScreen = null;
+let exitFullScreen = null;
 
 export default class YouTube extends Component {
   static propTypes = {
@@ -76,7 +77,7 @@ export default class YouTube extends Component {
     changeEvent = NativeAppEventEmitter.addListener(
       'youtubeVideoChangeState',
       (event) => {
-        if (event.nativeEvent.state === 'ended' && this.props.loop) {
+        if (event.state === 'ended' && this.props.loop) {
           this.seekTo(0);
         }
         return this.props.onChangeState && this.props.onChangeState(event);
@@ -110,6 +111,7 @@ export default class YouTube extends Component {
 
   componentWillUnmount() {
     changeEvent.remove();
+    changeQualityEvent.remove();
     readyEvent.remove();
     progressEvent.remove();
     errorEvent.remove();

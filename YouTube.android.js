@@ -14,16 +14,6 @@ import {
   NativeMethodsMixin
 } from 'react-native';
 
-const RCTYouTube = requireNativeComponent('ReactYouTube', YouTube,
-{
-  nativeOnly: {onYoutubeVideoError:true,
-              onYoutubeVideoReady:true,
-              onYoutubeVideoChangeState:true,
-              onYoutubeVideoChangeQuality:true,
-              onYoutubeVideoProgress:true,
-              }
-});
-
 export default class YouTube extends Component {
   static propTypes = {
     style: View.propTypes.style,
@@ -42,8 +32,10 @@ export default class YouTube extends Component {
     onChangeState: PropTypes.func,
     onChangeQuality: PropTypes.func,
     onError: PropTypes.func,
-    onProgress: PropTypes.func, // TODO: Make this work on android
+    // TODO: Make this work on android, the native player doesn't support it right now...
+    onProgress: PropTypes.func,
     loop: PropTypes.bool,
+     ...View.propTypes,
   };
 
   static defaultProps = {
@@ -147,13 +139,24 @@ export default class YouTube extends Component {
       onReady={this._onReady}
       {...nativeProps}
       // These override and delegate to the this.props functions
-      onChangeState={this._onChangeState}
-      onChangeQuality={this._onChangeQuality}
-      onError={this._onError}
-      onProgress={this._onProgress}
+      onYoutubeVideoReady={this._onReady}
+      onYoutubeVideoChangeState={this._onChangeState}
+      onYoutubeVideoChangeQuality={this._onChangeQuality}
+      onYoutubeVideoError={this._onError}
+      onYoutubeVideoProgress={this._onProgress}
       />;
   }
 }
+
+const RCTYouTube = requireNativeComponent('ReactYouTube', YouTube,
+{
+  nativeOnly: {onYoutubeVideoError:true,
+              onYoutubeVideoReady:true,
+              onYoutubeVideoChangeState:true,
+              onYoutubeVideoChangeQuality:true,
+              onYoutubeVideoProgress:true,
+              }
+});
 
 const styles = StyleSheet.create({
   base: {
