@@ -7,7 +7,6 @@
 
 import React, { Component, PropTypes } from 'react';
 import {
-  DeviceEventEmitter,
   View,
   StyleSheet,
   requireNativeComponent,
