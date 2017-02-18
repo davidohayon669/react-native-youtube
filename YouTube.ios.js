@@ -127,6 +127,10 @@ export default class YouTube extends React.Component {
   }
 
   videosIndex() {
+    // if only one video ID in videoIds, we should avoid calling native method
+    // that can only handle multiple videos
+    if (this.props.videoIds && this.props.videoIds.length === 1) return Promise.resolve(0)
+
     return new Promise((resolve, reject) =>
       NativeModules.YouTubeManager.videosIndex(ReactNative.findNodeHandle(this))
         .then(index => resolve(index))
