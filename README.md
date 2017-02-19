@@ -10,6 +10,8 @@ Uses Google's official [youtube-ios-player-helper](https://github.com/youtube/yo
 ## Usage
 
 ```javascript
+import YouTube from 'react-native-youtube'
+
 <YouTube
   ref="youtubePlayer"
   videoId="KVZ-P-ZI6W4" // The YouTube video ID
@@ -60,16 +62,16 @@ this.refs.youtubePlayer.seekTo(20);
 
 * `seekTo(seconds)`: Seeks to a specified time in the video
 
-### Installation
+## Installation
 
-##### IOS
+#### iOS
 (requires react-native >= 0.6.0)
 
 `$ rnpm install react-native-youtube`
 
 `$ add YTPlayerView-iframe-player.html from Assets to your xcode project`
 
-##### OPTIONAL : Activated sound when phone is on vibrate mode
+##### OPTIONAL: Activated sound when phone is on vibrate mode
 
 Open AppDelegate.m and add :
 
@@ -77,30 +79,29 @@ Open AppDelegate.m and add :
 
 * `[[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayback error: nil];` in your didFinishLaunchingWithOptions method
 
-##### Android : rnpm is not working yet !!
+#### Android: rnpm is not working yet !!
 
-In node_module :
+In node_module:
 
 `$ git clone https://github.com/inProgress-team/react-native-youtube.git`
 
-Then add in settings.gradle :
- ```
+Then add in settings.gradle:
+```
 include ':RCTYouTube', ':app'
-project(':RCTYouTube').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-youtube/RCTYouTube')
- ```
-In build.gradle : ( The one inside android/app . **NOT** android/build.gradle )
+project(':RCTYouTube').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-youtube/android')
+```
+In build.gradle: ( The one inside android/app . **NOT** android/build.gradle )
 
- ```
- dependencies {
+```
+dependencies {
     [...]
     compile project(':RCTYouTube')     // From node_modules
-   
-} 
+}
 ```
 
-In MainApplication.java :
+In MainApplication.java:
 
-```
+```java
 import com.inprogress.reactnativeyoutube.ReactNativeYouTube;
 
 [...]
