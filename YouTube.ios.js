@@ -81,9 +81,7 @@ export default class YouTube extends React.Component {
 
   _createPlayerParams(props) {
     return {
-      videoId: props.videoIds && Array.isArray(props.videoIds)
-        ? props.videoIds[0]
-        : props.videoId,
+      videoId: Array.isArray(props.videoIds) ? props.videoIds[0] : props.videoId,
       playlistId: props.playlistId,
       playerVars: {
 
@@ -91,8 +89,11 @@ export default class YouTube extends React.Component {
         // Also, looping a single video is unsupported by the iFrame player so we
         // must load the video as a 2 videos playlist, as suggested here:
         // https://developers.google.com/youtube/player_parameters#loop
-        playlist: props.videoIds && Array.isArray(props.videoIds)
-          ? props.videoIds.slice(1).toString()
+        // whether its a looped videoId or a looped single video in videoIds
+        playlist: Array.isArray(props.videoIds)
+          ? props.loop && !props.videoIds[1]
+            ? props.videoIds[0]
+            : props.videoIds.slice(1).toString() || undefined
           : props.loop && props.videoId
             ? props.videoId
             : undefined,
@@ -127,9 +128,11 @@ export default class YouTube extends React.Component {
   }
 
   videosIndex() {
-    // if only one video ID in videoIds, we should avoid calling native method
-    // that can only handle multiple videos
-    if (this.props.videoIds && this.props.videoIds.length === 1) return Promise.resolve(0)
+    // Avoid calling the native method if there is only one video loaded for sure
+    if (
+      (Array.isArray(this.props.videoIds) && !this.props.videoIds[1]) ||
+      this.props.videoId
+    ) return Promise.resolve(0)
 
     return new Promise((resolve, reject) =>
       NativeModules.YouTubeManager.videosIndex(ReactNative.findNodeHandle(this))
