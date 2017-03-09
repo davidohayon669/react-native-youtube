@@ -38,7 +38,8 @@ declare module "react-native-youtube" {
         onProgress?: (event: Progress) => void;
         onFullScreenExit?: () => void;
         onFullScreenEnter?: () => void;
-        style?: React.ViewStyle
+        apiKey?: string;
+        style?: React.ViewStyle;
         ref?: React.Ref<React.WebViewStatic & React.ViewStatic>
     }
     export default class Youtube extends React.Component<YoutubeProps, any>{}
