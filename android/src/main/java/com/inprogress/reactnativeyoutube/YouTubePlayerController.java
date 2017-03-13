@@ -8,7 +8,6 @@ import android.widget.ProgressBar;
 import com.google.android.youtube.player.YouTubeInitializationResult;
 import com.google.android.youtube.player.YouTubePlayer;
 
-
 public class YouTubePlayerController implements
         YouTubePlayer.OnInitializedListener, YouTubePlayer.PlayerStateChangeListener, YouTubePlayer.PlaybackEventListener, YouTubePlayer.OnFullscreenListener {
 
@@ -28,7 +27,6 @@ public class YouTubePlayerController implements
     private boolean playInline = false;
     private boolean fullscreen = true;
 
-
     public YouTubePlayerController(YouTubeView youTubeView) {
         this.mYouTubeView = youTubeView;
     }
@@ -45,6 +43,7 @@ public class YouTubePlayerController implements
 
             // Update config
             mYouTubePlayer.setShowFullscreenButton(fullscreen);
+            mYouTubePlayer.setFullscreenControlFlags(YouTubePlayer.FULLSCREEN_FLAG_CONTROL_ORIENTATION);
 
             // Emit 'onReady' event for player
             mYouTubeView.playerViewDidBecomeReady();
@@ -71,12 +70,11 @@ public class YouTubePlayerController implements
         mYouTubeView.receivedError(youTubeInitializationResult.toString());
     }
 
-
     @Override
     public void onPlaying() {
         mYouTubeView.didChangeToState("playing");
 
-        // When inline playback is not allowed, transition the 
+        // When inline playback is not allowed, transition the
         // player to full-screen.
         if (!isPlayInline()) {
             mYouTubePlayer.setFullscreen(true);
@@ -92,7 +90,6 @@ public class YouTubePlayerController implements
     public void onStopped() {
         mYouTubeView.didChangeToState("stopped");
     }
-
 
     @Override
     public void onBuffering(boolean b) {
@@ -203,7 +200,6 @@ public class YouTubePlayerController implements
         }
     }
 
-
     /**
      * GETTER &SETTER
      **/
@@ -296,7 +292,6 @@ public class YouTubePlayerController implements
     public void setPlayInline(boolean playInline) {
         this.playInline = playInline;
     }
-
 
     public boolean isPlay() {
         return play;

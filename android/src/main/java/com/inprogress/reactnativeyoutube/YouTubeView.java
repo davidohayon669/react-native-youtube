@@ -42,7 +42,7 @@ public class YouTubeView extends RelativeLayout {
     protected void onDetachedFromWindow() {
         try {
             FragmentManager fragmentManager = getReactContext().getCurrentActivity().getFragmentManager();
-            youTubePlayerFragment = (YouTubePlayerFragment) 
+            youTubePlayerFragment = (YouTubePlayerFragment)
                     fragmentManager.findFragmentById(R.id.youtubeplayerfragment);
             FragmentTransaction ft = fragmentManager.beginTransaction();
             ft.remove(youTubePlayerFragment);
