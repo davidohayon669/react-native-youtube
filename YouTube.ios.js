@@ -3,16 +3,11 @@
  */
 
 import React from 'react';
-import ReactNative, {
-  View,
-  requireNativeComponent,
-  NativeModules,
-} from 'react-native';
+import ReactNative, { View, requireNativeComponent, NativeModules } from 'react-native';
 
 const RCTYouTube = requireNativeComponent('RCTYouTube', null);
 
 export default class YouTube extends React.Component {
-
   static propTypes = {
     videoId: React.PropTypes.string,
     videoIds: React.PropTypes.arrayOf(React.PropTypes.string),
@@ -84,7 +79,6 @@ export default class YouTube extends React.Component {
       videoId: Array.isArray(props.videoIds) ? props.videoIds[0] : props.videoId,
       playlistId: props.playlistId,
       playerVars: {
-
         // videoIds are split to videoId and playlist (comma separated videoIds).
         // Also, looping a single video is unsupported by the iFrame player so we
         // must load the video as a 2 videos playlist, as suggested here:
@@ -92,11 +86,9 @@ export default class YouTube extends React.Component {
         // whether its a looped videoId or a looped single video in videoIds
         playlist: Array.isArray(props.videoIds)
           ? props.loop && !props.videoIds[1]
-            ? props.videoIds[0]
-            : props.videoIds.slice(1).toString() || undefined
-          : props.loop && props.videoId
-            ? props.videoId
-            : undefined,
+              ? props.videoIds[0]
+              : props.videoIds.slice(1).toString() || undefined
+          : props.loop && props.videoId ? props.videoId : undefined,
 
         // No need to explicitly pass positive or negative defaults
         loop: props.loop === true ? 1 : undefined,
@@ -129,13 +121,13 @@ export default class YouTube extends React.Component {
 
   videosIndex() {
     // Avoid calling the native method if there is only one video loaded for sure
-    if (
-      (Array.isArray(this.props.videoIds) && !this.props.videoIds[1]) ||
-      this.props.videoId
-    ) return Promise.resolve(0)
+    if ((Array.isArray(this.props.videoIds) && !this.props.videoIds[1]) || this.props.videoId) {
+      return Promise.resolve(0);
+    }
 
     return new Promise((resolve, reject) =>
-      NativeModules.YouTubeManager.videosIndex(ReactNative.findNodeHandle(this))
+      NativeModules.YouTubeManager
+        .videosIndex(ReactNative.findNodeHandle(this))
         .then(index => resolve(index))
         .catch(errorMessage => reject(errorMessage)));
   }

@@ -22,7 +22,6 @@ const RCTYouTube = requireNativeComponent('ReactYouTube', YouTube, {
 });
 
 export default class YouTube extends React.Component {
-
   static propTypes = {
     apiKey: React.PropTypes.string.isRequired,
     videoId: React.PropTypes.string,
@@ -31,7 +30,7 @@ export default class YouTube extends React.Component {
     play: React.PropTypes.bool,
     loop: React.PropTypes.bool,
     playsInline: React.PropTypes.bool,
-    controls: React.PropTypes.oneOf([0,1,2]),
+    controls: React.PropTypes.oneOf([0, 1, 2]),
     showFullscreenButton: React.PropTypes.bool,
     onError: React.PropTypes.func,
     onReady: React.PropTypes.func,
@@ -61,7 +60,7 @@ export default class YouTube extends React.Component {
 
   _onReady(event) {
     // Look at the JSX for info about this
-    this.setState({ hiddenRenderText: 'x' })
+    this.setState({ hiddenRenderText: 'x' });
     if (this.props.onReady) this.props.onReady(event.nativeEvent);
   }
 
@@ -107,18 +106,21 @@ export default class YouTube extends React.Component {
 
   videosIndex() {
     return new Promise((resolve, reject) =>
-      NativeModules.YouTubeModule.videosIndex(ReactNative.findNodeHandle(this._nativeComponentRef))
+      NativeModules.YouTubeModule
+        .videosIndex(ReactNative.findNodeHandle(this._nativeComponentRef))
         .then(index => resolve(index))
         .catch(errorMessage => reject(errorMessage)));
   }
 
   render() {
     return (
-      <View>
+      <View style={[this.props.style, styles.container]}>
         <RCTYouTube
-          ref={(component) => { this._nativeComponentRef = component }}
+          ref={component => {
+            this._nativeComponentRef = component;
+          }}
           {...this.props}
-          style={[{ overflow: 'hidden' }, this.props.style]}
+          style={styles.nativeModule}
           onYouTubeError={this._onError}
           onYouTubeReady={this._onReady}
           onYouTubeChangeState={this._onChangeState}
@@ -129,14 +131,24 @@ export default class YouTube extends React.Component {
           mounting correctly and rendering inside React-Native's views hierarchy.
           For now we must force a real render of one of its ancestors, right after
           the onReady event, to make it smoothly appear after ready.
-          */}
+          */
+        }
         <Text style={styles.hiddenRenderText}>{this.state.hiddenRenderText}</Text>
       </View>
-    )
+    );
   }
 }
 
 const styles = StyleSheet.create({
+  // Protection against `UNAUTHORIZED_OVERLAY` error coming from the native YouTube module.
+  // This module is pretty sensitive even when other views are only close to covering it.
+  container: {
+    padding: StyleSheet.hairlineWidth,
+    backgroundColor: 'black',
+  },
+  nativeModule: {
+    flex: 1,
+  },
   hiddenRenderText: {
     position: 'absolute',
     top: 10,
