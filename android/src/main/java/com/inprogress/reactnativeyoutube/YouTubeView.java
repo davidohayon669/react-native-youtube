@@ -13,7 +13,6 @@ import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.uimanager.events.RCTEventEmitter;
 import com.google.android.youtube.player.YouTubePlayerFragment;
 
-
 public class YouTubeView extends RelativeLayout {
 
     YouTubePlayerController youtubeController;
@@ -37,7 +36,6 @@ public class YouTubeView extends RelativeLayout {
         youtubeController = new YouTubePlayerController(YouTubeView.this);
     }
 
-
     @Override
     protected void onDetachedFromWindow() {
         try {
@@ -56,14 +54,12 @@ public class YouTubeView extends RelativeLayout {
         youtubeController.seekTo(second);
     }
 
-
     public void playerViewDidBecomeReady() {
         WritableMap event = Arguments.createMap();
         ReactContext reactContext = (ReactContext) getContext();
         event.putInt("target", getId());
         reactContext.getJSModule(RCTEventEmitter.class).receiveEvent(getId(), "ready", event);
     }
-
 
     public void didChangeToState(String param) {
         WritableMap event = Arguments.createMap();
@@ -73,7 +69,6 @@ public class YouTubeView extends RelativeLayout {
         reactContext.getJSModule(RCTEventEmitter.class).receiveEvent(getId(), "state", event);
     }
 
-
     public void didChangeToQuality(String param) {
         WritableMap event = Arguments.createMap();
         event.putString("quality", param);
@@ -81,7 +76,6 @@ public class YouTubeView extends RelativeLayout {
         ReactContext reactContext = (ReactContext) getContext();
         reactContext.getJSModule(RCTEventEmitter.class).receiveEvent(getId(), "quality", event);
     }
-
 
     public void didPlayTime(String current, String duration) {
         WritableMap event = Arguments.createMap();
@@ -92,7 +86,6 @@ public class YouTubeView extends RelativeLayout {
         reactContext.getJSModule(RCTEventEmitter.class).receiveEvent(getId(), "progress", event);
     }
 
-
     public void receivedError(String param) {
         WritableMap event = Arguments.createMap();
         ReactContext reactContext = (ReactContext) getContext();
@@ -100,7 +93,6 @@ public class YouTubeView extends RelativeLayout {
         event.putInt("target", getId());
         reactContext.getJSModule(RCTEventEmitter.class).receiveEvent(getId(), "error", event);
     }
-
 
     public void setVideoId(String str) {
         youtubeController.setVideoId(str);

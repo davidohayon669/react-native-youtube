@@ -11,7 +11,6 @@ import com.facebook.react.uimanager.annotations.ReactProp;
 
 import java.util.Map;
 
-
 public class YouTubeManager extends SimpleViewManager<YouTubeView> {
 
     public static final String REACT_CLASS = "ReactYouTube";
