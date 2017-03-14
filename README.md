@@ -5,18 +5,18 @@ Uses Google's official [youtube-ios-player-helper](https://github.com/youtube/yo
 
 ## Screenshot
 
-![Screenshot of the example app](https://github.com/inProgress-team/react-native-youtube/raw/master/Screenshot.png)
+![Screenshot of the example app](https://github.com/inProgress-team/react-native-youtube/raw/v1/Screenshot.png)
 
 ## Usage
 
 ```javascript
 <YouTube
-  ref={(component) => { this._youTubePlayer = component }}
+  ref={(component) => { this._youTubePlayer = component; }}
   videoId="KVZ-P-ZI6W4"           // The YouTube video ID
   playlist="PLF797E961509B4EB5"   // A playlist's ID, overridden by `videoId`
   play={true}                     // control playback of video with true/false
   playsInline={true}              // control whether the video should play full-screen or inline
-  loop={true}                    // control whether the video should loop when ended
+  loop={true}                     // control whether the video should loop when ended
 
   onReady={e => this.setState({ isReady: true })}
   onChangeState={e => this.setState({ status: e.state })}
