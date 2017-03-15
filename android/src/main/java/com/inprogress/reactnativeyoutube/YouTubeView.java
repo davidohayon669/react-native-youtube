@@ -18,6 +18,8 @@ import android.util.Log;
 
 public class YouTubeView extends RelativeLayout {
 
+    public static final String TAG = "YouTubeView";
+
     YouTubePlayerController youtubeController;
     private YouTubePlayerFragment youTubePlayerFragment;
     public static String youtube_key;
@@ -50,7 +52,7 @@ public class YouTubeView extends RelativeLayout {
             ft.remove(youTubePlayerFragment);
             ft.commit();
         } catch (Exception e) {
-
+            Log.e(TAG, "Exception thrown in onDetachedFromWindow method...", e);
         }
         getReactContext()
                 .getCurrentActivity()
