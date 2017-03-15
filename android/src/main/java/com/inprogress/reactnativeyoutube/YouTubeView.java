@@ -13,6 +13,8 @@ import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.uimanager.events.RCTEventEmitter;
 import com.google.android.youtube.player.YouTubePlayerFragment;
 
+import android.util.Log;
+
 
 public class YouTubeView extends RelativeLayout {
 
@@ -48,7 +50,11 @@ public class YouTubeView extends RelativeLayout {
             ft.remove(youTubePlayerFragment);
             ft.commit();
         } catch (Exception e) {
+
         }
+        getReactContext()
+                .getCurrentActivity()
+                .setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         super.onDetachedFromWindow();
     }
 
