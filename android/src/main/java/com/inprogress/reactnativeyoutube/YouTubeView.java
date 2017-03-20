@@ -1,6 +1,8 @@
 package com.inprogress.reactnativeyoutube;
 
+import android.app.Activity;
 import android.app.FragmentManager;
+import android.content.pm.ActivityInfo;
 import android.util.Log;
 import android.widget.FrameLayout;
 
@@ -41,9 +43,14 @@ public class YouTubeView extends FrameLayout {
 
     @Override
     protected void onDetachedFromWindow() {
-        FragmentManager fragmentManager = getReactContext().getCurrentActivity().getFragmentManager();
+        Activity activity = getReactContext().getCurrentActivity();
+        FragmentManager fragmentManager = activity.getFragmentManager();
         if (mYouTubePlayerFragment != null) {
             fragmentManager.beginTransaction().remove(mYouTubePlayerFragment).commit();
+        }
+
+        if (mYoutubeController.isPlayerFullscreen()) {
+            activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);
         }
     }
 
