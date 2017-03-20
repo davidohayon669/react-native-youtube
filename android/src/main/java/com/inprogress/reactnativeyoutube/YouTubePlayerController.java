@@ -1,6 +1,5 @@
 package com.inprogress.reactnativeyoutube;
 
-import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
@@ -36,6 +35,7 @@ public class YouTubePlayerController implements
     private boolean mPlaysInline = false;
     private int mControls = 1;
     private boolean mShowFullscreenButton = true;
+    private boolean mPlayerFullscreen = false;
 
     public YouTubePlayerController(YouTubeView youTubeView) {
         mYouTubeView = youTubeView;
@@ -209,6 +209,10 @@ public class YouTubePlayerController implements
 
     private void updateFullscreen() {
         mYouTubePlayer.setFullscreen(!mPlaysInline);
+        mPlayerFullscreen = !mPlaysInline;
+        mYouTubePlayer.setFullscreenControlFlags(YouTubePlayer.FULLSCREEN_FLAG_CONTROL_ORIENTATION
+            | YouTubePlayer.FULLSCREEN_FLAG_CONTROL_SYSTEM_UI
+            | YouTubePlayer.FULLSCREEN_FLAG_ALWAYS_FULLSCREEN_IN_LANDSCAPE);
     }
 
     private void updateShowFullscreenButton() {
@@ -285,6 +289,10 @@ public class YouTubePlayerController implements
 
     private boolean isPlaysInline() {
         return mPlaysInline;
+    }
+
+    public boolean isPlayerFullscreen() {
+        return mPlayerFullscreen;
     }
 
     private int getControls() {
