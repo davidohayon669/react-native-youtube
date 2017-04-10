@@ -711,7 +711,11 @@ NSString static *const kYTPlayerStaticProxyRegexPattern = @"^https://content.goo
   NSString *embedHTML = [NSString stringWithFormat:embedHTMLTemplate, playerVarsJsonString];
   [self.webView loadHTMLString:embedHTML baseURL: self.originURL];
   [self.webView setDelegate:self];
-  self.webView.allowsInlineMediaPlayback = YES;
+  
+  //This is needed because due to iOS 10, videos do not play full screen if allowsInlineMediaPLayback is set to YES; 
+  BOOL shouldPlayInline = [[playerParams objectForKey: @"playerVars"] objectForKey:@"playsinline"];
+  self.webView.allowsInlineMediaPlayback = shouldPlayInline;
+  
   self.webView.mediaPlaybackRequiresUserAction = NO;
   return YES;
 }
