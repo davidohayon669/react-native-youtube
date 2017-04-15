@@ -1,13 +1,13 @@
 {
   "name": "RCTYouTubeExample",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "private": true,
   "scripts": {
     "start": "node node_modules/react-native/local-cli/cli.js start"
   },
   "dependencies": {
-    "react": "15.4.2",
-    "react-native": "0.41.2",
+    "react": "~15.4.0",
+    "react-native": "~0.42.0",
     "react-native-youtube": "file:../"
   }
 }
