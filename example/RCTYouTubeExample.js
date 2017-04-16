@@ -149,6 +149,17 @@ class RCTYouTubeExample extends React.Component {
           </TouchableOpacity>
         </View>
 
+        {/* Fullscreen */}
+        {!this.state.fullscreen &&
+          <View style={styles.buttonGroup}>
+            <TouchableOpacity
+              style={styles.button}
+              onPress={() => this.setState({ fullscreen: true })}
+            >
+              <Text style={styles.buttonText}>Set Fullscreen</Text>
+            </TouchableOpacity>
+          </View>}
+
         <Text style={styles.instructions}>{this.state.isReady ? 'Player is ready' : 'Player setting up...'}</Text>
         <Text style={styles.instructions}>Status: {this.state.status}</Text>
         <Text style={styles.instructions}>Quality: {this.state.quality}</Text>

@@ -2,7 +2,7 @@
  * @providesModule YouTube
  */
 
-import React from 'react';
+import React, { PropTypes } from 'react';
 import ReactNative, {
   View,
   Text,
@@ -12,15 +12,6 @@ import ReactNative, {
   NativeModules,
   BackAndroid,
 } from 'react-native';
-
-function backAndroidHandler() {
-  console.log('backAndroidHandler called');
-  if (this.state.fullscreen) {
-    this.setState({ fullscreen: false })
-    return true
-  }
-  return false;
-}
 
 const RCTYouTube = requireNativeComponent('ReactYouTube', YouTube, {
   nativeOnly: {
@@ -34,20 +25,20 @@ const RCTYouTube = requireNativeComponent('ReactYouTube', YouTube, {
 
 export default class YouTube extends React.Component {
   static propTypes = {
-    apiKey: React.PropTypes.string.isRequired,
-    videoId: React.PropTypes.string,
-    videoIds: React.PropTypes.arrayOf(React.PropTypes.string),
-    playlistId: React.PropTypes.string,
-    play: React.PropTypes.bool,
-    loop: React.PropTypes.bool,
-    fullscreen: React.PropTypes.bool,
-    controls: React.PropTypes.oneOf([0, 1, 2]),
-    showFullscreenButton: React.PropTypes.bool,
-    onError: React.PropTypes.func,
-    onReady: React.PropTypes.func,
-    onChangeState: React.PropTypes.func,
-    onChangeQuality: React.PropTypes.func,
-    onChangeFullscreen: React.PropTypes.func,
+    apiKey: PropTypes.string.isRequired,
+    videoId: PropTypes.string,
+    videoIds: PropTypes.arrayOf(PropTypes.string),
+    playlistId: PropTypes.string,
+    play: PropTypes.bool,
+    loop: PropTypes.bool,
+    fullscreen: PropTypes.bool,
+    controls: PropTypes.oneOf([0, 1, 2]),
+    showFullscreenButton: PropTypes.bool,
+    onError: PropTypes.func,
+    onReady: PropTypes.func,
+    onChangeState: PropTypes.func,
+    onChangeQuality: PropTypes.func,
+    onChangeFullscreen: PropTypes.func,
     style: View.propTypes.style,
   };
 
@@ -57,19 +48,17 @@ export default class YouTube extends React.Component {
 
   constructor(props) {
     super(props);
+    if (props.playsInline !== undefined) {
+      throw new Error('YouTube.android.js: `playsInline` prop was dropped. Please use `fullscreen`')
+    }
+
     this.state = {
       hiddenRenderText: 'o',
       fullscreen: props.fullscreen,
     };
-    this._onError = this._onError.bind(this);
-    this._onReady = this._onReady.bind(this);
-    this._onChangeState = this._onChangeState.bind(this);
-    this._onChangeQuality = this._onChangeQuality.bind(this);
-    this._onChangeFullscreen = this._onChangeFullscreen.bind(this);
   }
 
   componentWillMount() {
-    this._backAndroidHandler = backAndroidHandler.bind(this);
     BackAndroid.addEventListener('hardwareBackPress', this._backAndroidHandler);
   }
 
@@ -84,25 +73,33 @@ export default class YouTube extends React.Component {
     BackAndroid.removeEventListener('hardwareBackPress', this._backAndroidHandler);
   }
 
-  _onError(event) {
+  _backAndroidHandler = () => {
+    if (this.state.fullscreen) {
+      this.setState({ fullscreen: false })
+      return true
+    }
+    return false;
+  }
+
+  _onError = (event) => {
     if (this.props.onError) this.props.onError(event.nativeEvent);
   }
 
-  _onReady(event) {
+  _onReady = (event) => {
     // Look at the JSX for info about this
     this.setState({ hiddenRenderText: 'x' });
     if (this.props.onReady) this.props.onReady(event.nativeEvent);
   }
 
-  _onChangeState(event) {
+  _onChangeState = (event) => {
     if (this.props.onChangeState) this.props.onChangeState(event.nativeEvent);
   }
 
-  _onChangeQuality(event) {
+  _onChangeQuality = (event) => {
     if (this.props.onChangeQuality) this.props.onChangeQuality(event.nativeEvent);
   }
 
-  _onChangeFullscreen(event) {
+  _onChangeFullscreen = (event) => {
     const { isFullscreen } = event.nativeEvent;
     if (this.state.fullscreen !== isFullscreen) this.setState({ fullscreen: isFullscreen });
     if (this.props.onChangeFullscreen) this.props.onChangeFullscreen(event.nativeEvent);
