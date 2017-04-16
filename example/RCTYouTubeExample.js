@@ -37,7 +37,9 @@ class RCTYouTubeExample extends React.Component {
         </Text>
 
         <YouTube
-          ref={(component) => { this._youTubeRef = component }}
+          ref={(component) => {
+            this._youTubeRef = component;
+          }}
 
           // You must have an apiKey for the player to load in Android
           apiKey=""
@@ -157,6 +159,17 @@ class RCTYouTubeExample extends React.Component {
               onPress={() => this.setState({ fullscreen: true })}
             >
               <Text style={styles.buttonText}>Set Fullscreen</Text>
+            </TouchableOpacity>
+          </View>}
+
+        {/* Reload iFrame for updated props (Only needed for iOS) */}
+        {Platform.OS === 'ios' &&
+          <View style={styles.buttonGroup}>
+            <TouchableOpacity
+              style={styles.button}
+              onPress={() => this._youTubeRef && this._youTubeRef.reloadIframe()}
+            >
+              <Text style={styles.buttonText}>Reload iFrame (iOS)</Text>
             </TouchableOpacity>
           </View>}
 

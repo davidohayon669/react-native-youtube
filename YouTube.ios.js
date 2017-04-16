@@ -2,46 +2,70 @@
  * @providesModule YouTube
  */
 
-import React from 'react';
+import React, { PropTypes } from 'react';
 import ReactNative, { View, requireNativeComponent, NativeModules } from 'react-native';
 
 const RCTYouTube = requireNativeComponent('RCTYouTube', null);
 
+const parsePlayerParams = (props) => ({
+  videoId: Array.isArray(props.videoIds) ? props.videoIds[0] : props.videoId,
+  playlistId: props.playlistId,
+  playerVars: {
+    // videoIds are split to videoId and playlist (comma separated videoIds).
+    // Also, looping a single video is unsupported by the iFrame player so we
+    // must load the video as a 2 videos playlist, as suggested here:
+    // https://developers.google.com/youtube/player_parameters#loop
+    // whether its a looped videoId or a looped single video in videoIds
+    playlist: Array.isArray(props.videoIds)
+      ? props.loop && !props.videoIds[1]
+          ? props.videoIds[0]
+          : props.videoIds.slice(1).toString() || undefined
+      : props.loop && props.videoId ? props.videoId : undefined,
+
+    // No need to explicitly pass positive or negative defaults
+    loop: props.loop === true ? 1 : undefined,
+    playsinline: props.fullscreen === true ? undefined : 1,
+    controls: props.controls,
+    fs: props.showFullscreenButton === false ? 0 : undefined,
+    showinfo: props.showinfo === false ? 0 : undefined,
+    modestbranding: props.modestbranding === true ? 1 : undefined,
+    rel: props.rel === false ? 0 : undefined,
+    origin: props.origin,
+  },
+});
+
 export default class YouTube extends React.Component {
   static propTypes = {
-    videoId: React.PropTypes.string,
-    videoIds: React.PropTypes.arrayOf(React.PropTypes.string),
-    playlistId: React.PropTypes.string,
-    play: React.PropTypes.bool,
-    loop: React.PropTypes.bool,
-    playsInline: React.PropTypes.bool,
-    controls: React.PropTypes.oneOf([0, 1, 2]),
-    showinfo: React.PropTypes.bool,
-    modestbranding: React.PropTypes.bool,
-    rel: React.PropTypes.bool,
-    origin: React.PropTypes.string,
-    onError: React.PropTypes.func,
-    onReady: React.PropTypes.func,
-    onChangeState: React.PropTypes.func,
-    onChangeQuality: React.PropTypes.func,
-    onProgress: React.PropTypes.func,
+    videoId: PropTypes.string,
+    videoIds: PropTypes.arrayOf(PropTypes.string),
+    playlistId: PropTypes.string,
+    play: PropTypes.bool,
+    loop: PropTypes.bool,
+    fullscreen: PropTypes.bool,
+    controls: PropTypes.oneOf([0, 1, 2]),
+    showinfo: PropTypes.bool,
+    modestbranding: PropTypes.bool,
+    rel: PropTypes.bool,
+    origin: PropTypes.string,
+    onError: PropTypes.func,
+    onReady: PropTypes.func,
+    onChangeState: PropTypes.func,
+    onChangeQuality: PropTypes.func,
+    onProgress: PropTypes.func,
     style: View.propTypes.style,
   };
 
   constructor(props) {
     super(props);
-    this._onError = this._onError.bind(this);
-    this._onReady = this._onReady.bind(this);
-    this._onChangeState = this._onChangeState.bind(this);
-    this._onChangeQuality = this._onChangeQuality.bind(this);
-    this._onProgress = this._onProgress.bind(this);
-    this.reloadIframe = this.reloadIframe.bind(this);
+    if (props.playsInline !== undefined) {
+      throw new Error('YouTube.android.js: `playsInline` prop was dropped. Please use `fullscreen`')
+    }
 
     // iOS uses a YouTube iFrame under the hood. We need to create its initial params
     // for a quick and clean load. After the initial loading, props changes will interact
     // with the iframe via its instance's methods so it won't need to load the iframe again.
     this.state = {
-      playerParams: this._createPlayerParams(props),
+      playerParams: parsePlayerParams(props),
     };
   }
 
@@ -51,56 +75,28 @@ export default class YouTube extends React.Component {
     else return false;
   }
 
-  _onError(event) {
+  _onError = (event) => {
     if (this.props.onError) this.props.onError(event.nativeEvent);
   }
 
-  _onReady(event) {
-    // Render if any props have changed, and let the component know it can render any future change
+  _onReady = (event) => {
+    // Force render to handle any props that have changed since mounting, and let the
+    // component know it can render any future change
     this.forceUpdate();
     this._isReady = true;
     if (this.props.onReady) this.props.onReady(event.nativeEvent);
   }
 
-  _onChangeState(event) {
+  _onChangeState = (event) => {
     if (this.props.onChangeState) this.props.onChangeState(event.nativeEvent);
   }
 
-  _onChangeQuality(event) {
+  _onChangeQuality = (event) => {
     if (this.props.onChangeQuality) this.props.onChangeQuality(event.nativeEvent);
   }
 
-  _onProgress(event) {
+  _onProgress = (event) => {
     if (this.props.onProgress) this.props.onProgress(event.nativeEvent);
-  }
-
-  _createPlayerParams(props) {
-    return {
-      videoId: Array.isArray(props.videoIds) ? props.videoIds[0] : props.videoId,
-      playlistId: props.playlistId,
-      playerVars: {
-        // videoIds are split to videoId and playlist (comma separated videoIds).
-        // Also, looping a single video is unsupported by the iFrame player so we
-        // must load the video as a 2 videos playlist, as suggested here:
-        // https://developers.google.com/youtube/player_parameters#loop
-        // whether its a looped videoId or a looped single video in videoIds
-        playlist: Array.isArray(props.videoIds)
-          ? props.loop && !props.videoIds[1]
-              ? props.videoIds[0]
-              : props.videoIds.slice(1).toString() || undefined
-          : props.loop && props.videoId ? props.videoId : undefined,
-
-        // No need to explicitly pass positive or negative defaults
-        loop: props.loop === true ? 1 : undefined,
-        playsinline: props.playsInline === true ? 1 : undefined,
-        controls: props.controls,
-        fs: props.showFullscreenButton === false ? 0 : undefined,
-        showinfo: props.showinfo === false ? 0 : undefined,
-        modestbranding: props.modestbranding === true ? 1 : undefined,
-        rel: props.rel === false ? 0 : undefined,
-        origin: props.origin,
-      },
-    };
   }
 
   seekTo(seconds) {
@@ -136,7 +132,7 @@ export default class YouTube extends React.Component {
   // This method will force a reload on the inner iFrame. Use it if you know the cost
   // and still wants to refresh the iFrame's vars
   reloadIframe() {
-    this.setState({ playerParams: this._createPlayerParams(this.props) });
+    this.setState({ playerParams: parsePlayerParams(this.props) });
   }
 
   render() {
