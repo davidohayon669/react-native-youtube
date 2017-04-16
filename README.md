@@ -11,11 +11,13 @@ Uses Google's official [youtube-ios-player-helper](https://github.com/youtube/yo
 
 ```javascript
 <YouTube
-  ref={(component) => { this._youTubePlayer = component; }}
+  ref={(component) => {
+    this._youTubePlayer = component;
+  }}
   videoId="KVZ-P-ZI6W4"           // The YouTube video ID
   playlist="PLF797E961509B4EB5"   // A playlist's ID, overridden by `videoId`
   play={true}                     // control playback of video with true/false
-  playsInline={true}              // control whether the video should play full-screen or inline
+  fullscreen={true}               // control whether the video should play in fullscreen or inline
   loop={true}                     // control whether the video should loop when ended
 
   onReady={e => this.setState({ isReady: true })}
@@ -43,7 +45,7 @@ this._youTubePlayer.playVideoAt(2);
 Can be changed while mounted. Overridden at start by `videoId` and `videoIds`.
 * `play`: Controls playback of video with `true`/`false`. Setting it as `true` in the beginning itself makes the video autoplay on loading. Default `false`.
 * `loop`: Loops the video. Default `false`.
-* `playsInline`: Controls whether the video should play inline, or in full-screen. Default `false`.
+* `fullscreen`: Controls whether the video should play inline or in fullscreen. Default `false`.
 * `controls`: A number parameter to decide on the player's controls scheme. Supported values are `0`, `1`, `2`. Default `1`. On iOS the numbers conform to [These Parameters](https://developers.google.com/youtube/player_parameters?hl=en#controls). On Android the mapping is `0 = CHROMELSEE`, `1 = DEFAULT`, `2 = MINIMAL` ([More Info](https://developers.google.com/youtube/android/player/reference/com/google/android/youtube/player/YouTubePlayer.PlayerStyle)).
 * `showFullscreenButton`: Show or hide Fullscreen button. Default `true`.
 * `showinfo` *(iOS)*: Setting the parameter's value to false causes the player to not display information like the video title and uploader before the video starts playing. Default `true`.
@@ -61,6 +63,7 @@ The iOS implementation of this player uses the official YouTube iFrame under the
 * `onChangeQuality`: Sends the current quality of video playback on `e.quality`.
 * `onError`: Sends any errors before and during video playback on `e.error`.
 * `onProgress` *(iOS)*: Sends any time progress made on `e.currentTime` and `e.duration`.
+* `onChangeFullscreen` *(Android)*: Called when the player enters or exits the fullscreen mode on `e.isFullscreen`.
 
 ## Methods
 
@@ -69,11 +72,11 @@ The iOS implementation of this player uses the official YouTube iFrame under the
 * `previousVideo()`: opposite of `nextVideo()`.
 * `playVideoAt(index)`: Will start playing the video at `index` (zero-based) position in a playlist (`videoIds` or `playlistId`. Not supported for `playlistId` on Android).
 * `videosIndex()`: A Promise that returns the `index` (zero-based) of the video currently played in a playlist (`videoIds` or `playlistId`. Not supported for `playlistId` on Android).
-* `reloadIframe()` *(iOS)*: Specific props (`playsinline`, `modestbranding`, `showinfo`, `rel`, `controls`, `origin`) can only be set at mounting and initial loading of the underlying WebView that holds the YouTube iFrame (Those are `<iframe>` parameters). If you want to changed one of them during the lifecycle of the component you should know the usability cost of loading the WebView again and use this method right after the component was rendered with the updated prop.
+* `reloadIframe()` *(iOS)*: Specific props (`fullscreen`, `modestbranding`, `showinfo`, `rel`, `controls`, `origin`) can only be set at mounting and initial loading of the underlying WebView that holds the YouTube iFrame (Those are `<iframe>` parameters). If you want to changed one of them during the lifecycle of the component you should know the usability cost of loading the WebView again and use this method right after the component was rendered with the updated prop.
 
 ## Installation
 
-This component is confirmed to be working on react-native ~0.37 - ~0.41
+This component is confirmed to be working on react-native ~0.37 - ~0.42
 
 * Install the latest version to your `package.json`:
 
