@@ -23,6 +23,7 @@ class RCTYouTubeExample extends React.Component {
     isLooping: true,
     duration: 0,
     currentTime: 0,
+    fullscreen: false,
   };
 
   render() {
@@ -50,13 +51,14 @@ class RCTYouTubeExample extends React.Component {
 
           play={this.state.isPlaying}
           loop={this.state.isLooping}
-          playsInline={true}
+          fullscreen={this.state.fullscreen}
           controls={1}
           style={styles.player}
           onError={e => this.setState({ error: e.error })}
           onReady={e => this.setState({ isReady: true })}
           onChangeState={e => this.setState({ status: e.state })}
           onChangeQuality={e => this.setState({ quality: e.quality })}
+          onChangeFullscreen={e => this.setState({ fullscreen: e.isFullscreen })}
           onProgress={Platform.OS === 'ios'
             ? e => this.setState({ duration: e.duration, currentTime: e.currentTime })
             : undefined}

@@ -10,7 +10,17 @@ import ReactNative, {
   requireNativeComponent,
   UIManager,
   NativeModules,
+  BackAndroid,
 } from 'react-native';
+
+function backAndroidHandler() {
+  console.log('backAndroidHandler called');
+  if (this.state.fullscreen) {
+    this.setState({ fullscreen: false })
+    return true
+  }
+  return false;
+}
 
 const RCTYouTube = requireNativeComponent('ReactYouTube', YouTube, {
   nativeOnly: {
@@ -18,6 +28,7 @@ const RCTYouTube = requireNativeComponent('ReactYouTube', YouTube, {
     onYouTubeErrorReady: true,
     onYouTubeErrorChangeState: true,
     onYouTubeErrorChangeQuality: true,
+    onYouTubeChangeFullscreen: true,
   },
 });
 
@@ -29,13 +40,14 @@ export default class YouTube extends React.Component {
     playlistId: React.PropTypes.string,
     play: React.PropTypes.bool,
     loop: React.PropTypes.bool,
-    playsInline: React.PropTypes.bool,
+    fullscreen: React.PropTypes.bool,
     controls: React.PropTypes.oneOf([0, 1, 2]),
     showFullscreenButton: React.PropTypes.bool,
     onError: React.PropTypes.func,
     onReady: React.PropTypes.func,
     onChangeState: React.PropTypes.func,
     onChangeQuality: React.PropTypes.func,
+    onChangeFullscreen: React.PropTypes.func,
     style: View.propTypes.style,
   };
 
@@ -47,11 +59,29 @@ export default class YouTube extends React.Component {
     super(props);
     this.state = {
       hiddenRenderText: 'o',
+      fullscreen: props.fullscreen,
     };
     this._onError = this._onError.bind(this);
     this._onReady = this._onReady.bind(this);
     this._onChangeState = this._onChangeState.bind(this);
     this._onChangeQuality = this._onChangeQuality.bind(this);
+    this._onChangeFullscreen = this._onChangeFullscreen.bind(this);
+  }
+
+  componentWillMount() {
+    this._backAndroidHandler = backAndroidHandler.bind(this);
+    BackAndroid.addEventListener('hardwareBackPress', this._backAndroidHandler);
+  }
+
+  componentWillReceiveProps(nextProps) {
+    // Translate next `fullscreen` prop to state
+    if (nextProps.fullscreen !== this.props.fullscreen) {
+      this.setState({ fullscreen: nextProps.fullscreen })
+    }
+  }
+
+  componentWillUnmount() {
+    BackAndroid.removeEventListener('hardwareBackPress', this._backAndroidHandler);
   }
 
   _onError(event) {
@@ -70,6 +100,12 @@ export default class YouTube extends React.Component {
 
   _onChangeQuality(event) {
     if (this.props.onChangeQuality) this.props.onChangeQuality(event.nativeEvent);
+  }
+
+  _onChangeFullscreen(event) {
+    const { isFullscreen } = event.nativeEvent;
+    if (this.state.fullscreen !== isFullscreen) this.setState({ fullscreen: isFullscreen });
+    if (this.props.onChangeFullscreen) this.props.onChangeFullscreen(event.nativeEvent);
   }
 
   seekTo(seconds) {
@@ -120,11 +156,13 @@ export default class YouTube extends React.Component {
             this._nativeComponentRef = component;
           }}
           {...this.props}
+          fullscreen={this.state.fullscreen}
           style={styles.nativeModule}
           onYouTubeError={this._onError}
           onYouTubeReady={this._onReady}
           onYouTubeChangeState={this._onChangeState}
           onYouTubeChangeQuality={this._onChangeQuality}
+          onYouTubeChangeFullscreen={this._onChangeFullscreen}
         />
         {/*
           The Android YouTube native player is pretty problematic when it comes to

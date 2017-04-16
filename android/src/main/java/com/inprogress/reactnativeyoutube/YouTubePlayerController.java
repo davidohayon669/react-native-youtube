@@ -15,7 +15,10 @@ import java.util.List;
 
 
 public class YouTubePlayerController implements
-        YouTubePlayer.OnInitializedListener, YouTubePlayer.PlayerStateChangeListener, YouTubePlayer.PlaybackEventListener {
+        YouTubePlayer.OnInitializedListener,
+        YouTubePlayer.PlayerStateChangeListener,
+        YouTubePlayer.PlaybackEventListener,
+        YouTubePlayer.OnFullscreenListener {
 
     private YouTubePlayer mYouTubePlayer;
     private YouTubeView mYouTubeView;
@@ -33,7 +36,7 @@ public class YouTubePlayerController implements
     private String mPlaylistId = null;
     private boolean mPlay = false;
     private boolean mLoop = false;
-    private boolean mPlaysInline = false;
+    private boolean mFullscreen = false;
     private int mControls = 1;
     private boolean mShowFullscreenButton = true;
 
@@ -47,6 +50,7 @@ public class YouTubePlayerController implements
             mYouTubePlayer = youTubePlayer;
             mYouTubePlayer.setPlayerStateChangeListener(this);
             mYouTubePlayer.setPlaybackEventListener(this);
+            mYouTubePlayer.setOnFullscreenListener(this);
             updateFullscreen();
             updateShowFullscreenButton();
             updateControls();
@@ -131,6 +135,11 @@ public class YouTubePlayerController implements
     }
 
     @Override
+    public void onFullscreen(boolean isFullscreen) {
+        mYouTubeView.didChangeToFullscreen(isFullscreen);
+    }
+
+    @Override
     public void onError(YouTubePlayer.ErrorReason errorReason) {
         mYouTubeView.receivedError(errorReason.toString());
     }
@@ -208,7 +217,7 @@ public class YouTubePlayerController implements
     }
 
     private void updateFullscreen() {
-        mYouTubePlayer.setFullscreen(!mPlaysInline);
+        mYouTubePlayer.setFullscreen(mFullscreen);
     }
 
     private void updateShowFullscreenButton() {
@@ -283,8 +292,8 @@ public class YouTubePlayerController implements
         return mLoop;
     }
 
-    private boolean isPlaysInline() {
-        return mPlaysInline;
+    private boolean isFullscreen() {
+        return mFullscreen;
     }
 
     private int getControls() {
@@ -328,8 +337,8 @@ public class YouTubePlayerController implements
         mLoop = loop;
     }
 
-    public void setPlaysInline(boolean playsInline) {
-        mPlaysInline = playsInline;
+    public void setFullscreen(boolean fullscreen) {
+        mFullscreen = fullscreen;
         if (isLoaded()) updateFullscreen();
     }
 
