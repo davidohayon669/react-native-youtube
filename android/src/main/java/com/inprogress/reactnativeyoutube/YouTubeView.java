@@ -1,24 +1,22 @@
 package com.inprogress.reactnativeyoutube;
 
-import android.app.Activity;
 import android.app.FragmentManager;
-import android.app.FragmentTransaction;
-import android.content.Context;
-import android.widget.RelativeLayout;
+import android.util.Log;
+import android.widget.FrameLayout;
+
+import com.google.android.youtube.player.YouTubePlayerFragment;
 
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.ReactContext;
-import com.facebook.react.bridge.ReactMethod;
+import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.uimanager.events.RCTEventEmitter;
-import com.google.android.youtube.player.YouTubePlayerFragment;
 
 
-public class YouTubeView extends RelativeLayout {
+public class YouTubeView extends FrameLayout {
 
-    YouTubePlayerController youtubeController;
-    private YouTubePlayerFragment youTubePlayerFragment;
-    public static String youtube_key;
+    private YouTubePlayerController mYoutubeController;
+    private YouTubePlayerFragment mYouTubePlayerFragment;
 
     public YouTubeView(ReactContext context) {
         super(context);
@@ -26,72 +24,48 @@ public class YouTubeView extends RelativeLayout {
     }
 
     private ReactContext getReactContext() {
-        return (ReactContext)getContext();
+        return (ReactContext) getContext();
     }
 
     public void init() {
         inflate(getContext(), R.layout.youtube_layout, this);
-        FragmentManager fragmentManager = getReactContext().getCurrentActivity().getFragmentManager();
-        youTubePlayerFragment = (YouTubePlayerFragment) fragmentManager
-                .findFragmentById(R.id.youtubeplayerfragment);
-        youtubeController = new YouTubePlayerController(YouTubeView.this);
+        mYouTubePlayerFragment = YouTubePlayerFragment.newInstance();
+        mYoutubeController = new YouTubePlayerController(this);
     }
 
+    @Override
+    protected void onAttachedToWindow() {
+        FragmentManager fragmentManager = getReactContext().getCurrentActivity().getFragmentManager();
+        fragmentManager.beginTransaction().add(getId(), mYouTubePlayerFragment).commit();
+    }
 
     @Override
     protected void onDetachedFromWindow() {
-        try {
-            FragmentManager fragmentManager = getReactContext().getCurrentActivity().getFragmentManager();
-            youTubePlayerFragment = (YouTubePlayerFragment) 
-                    fragmentManager.findFragmentById(R.id.youtubeplayerfragment);
-            FragmentTransaction ft = fragmentManager.beginTransaction();
-            ft.remove(youTubePlayerFragment);
-            ft.commit();
-        } catch (Exception e) {
+        FragmentManager fragmentManager = getReactContext().getCurrentActivity().getFragmentManager();
+        if (mYouTubePlayerFragment != null) {
+            fragmentManager.beginTransaction().remove(mYouTubePlayerFragment).commit();
         }
-        super.onDetachedFromWindow();
     }
 
     public void seekTo(int second) {
-        youtubeController.seekTo(second);
+        mYoutubeController.seekTo(second);
     }
 
-
-    public void playerViewDidBecomeReady() {
-        WritableMap event = Arguments.createMap();
-        ReactContext reactContext = (ReactContext) getContext();
-        event.putInt("target", getId());
-        reactContext.getJSModule(RCTEventEmitter.class).receiveEvent(getId(), "ready", event);
+    public void nextVideo() {
+        mYoutubeController.nextVideo();
     }
 
-
-    public void didChangeToState(String param) {
-        WritableMap event = Arguments.createMap();
-        event.putString("state", param);
-        event.putInt("target", getId());
-        ReactContext reactContext = (ReactContext) getContext();
-        reactContext.getJSModule(RCTEventEmitter.class).receiveEvent(getId(), "state", event);
+    public void previousVideo() {
+        mYoutubeController.previousVideo();
     }
 
-
-    public void didChangeToQuality(String param) {
-        WritableMap event = Arguments.createMap();
-        event.putString("quality", param);
-        event.putInt("target", getId());
-        ReactContext reactContext = (ReactContext) getContext();
-        reactContext.getJSModule(RCTEventEmitter.class).receiveEvent(getId(), "quality", event);
+    public void playVideoAt(int index) {
+        mYoutubeController.playVideoAt(index);
     }
 
-
-    public void didPlayTime(String current, String duration) {
-        WritableMap event = Arguments.createMap();
-        event.putString("currentTime", current);
-        event.putString("duration", duration);
-        event.putInt("target", getId());
-        ReactContext reactContext = (ReactContext) getContext();
-        reactContext.getJSModule(RCTEventEmitter.class).receiveEvent(getId(), "progress", event);
+    public int getVideosIndex() {
+        return mYoutubeController.getVideosIndex();
     }
-
 
     public void receivedError(String param) {
         WritableMap event = Arguments.createMap();
@@ -101,49 +75,74 @@ public class YouTubeView extends RelativeLayout {
         reactContext.getJSModule(RCTEventEmitter.class).receiveEvent(getId(), "error", event);
     }
 
-
-    public void setVideoId(String str) {
-        youtubeController.setVideoId(str);
+    public void playerViewDidBecomeReady() {
+        WritableMap event = Arguments.createMap();
+        ReactContext reactContext = (ReactContext) getContext();
+        event.putInt("target", getId());
+        reactContext.getJSModule(RCTEventEmitter.class).receiveEvent(getId(), "ready", event);
     }
 
-    public void setInline(Boolean bool) {
-        youtubeController.setPlayInline(bool);
+    public void didChangeToState(String param) {
+        WritableMap event = Arguments.createMap();
+        event.putString("state", param);
+        event.putInt("target", getId());
+        ReactContext reactContext = (ReactContext) getContext();
+        reactContext.getJSModule(RCTEventEmitter.class).receiveEvent(getId(), "state", event);
     }
 
-    public void setShowInfo(Boolean bool) {
-        youtubeController.setShowInfo(bool);
+    public void didChangeToQuality(String param) {
+        WritableMap event = Arguments.createMap();
+        event.putString("quality", param);
+        event.putInt("target", getId());
+        ReactContext reactContext = (ReactContext) getContext();
+        reactContext.getJSModule(RCTEventEmitter.class).receiveEvent(getId(), "quality", event);
     }
 
-    public void setModestbranding(Boolean bool) {
-        youtubeController.setModestBranding(bool);
-    }
-
-    public void setControls(Integer nb) {
-        youtubeController.setControls(nb);
-    }
-
-    public void setPlay(Boolean bool) {
-        youtubeController.setPlay(bool);
-    }
-
-    public void setHidden(Boolean bool) {
-        youtubeController.setHidden(bool);
+    public void didChangeToFullscreen(boolean isFullscreen) {
+        WritableMap event = Arguments.createMap();
+        ReactContext reactContext = (ReactContext) getContext();
+        event.putBoolean("isFullscreen", isFullscreen);
+        event.putInt("target", getId());
+        reactContext.getJSModule(RCTEventEmitter.class).receiveEvent(getId(), "fullscreen", event);
     }
 
     public void setApiKey(String apiKey) {
-        youtube_key = apiKey;
-        youTubePlayerFragment.initialize(youtube_key, youtubeController);
+        try {
+            mYouTubePlayerFragment.initialize(apiKey, mYoutubeController);
+        } catch (Exception e) {
+            receivedError(e.getMessage());
+        }
     }
 
-    public void setLoop(Boolean loop) {
-        youtubeController.setLoop(loop);
+    public void setVideoId(String str) {
+        mYoutubeController.setVideoId(str);
     }
 
-    public void setRelated(Boolean related) {
-        youtubeController.setRelated(related);
+    public void setVideoIds(ReadableArray arr) {
+        mYoutubeController.setVideoIds(arr);
     }
 
-    public void setFullscreen(Boolean bool) {
-        youtubeController.setFullscreen(bool);
+    public void setPlaylistId(String str) {
+        mYoutubeController.setPlaylistId(str);
+    }
+
+    public void setPlay(boolean bool) {
+        mYoutubeController.setPlay(bool);
+    }
+
+    public void setLoop(boolean bool) {
+        mYoutubeController.setLoop(bool);
+    }
+
+    public void setFullscreen(boolean bool) {
+        mYoutubeController.setFullscreen(bool);
+    }
+
+    public void setControls(int nb) {
+        mYoutubeController.setControls(nb);
+    }
+
+    public void setShowFullscreenButton(boolean bool) {
+        mYoutubeController.setShowFullscreenButton(bool);
     }
 }

@@ -8,61 +8,57 @@ import android.widget.ProgressBar;
 import com.google.android.youtube.player.YouTubeInitializationResult;
 import com.google.android.youtube.player.YouTubePlayer;
 
+import com.facebook.react.bridge.ReadableArray;
+
+import java.util.ArrayList;
+import java.util.List;
+
 
 public class YouTubePlayerController implements
-        YouTubePlayer.OnInitializedListener, YouTubePlayer.PlayerStateChangeListener, YouTubePlayer.PlaybackEventListener, YouTubePlayer.OnFullscreenListener {
+        YouTubePlayer.OnInitializedListener,
+        YouTubePlayer.PlayerStateChangeListener,
+        YouTubePlayer.PlaybackEventListener,
+        YouTubePlayer.OnFullscreenListener {
 
-    String videoId = null;
+    private YouTubePlayer mYouTubePlayer;
+    private YouTubeView mYouTubeView;
 
-    YouTubePlayer mYouTubePlayer;
-    YouTubeView mYouTubeView;
+    private static final int VIDEO_MODE = 0;
+    private static final int VIDEOS_MODE = 1;
+    private static final int PLAYLIST_MODE = 2;
 
-    private boolean isLoaded = false;
-    private boolean play = false;
-    private boolean hidden = false;
-    private boolean related = false;
-    private boolean modestBranding = false;
-    private int controls = 1;
-    private boolean showInfo = true;
-    private boolean loop = false;
-    private boolean playInline = false;
-    private boolean fullscreen = true;
+    private boolean mIsLoaded = false;
+    private int mMode = 0;
+    private int mVideosIndex = 0;
 
+    private String mVideoId = null;
+    private List<String> mVideoIds = new ArrayList<String>();
+    private String mPlaylistId = null;
+    private boolean mPlay = false;
+    private boolean mLoop = false;
+    private boolean mFullscreen = false;
+    private int mControls = 1;
+    private boolean mShowFullscreenButton = true;
 
     public YouTubePlayerController(YouTubeView youTubeView) {
-        this.mYouTubeView = youTubeView;
+        mYouTubeView = youTubeView;
     }
 
     @Override
     public void onInitializationSuccess(YouTubePlayer.Provider provider, YouTubePlayer youTubePlayer, boolean wasRestored) {
         if (!wasRestored) {
-
-            // Intall listeners on the youtube player
             mYouTubePlayer = youTubePlayer;
             mYouTubePlayer.setPlayerStateChangeListener(this);
             mYouTubePlayer.setPlaybackEventListener(this);
             mYouTubePlayer.setOnFullscreenListener(this);
-
-            // Update config
-            mYouTubePlayer.setShowFullscreenButton(fullscreen);
-
-            // Emit 'onReady' event for player
+            updateFullscreen();
+            updateShowFullscreenButton();
+            updateControls();
             mYouTubeView.playerViewDidBecomeReady();
             setLoaded(true);
-
-            // Load/start the video in case it was initially provided
-            if (videoId != null) {
-                if (isPlay()) {
-                    mYouTubePlayer.loadVideo(videoId);
-                    if (!isPlayInline()) {
-                        mYouTubePlayer.setFullscreen(true);
-                    }
-                }
-                else {
-                    mYouTubePlayer.cueVideo(videoId);
-                }
-            }
-            updateControls();
+            if (mVideoId != null) loadVideo();
+            else if (!mVideoIds.isEmpty()) loadVideos();
+            else if (mPlaylistId != null) loadPlaylist();
         }
     }
 
@@ -71,16 +67,9 @@ public class YouTubePlayerController implements
         mYouTubeView.receivedError(youTubeInitializationResult.toString());
     }
 
-
     @Override
     public void onPlaying() {
         mYouTubeView.didChangeToState("playing");
-
-        // When inline playback is not allowed, transition the 
-        // player to full-screen.
-        if (!isPlayInline()) {
-            mYouTubePlayer.setFullscreen(true);
-        }
     }
 
     @Override
@@ -93,47 +82,28 @@ public class YouTubePlayerController implements
         mYouTubeView.didChangeToState("stopped");
     }
 
-
     @Override
-    public void onBuffering(boolean b) {
-        if (b)
-            mYouTubeView.didChangeToState("buffering");
+    public void onBuffering(boolean buffering) {
+        if (buffering) mYouTubeView.didChangeToState("buffering");
 
         //Trick to remove when YouTube will patch it
         ProgressBar progressBar;
         try {
             // As of 2016-02-16, the ProgressBar is at position 0 -> 3 -> 2 in the view tree of the Youtube Player Fragment
-            ViewGroup child1 = (ViewGroup)mYouTubeView.getChildAt(0);
-            ViewGroup child2 = (ViewGroup)child1.getChildAt(3);
-            progressBar = (ProgressBar)child2.getChildAt(2);
+            ViewGroup child1 = (ViewGroup) mYouTubeView.getChildAt(0);
+            ViewGroup child2 = (ViewGroup) child1.getChildAt(3);
+            progressBar = (ProgressBar) child2.getChildAt(2);
         } catch (Throwable t) {
             // As its position may change, we fallback to looking for it
             progressBar = findProgressBar(mYouTubeView);
         }
 
-        int visibility = b ? View.VISIBLE : View.INVISIBLE;
-        if (progressBar != null) {
-            progressBar.setVisibility(visibility);
-        }
-    }
-
-    private ProgressBar findProgressBar(View view) {
-        if (view instanceof ProgressBar) {
-            return (ProgressBar)view;
-        } else if (view instanceof ViewGroup) {
-            ViewGroup viewGroup = (ViewGroup)view;
-            for (int i = 0; i < viewGroup.getChildCount(); i++) {
-                ProgressBar res = findProgressBar(viewGroup.getChildAt(i));
-                if (res != null) return res;
-            }
-        }
-        return null;
+        int visibility = buffering ? View.VISIBLE : View.INVISIBLE;
+        if (progressBar != null) progressBar.setVisibility(visibility);
     }
 
     @Override
-    public void onSeekTo(int i) {
-
-    }
+    public void onSeekTo(int i) { }
 
     @Override
     public void onLoading() {
@@ -141,8 +111,8 @@ public class YouTubePlayerController implements
     }
 
     @Override
-    public void onLoaded(String s) {
-        mYouTubeView.didChangeToState("loaded");
+    public void onLoaded(String videoId) {
+        if (isVideosMode()) setVideosIndex(mVideoIds.indexOf(videoId));
     }
 
     @Override
@@ -152,19 +122,21 @@ public class YouTubePlayerController implements
 
     @Override
     public void onVideoStarted() {
-        mYouTubeView.didChangeToState("videoStarted");
+        mYouTubeView.didChangeToState("started");
     }
 
     @Override
     public void onVideoEnded() {
         mYouTubeView.didChangeToState("ended");
         if (isLoop()) {
-            mYouTubePlayer.loadVideo(videoId);
-            mYouTubePlayer.play();
+            if (isVideoMode()) loadVideo();
+            else if (isVideosMode() && getVideosIndex() == mVideoIds.size() - 1) playVideoAt(0);
         }
-        else {
-            mYouTubePlayer.setFullscreen(false);
-        }
+    }
+
+    @Override
+    public void onFullscreen(boolean isFullscreen) {
+        mYouTubeView.didChangeToFullscreen(isFullscreen);
     }
 
     @Override
@@ -172,25 +144,66 @@ public class YouTubePlayerController implements
         mYouTubeView.receivedError(errorReason.toString());
     }
 
-    @Override
-    public void onFullscreen(boolean isFullscreen) {
-        mYouTubeView.didChangeToState(isFullscreen ? "fullscreenMode" : "windowMode");
-
-        // When exiting full-screen mode and inline playback is not enabled
-        // then pause the video playback.
-        if (!isPlayInline() && !isFullscreen) {
-            mYouTubePlayer.pause();
-        }
-    }
-
     public void seekTo(int second) {
+        if (isLoaded()) mYouTubePlayer.seekToMillis(second * 1000);
+    }
+
+    public void nextVideo() {
         if (isLoaded()) {
-            mYouTubePlayer.seekToMillis(second * 1000);
+            if (mYouTubePlayer.hasNext()) mYouTubePlayer.next();
+            else if (isLoop()) {
+                if (isVideosMode()) playVideoAt(0);
+                else if (isPlaylistMode()) loadPlaylist();
+                else loadVideo();
+            }
         }
     }
 
-    public void updateControls() {
-        switch (controls) {
+    public void previousVideo() {
+        if (isLoaded()) {
+            if (mYouTubePlayer.hasPrevious()) mYouTubePlayer.previous();
+            else if (isLoop()) {
+                if (isVideosMode()) playVideoAt(mVideoIds.size() - 1);
+                else if (isPlaylistMode()) loadPlaylist();
+                else loadVideo();
+            }
+        }
+    }
+
+    public void playVideoAt(int index) {
+        if (isLoaded() && isVideosMode()) {
+            boolean indexIsInRange = setVideosIndex(index);
+            if (indexIsInRange) loadVideos();
+            else mYouTubeView.receivedError("Video index is out of bound for videoIds[]");
+        }
+    }
+
+    /**
+     * Private methods
+     **/
+
+    private void loadVideo() {
+        if (isPlay()) mYouTubePlayer.loadVideo(mVideoId);
+        else mYouTubePlayer.cueVideo(mVideoId);
+        setVideosIndex(0);
+        setVideoMode();
+    }
+
+    private void loadVideos() {
+        if (isPlay()) mYouTubePlayer.loadVideos(mVideoIds, getVideosIndex(), 0);
+        else mYouTubePlayer.cueVideos(mVideoIds, getVideosIndex(), 0);
+        setVideosMode();
+    }
+
+    private void loadPlaylist() {
+        if (isPlay()) mYouTubePlayer.loadPlaylist(mPlaylistId);
+        else mYouTubePlayer.cuePlaylist(mPlaylistId);
+        setVideosIndex(0);
+        setPlaylistMode();
+    }
+
+    private void updateControls() {
+        switch (mControls) {
             case 0:
                 mYouTubePlayer.setPlayerStyle(YouTubePlayer.PlayerStyle.CHROMELESS);
                 break;
@@ -203,134 +216,141 @@ public class YouTubePlayerController implements
         }
     }
 
+    private void updateFullscreen() {
+        mYouTubePlayer.setFullscreen(mFullscreen);
+    }
+
+    private void updateShowFullscreenButton() {
+        mYouTubePlayer.setShowFullscreenButton(mShowFullscreenButton);
+    }
+
+    private ProgressBar findProgressBar(View view) {
+        if (view instanceof ProgressBar) {
+            return (ProgressBar) view;
+        } else if (view instanceof ViewGroup) {
+            ViewGroup viewGroup = (ViewGroup) view;
+            for (int i = 0; i < viewGroup.getChildCount(); i++) {
+                ProgressBar res = findProgressBar(viewGroup.getChildAt(i));
+                if (res != null) return res;
+            }
+        }
+        return null;
+    }
 
     /**
-     * GETTER &SETTER
+     * Getters & Setters
      **/
 
-    public void setLoaded(boolean loaded) {
-        isLoaded = loaded;
+    private void setLoaded(boolean loaded) {
+        mIsLoaded = loaded;
     }
 
-    public boolean isLoaded() {
-        return isLoaded;
+    private boolean isLoaded() {
+        return mIsLoaded;
+    }
+
+    private void setVideoMode() {
+        mMode = VIDEO_MODE;
+    }
+
+    private boolean isVideoMode() {
+        return (mMode == VIDEO_MODE);
+    }
+
+    private void setVideosMode() {
+        mMode = VIDEOS_MODE;
+    }
+
+    private boolean isVideosMode() {
+        return (mMode == VIDEOS_MODE);
+    }
+
+    private void setPlaylistMode() {
+        mMode = PLAYLIST_MODE;
+    }
+
+    private boolean isPlaylistMode() {
+        return (mMode == PLAYLIST_MODE);
+    }
+
+    private boolean setVideosIndex(int index) {
+        if (index >= 0 && index < mVideoIds.size()) {
+            mVideosIndex = index;
+            return true;
+        } else return false;
+    }
+
+    public int getVideosIndex() {
+        return mVideosIndex;
+    }
+
+    private boolean isPlay() {
+        return mPlay;
+    }
+
+    private boolean isLoop() {
+        return mLoop;
+    }
+
+    private boolean isFullscreen() {
+        return mFullscreen;
+    }
+
+    private int getControls() {
+        return mControls;
     }
 
     /**
-     * PROPS
+     * React Props
      */
 
-    public void setVideoId(String str) {
-        videoId = str;
-        if (isLoaded()) {
-            if (videoId == null) {
-                mYouTubePlayer.pause();
+    public void setVideoId(String videoId) {
+        mVideoId = videoId;
+        if (isLoaded()) loadVideo();
+    }
+
+    public void setVideoIds(ReadableArray videoIds) {
+        if (videoIds != null) {
+            setVideosIndex(0);
+            mVideoIds.clear();
+            for (int i = 0; i < videoIds.size(); i++) {
+                mVideoIds.add(videoIds.getString(i));
             }
-            else if (isPlay()) {
-                mYouTubePlayer.loadVideo(videoId);
-                mYouTubePlayer.play();
-            }
-            else {
-                mYouTubePlayer.cueVideo(videoId);
-            }
+            if (isLoaded()) loadVideos();
         }
     }
 
-    public void setPlay(boolean play) {
-        this.play = play;
+    public void setPlaylistId(String playlistId) {
+        mPlaylistId = playlistId;
+        if (isLoaded()) loadPlaylist();
+    }
 
+    public void setPlay(boolean play) {
+        mPlay = play;
         if (isLoaded()) {
-            if (this.play && !mYouTubePlayer.isPlaying()) {
-                mYouTubePlayer.play();
-                if (!isPlayInline()) {
-                    mYouTubePlayer.setFullscreen(true);
-                }
-            }
-            else if (!this.play && mYouTubePlayer.isPlaying()){
-                mYouTubePlayer.pause();
-                mYouTubePlayer.setFullscreen(false);
-            }
+            if (isPlay()) mYouTubePlayer.play();
+            else mYouTubePlayer.pause();
         }
     }
 
     public void setLoop(boolean loop) {
-        this.loop = loop;
-    }
-
-    public void setControls(Integer controls) {
-        if (controls >= 0 && controls <= 2) {
-            this.controls = Integer.valueOf(controls);
-            if (isLoaded())
-                updateControls();
-        }
+        mLoop = loop;
     }
 
     public void setFullscreen(boolean fullscreen) {
-        this.fullscreen = fullscreen;
-        if (isLoaded()) {
-            mYouTubePlayer.setShowFullscreenButton(fullscreen);
+        mFullscreen = fullscreen;
+        if (isLoaded()) updateFullscreen();
+    }
+
+    public void setControls(int controls) {
+        if (controls >= 0 && controls <= 2) {
+            mControls = controls;
+            if (isLoaded()) updateControls();
         }
     }
 
-    //TODO
-    public void setHidden(boolean hidden) {
-        this.hidden = hidden;
-    }
-
-    //TODO
-    public void setShowInfo(boolean showInfo) {
-        this.showInfo = showInfo;
-    }
-
-    //TODO
-    public void setRelated(boolean related) {
-        this.related = related;
-    }
-
-    //TODO
-    public void setModestBranding(boolean modestBranding) {
-        this.modestBranding = modestBranding;
-    }
-
-    //TODO
-    public void setPlayInline(boolean playInline) {
-        this.playInline = playInline;
-    }
-
-
-    public boolean isPlay() {
-        return play;
-    }
-
-    public boolean isHidden() {
-        return hidden;
-    }
-
-    public boolean isRelated() {
-        return related;
-    }
-
-    public boolean isModestBranding() {
-        return modestBranding;
-    }
-
-    public int getControls() {
-        return controls;
-    }
-
-    public boolean isShowInfo() {
-        return showInfo;
-    }
-
-    public boolean isLoop() {
-        return loop;
-    }
-
-    public boolean isPlayInline() {
-        return playInline;
-    }
-
-    public boolean isFullscreen() {
-        return fullscreen;
+    public void setShowFullscreenButton(boolean show) {
+        mShowFullscreenButton = show;
+        if (isLoaded()) updateShowFullscreenButton();
     }
 }

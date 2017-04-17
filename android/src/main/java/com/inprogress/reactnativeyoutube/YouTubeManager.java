@@ -1,10 +1,11 @@
 package com.inprogress.reactnativeyoutube;
 
 import android.support.annotation.Nullable;
-import android.util.Log;
 
-import com.facebook.react.bridge.ReactMethod;
+import com.facebook.infer.annotation.Assertions;
 import com.facebook.react.common.MapBuilder;
+import com.facebook.react.bridge.ReactMethod;
+import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.uimanager.SimpleViewManager;
 import com.facebook.react.uimanager.ThemedReactContext;
 import com.facebook.react.uimanager.annotations.ReactProp;
@@ -14,128 +15,125 @@ import java.util.Map;
 
 public class YouTubeManager extends SimpleViewManager<YouTubeView> {
 
-    public static final String REACT_CLASS = "ReactYouTube";
-
-    public YouTubeView mYouTubeView;
-
-    public static final String PROP_VIDEO_ID = "videoId";
-    public static final String PROP_API_KEY = "apiKey";
-    public static final String PROP_INLINE = "playsInline";
-    public static final String PROP_SHOW_INFO = "showinfo";
-    public static final String PROP_MODESTBRANDING = "modestbranding";
-    public static final String PROP_CONTROLS = "controls";
-    public static final String PROP_PLAY = "play";
-    public static final String PROP_HIDDEN = "hidden";
-    public static final String PROP_REL = "rel";
-    public static final String PROP_LOOP = "loop";
-    public static final String PROP_FULLSCREEN = "fs";
+    private static final int COMMAND_SEEK_TO = 1;
+    private static final int COMMAND_NEXT_VIDEO = 2;
+    private static final int COMMAND_PREVIOUS_VIDEO = 3;
+    private static final int COMMAND_PLAY_VIDEO_AT = 4;
 
     @Override
     public String getName() {
-        return REACT_CLASS;
+        return "ReactYouTube";
     }
 
     @Override
     protected YouTubeView createViewInstance(ThemedReactContext themedReactContext) {
-        mYouTubeView = new YouTubeView(themedReactContext);
-        return mYouTubeView;
+        return new YouTubeView(themedReactContext);
     }
 
     @Override
-    public
-    @Nullable
-    Map getExportedCustomDirectEventTypeConstants() {
+    public Map<String,Integer> getCommandsMap() {
         return MapBuilder.of(
-                "error",
-                MapBuilder.of("registrationName", "onYoutubeVideoError"),
-                "ready",
-                MapBuilder.of("registrationName", "onYoutubeVideoReady"),
-                "state",
-                MapBuilder.of("registrationName", "onYoutubeVideoChangeState"),
-                "quality",
-                MapBuilder.of("registrationName", "onYoutubeVideoChangeQuality")
+            "seekTo",
+            COMMAND_SEEK_TO,
+            "nextVideo",
+            COMMAND_NEXT_VIDEO,
+            "previousVideo",
+            COMMAND_PREVIOUS_VIDEO,
+            "playVideoAt",
+            COMMAND_PLAY_VIDEO_AT
         );
     }
 
-    @ReactMethod
-    public void seekTo(Integer seconds) {
-        mYouTubeView.seekTo(seconds);
+    @Override
+    public void receiveCommand(YouTubeView view, int commandType, @Nullable ReadableArray args) {
+        Assertions.assertNotNull(view);
+        Assertions.assertNotNull(args);
+        switch (commandType) {
+            case COMMAND_SEEK_TO: {
+                view.seekTo(args.getInt(0));
+                return;
+            }
+            case COMMAND_NEXT_VIDEO: {
+                view.nextVideo();
+                return;
+            }
+            case COMMAND_PREVIOUS_VIDEO: {
+                view.previousVideo();
+                return;
+            }
+            case COMMAND_PLAY_VIDEO_AT: {
+                view.playVideoAt(args.getInt(0));
+                return;
+            }
+            default:
+                throw new IllegalArgumentException(
+                  String.format("Unsupported command %d received by %s.", commandType, getClass().getSimpleName())
+                );
+        }
     }
 
-    @ReactProp(name = PROP_VIDEO_ID)
-    public void setPropVideoId(
-            YouTubeView view, @Nullable String param) {
-        //Log.e(PROP_VIDEO_ID,""+param);
-        view.setVideoId(param);
+    @Override
+    public @Nullable Map <String,Object> getExportedCustomDirectEventTypeConstants() {
+        return MapBuilder.of(
+            "error",
+            (Object) MapBuilder.of("registrationName", "onYouTubeError"),
+            "ready",
+            (Object) MapBuilder.of("registrationName", "onYouTubeReady"),
+            "state",
+            (Object) MapBuilder.of("registrationName", "onYouTubeChangeState"),
+            "quality",
+            (Object) MapBuilder.of("registrationName", "onYouTubeChangeQuality"),
+            "fullscreen",
+            (Object) MapBuilder.of("registrationName", "onYouTubeChangeFullscreen")
+        );
     }
 
-    @ReactProp(name = PROP_API_KEY)
-    public void setApiKey(
-            YouTubeView view, @Nullable String param) {
-        //Log.e(PROP_API_KEY,""+param);
+    public int getVideosIndex(YouTubeView view) {
+        return view.getVideosIndex();
+    }
+
+    @ReactProp(name = "apiKey")
+    public void setApiKey(YouTubeView view, @Nullable String param) {
         view.setApiKey(param);
     }
 
-    @ReactProp(name = PROP_PLAY)
-    public void setPropPlay(
-            YouTubeView view, @Nullable Boolean param) {
-        Log.e(PROP_PLAY,""+param);
+    @ReactProp(name = "videoId")
+    public void setPropVideoId(YouTubeView view, @Nullable String param) {
+        view.setVideoId(param);
+    }
+
+    @ReactProp(name = "videoIds")
+    public void setPropVideoIds(YouTubeView view, @Nullable ReadableArray param) {
+        view.setVideoIds(param);
+    }
+
+    @ReactProp(name = "playlistId")
+    public void setPropPlaylistId(YouTubeView view, @Nullable String param) {
+        view.setPlaylistId(param);
+    }
+
+    @ReactProp(name = "play")
+    public void setPropPlay(YouTubeView view, @Nullable boolean param) {
         view.setPlay(param);
     }
 
-    @ReactProp(name = PROP_HIDDEN)
-    public void setPropHidden(
-            YouTubeView view, @Nullable Boolean param) {
-        //Log.e(PROP_HIDDEN,""+param);
-        view.setHidden(param);
-    }
-
-    @ReactProp(name = PROP_INLINE)
-    public void setPropInline(
-            YouTubeView view, @Nullable Boolean param) {
-        //Log.e(PROP_INLINE,""+param);
-        view.setInline(param);
-    }
-
-    @ReactProp(name = PROP_REL)
-    public void setPropRel(
-            YouTubeView view, @Nullable Boolean param) {
-        //Log.e(PROP_REL,""+param);
-        view.setRelated(param);
-    }
-
-    @ReactProp(name = PROP_MODESTBRANDING)
-    public void setPropModestbranding(
-            YouTubeView view, @Nullable Boolean param) {
-        //Log.e(PROP_MODESTBRANDING,""+param);
-        view.setModestbranding(param);
-    }
-
-    @ReactProp(name = PROP_LOOP)
-    public void setPropLoop(
-            YouTubeView view, @Nullable Boolean param) {
-        //Log.e(PROP_LOOP,""+param);
+    @ReactProp(name = "loop")
+    public void setPropLoop(YouTubeView view, @Nullable boolean param) {
         view.setLoop(param);
     }
 
-    @ReactProp(name = PROP_CONTROLS)
-    public void setPropControls(
-            YouTubeView view, @Nullable Integer param) {
-        //Log.e(PROP_CONTROLS,""+param);
+    @ReactProp(name = "fullscreen")
+    public void setPropFullscreen(YouTubeView view, @Nullable boolean param) {
+        view.setFullscreen(param);
+    }
+
+    @ReactProp(name = "controls")
+    public void setPropControls(YouTubeView view, @Nullable int param) {
         view.setControls(param);
     }
 
-    @ReactProp(name = PROP_SHOW_INFO)
-    public void setPropShowInfo(
-            YouTubeView view, @Nullable Boolean param) {
-        //Log.e(PROP_SHOW_INFO,""+param);
-        view.setShowInfo(param);
-    }
-
-    @ReactProp(name = PROP_FULLSCREEN)
-    public void setPropFullscreen(
-            YouTubeView view, @Nullable Boolean param) {
-        //Log.e(PROP_FULLSCREEN,""+param);
-        view.setFullscreen(param);
+    @ReactProp(name = "showFullscreenButton")
+    public void setPropShowFullscreenButton(YouTubeView view, @Nullable boolean param) {
+        view.setShowFullscreenButton(param);
     }
 }

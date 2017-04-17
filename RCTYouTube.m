@@ -1,75 +1,46 @@
-//
-//  MYNReactYouTubeView.m
-//  Myntra
-//
-//  Created by Param Aggarwal on 15/06/15.
-//  Copyright (c) 2015 Myntra Designs. All rights reserved.
-//
-
 #import "RCTYouTube.h"
 #if __has_include(<React/RCTAssert.h>)
-#import <React/RCTBridgeModule.h>
-#import <React/RCTEventDispatcher.h>
+#import <React/RCTBridge.h>
 #import <React/UIView+React.h>
 #else // backwards compatibility for RN < 0.40
-#import "RCTBridgeModule.h"
-#import "RCTEventDispatcher.h"
+#import "RCTBridge.h"
 #import "UIView+React.h"
 #endif
 
-@implementation RCTYouTube
-{
-    NSString *_videoId;
-    BOOL _playsInline;
-    NSDictionary *_playerParams;
-    BOOL _isPlaying;
+@interface RCTYouTube ()
 
-    /* Check to see if commands can
-     * be sent to the player
-     */
+@property (nonatomic, copy) RCTDirectEventBlock onError;
+@property (nonatomic, copy) RCTDirectEventBlock onReady;
+@property (nonatomic, copy) RCTDirectEventBlock onChangeState;
+@property (nonatomic, copy) RCTDirectEventBlock onChangeQuality;
+@property (nonatomic, copy) RCTDirectEventBlock onProgress;
+
+@end
+
+@implementation RCTYouTube {
+    __weak RCTBridge *_bridge;
+
     BOOL _isReady;
-    BOOL _playsOnLoad;
-
-    /* StatusBar visibility status before the player changed to fullscreen */
-    BOOL _isStatusBarHidden;
-    BOOL _enteredFullScreen;
-    
-    /* Required to publish events */
-    RCTEventDispatcher *_eventDispatcher;
+    BOOL _playOnLoad;
+    BOOL _loop;
 }
 
-- (instancetype)initWithEventDispatcher:(RCTEventDispatcher *)eventDispatcher
-{
-    if ((self = [super init])) {
-        _eventDispatcher = eventDispatcher;
-        _playsInline = NO;
-        _isPlaying = NO;
-        _enteredFullScreen = NO;
+- (instancetype)initWithBridge:(RCTBridge *)bridge {
+    if ((self = [super initWithFrame:CGRectZero])) {
+      _bridge = bridge;
 
-        self.delegate = self;
-        [self addFullScreenObserver];
+      _isReady = NO;
+      _playOnLoad = NO;
+      _loop = NO;
+
+      self.delegate = self;
     }
-
     return self;
 }
 
-- (void)addFullScreenObserver
-{
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(playerFullScreenStateChange:)
-                                                 name:UIWindowDidResignKeyNotification
-                                               object:self.window];
-}
+- (instancetype)initWithFrame:(CGRect)frame { @throw nil; }
 
-- (void)removeFullScreenObserver
-{
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIWindowDidResignKeyNotification object:self.window];
-}
-
-- (void)dealloc
-{
-    [self removeFullScreenObserver];
-}
+- (instancetype)initWithCoder:(NSCoder *)aDecoder { @throw nil; }
 
 - (void)layoutSubviews {
     [super layoutSubviews];
@@ -79,97 +50,87 @@
     }
 }
 
-- (void)playerFullScreenStateChange:(NSNotification*)notification
-{
-    if((UIWindow*)notification.object == self.window && !_enteredFullScreen) {
-        [_eventDispatcher sendAppEventWithName:@"youtubeVideoEnterFullScreen"
-                                            body:@{
-                                                   @"target": self.reactTag
-                                                   }];
-        _isStatusBarHidden = [[UIApplication sharedApplication] isStatusBarHidden];
-        _enteredFullScreen = YES;
-    }
-    if ((UIWindow*)notification.object != self.window && _enteredFullScreen) {
-        [_eventDispatcher sendAppEventWithName:@"youtubeVideoExitFullScreen"
-                                            body:@{
-                                                   @"target": self.reactTag
-                                                   }];
-        [[UIApplication sharedApplication] setStatusBarHidden:_isStatusBarHidden
-                                                withAnimation:UIStatusBarAnimationFade];
-        _enteredFullScreen = NO;
-    }
-}
 
 #pragma mark - YTPlayer control methods
 
-- (void)setPlay:(BOOL)play {
-    // if not ready, configure for later
-    _playsOnLoad = false;
-    if (!_isReady) {
-        _playsOnLoad = play;
-        return;
-    }
-
-    if (!_isPlaying && play) {
-        [self playVideo];
-        _isPlaying = YES;
-    } else if (_isPlaying && !play) {
-        [self pauseVideo];
-        _isPlaying = NO;
+- (void)setPlayerParams:(NSDictionary *)playerParams {
+    if (playerParams[@"videoId"]) {
+        [self loadWithVideoId:playerParams[@"videoId"]
+                   playerVars:playerParams[@"playerVars"]];
+    } else if (playerParams[@"playlistId"]) {
+        [self loadWithPlaylistId:playerParams[@"playlistId"]
+                      playerVars:playerParams[@"playerVars"]];
+    } else {
+        // if no videos info provided, we would still want to initiate an iframe instance
+        // so it'll be available for future method calls with the initial vars
+        [self loadWithVideoId:@""
+                   playerVars:playerParams[@"playerVars"]];
     }
 }
 
-- (void)setPlaysInline:(BOOL)playsInline {
-    _isReady = false;
-    _isPlaying = false;
-    if (_videoId && playsInline) {
-        [self loadWithVideoId:_videoId playerVars:@{@"playsinline": @1}];
-    } else if (_videoId && !playsInline){
-        [self loadWithVideoId:_videoId];
+- (void)setPlay:(BOOL)play {
+    if (!_isReady) {
+        _playOnLoad = play;
     } else {
-        // will get set when videoId is set
+        if (play) [self playVideo];
+        else [self pauseVideo];
     }
-
-    _playsInline = playsInline;
 }
 
 - (void)setVideoId:(NSString *)videoId {
-    if (_videoId && [_videoId isEqualToString:videoId]) {
-        return;
+    if (videoId && _isReady) {
+        if (_loop) {
+            // Looping a single video is unsupported by the iframe player so we
+            // must load the video as a 2 videos playlist, as suggested here:
+            // https://developers.google.com/youtube/player_parameters#loop
+            [self loadPlaylistByVideos:@[videoId, videoId]
+                                 index:0
+                          startSeconds:0
+                      suggestedQuality:kYTPlaybackQualityDefault];
+        } else {
+            [self loadVideoById:videoId
+                   startSeconds:0
+               suggestedQuality:kYTPlaybackQualityDefault];
+        }
     }
-    if (_videoId) {
-        [self cueVideoById:videoId startSeconds:0 suggestedQuality:kYTPlaybackQualityDefault];
-    } else if (_playsInline) {
-        _isReady = false;
-        _isPlaying = false;
-        [self loadWithVideoId:videoId playerVars:@{@"playsinline": @1}];
-    } else {
-        // will get set when playsInline is set
-    }
-
-    _videoId = videoId;
 }
 
-- (void)setPlayerParams:(NSDictionary *)playerParams {
-    _playerParams = playerParams;
-    _isReady = false;
-    _isPlaying = false;
-    [self loadWithPlayerParams:playerParams];
+- (void)setVideoIds:(NSArray *)videoIds {
+    if (_isReady) {
+        [self loadPlaylistByVideos:videoIds
+                             index:0
+                      startSeconds:0
+                  suggestedQuality:kYTPlaybackQualityDefault];
+        [self setLoopProp:_loop];
+    }
 }
+
+- (void)setPlaylistId:(NSString *)playlistId {
+    if (playlistId && _isReady) {
+        // TODO: there is an unidentifiable error with this method when using a playlist's id
+        [self loadPlaylistByPlaylistId:playlistId
+                                 index:0
+                          startSeconds:0
+                      suggestedQuality:kYTPlaybackQualityDefault];
+    }
+}
+
+- (void)setLoopProp:(BOOL)loop {
+    _loop = loop;
+    if (_isReady) [self setLoop:loop];
+}
+
 
 #pragma mark - YTPlayer delegate methods
 
 - (void)playerViewDidBecomeReady:(YTPlayerView *)playerView {
-    if (_playsOnLoad) {
-        [self playVideo];
-        _isPlaying = YES;
-    }
+    if (_playOnLoad) [self playVideo];
+
     _isReady = YES;
 
-    [_eventDispatcher sendAppEventWithName:@"youtubeVideoReady"
-                                        body:@{
-                                               @"target": self.reactTag
-                                               }];
+    if (_onReady) {
+        _onReady(@{@"target": self.reactTag});
+    }
 }
 
 - (void)playerView:(YTPlayerView *)playerView didChangeToState:(YTPlayerState)state {
@@ -190,26 +151,23 @@
             break;
         case kYTPlayerStatePlaying:
             playerState = @"playing";
-            _isPlaying = YES;
             break;
         case kYTPlayerStatePaused:
             playerState = @"paused";
-            _isPlaying = NO;
             break;
         case kYTPlayerStateEnded:
             playerState = @"ended";
-            _isPlaying = NO;
             break;
         default:
             break;
     }
 
-    [_eventDispatcher sendAppEventWithName:@"youtubeVideoChangeState"
-                                        body:@{
-                                               @"state": playerState,
-                                               @"target": self.reactTag
-                                               }];
-
+    if (_onChangeState) {
+        _onChangeState(@{
+            @"state": playerState,
+            @"target": self.reactTag
+        });
+    }
 }
 
 - (void)playerView:(YTPlayerView *)playerView didChangeToQuality:(YTPlaybackQuality)quality {
@@ -247,22 +205,23 @@
             break;
     }
 
-    [_eventDispatcher sendAppEventWithName:@"youtubeVideoChangeQuality"
-                                        body:@{
-                                               @"quality": playerQuality,
-                                               @"target": self.reactTag
-                                               }];
+    if (_onChangeQuality) {
+        _onChangeQuality(@{
+            @"quality": playerQuality,
+            @"target": self.reactTag
+        });
+    }
 }
 
 - (void)playerView:(YTPlayerView *)playerView didPlayTime:(float)currentTime {
 
-    [_eventDispatcher sendAppEventWithName:@"youtubeProgress"
-                                        body:@{
-                                               @"currentTime": @(currentTime),
-                                               @"duration": @(self.duration),
-                                               @"target": self.reactTag
-                                               }];
-
+    if (_onProgress) {
+        _onProgress(@{
+            @"currentTime": @(currentTime),
+            @"duration": @(self.duration),
+            @"target": self.reactTag
+        });
+    }
 }
 
 - (void)playerView:(YTPlayerView *)playerView receivedError:(YTPlayerError)error {
@@ -288,19 +247,18 @@
             break;
     }
 
-
-    [_eventDispatcher sendAppEventWithName:@"youtubeVideoError"
-                                        body:@{
-                                               @"error": playerError,
-                                               @"target": self.reactTag
-                                               }];
-
+    if (_onError) {
+        _onError(@{
+            @"error": playerError,
+            @"target": self.reactTag
+        });
+    }
 }
+
 
 #pragma mark - Lifecycle
 
-- (void)removeFromSuperview
-{
+- (void)removeFromSuperview {
     [self removeWebView];
     [super removeFromSuperview];
 }

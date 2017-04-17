@@ -1,186 +1,156 @@
 /**
  * @providesModule YouTube
- * @flow
  */
 
-'use strict';
-
-import React, { Component, PropTypes } from 'react';
-import ReactNative, {
-  View,
-  StyleSheet,
-  requireNativeComponent,
-  NativeModules,
-  NativeMethodsMixin,
-  NativeAppEventEmitter
-} from 'react-native';
+import React, { PropTypes } from 'react';
+import ReactNative, { View, requireNativeComponent, NativeModules } from 'react-native';
 
 const RCTYouTube = requireNativeComponent('RCTYouTube', null);
 
-let changeEvent = null;
-let changeQualityEvent = null;
-let readyEvent = null;
-let progressEvent = null;
-let errorEvent = null;
-let enterFullScreen = null;
-let exitFullScreen = null;
+const parsePlayerParams = (props) => ({
+  videoId: Array.isArray(props.videoIds) ? props.videoIds[0] : props.videoId,
+  playlistId: props.playlistId,
+  playerVars: {
+    // videoIds are split to videoId and playlist (comma separated videoIds).
+    // Also, looping a single video is unsupported by the iFrame player so we
+    // must load the video as a 2 videos playlist, as suggested here:
+    // https://developers.google.com/youtube/player_parameters#loop
+    // whether its a looped videoId or a looped single video in videoIds
+    playlist: Array.isArray(props.videoIds)
+      ? props.loop && !props.videoIds[1]
+          ? props.videoIds[0]
+          : props.videoIds.slice(1).toString() || undefined
+      : props.loop && props.videoId ? props.videoId : undefined,
 
-export default class YouTube extends Component {
+    // No need to explicitly pass positive or negative defaults
+    loop: props.loop === true ? 1 : undefined,
+    playsinline: props.fullscreen === true ? undefined : 1,
+    controls: props.controls,
+    fs: props.showFullscreenButton === false ? 0 : undefined,
+    showinfo: props.showinfo === false ? 0 : undefined,
+    modestbranding: props.modestbranding === true ? 1 : undefined,
+    rel: props.rel === false ? 0 : undefined,
+    origin: props.origin,
+  },
+});
+
+export default class YouTube extends React.Component {
   static propTypes = {
-    style: View.propTypes.style,
-    videoId: PropTypes.string.isRequired,
-    playsInline: PropTypes.bool,
+    videoId: PropTypes.string,
+    videoIds: PropTypes.arrayOf(PropTypes.string),
+    playlistId: PropTypes.string,
+    play: PropTypes.bool,
+    loop: PropTypes.bool,
+    fullscreen: PropTypes.bool,
+    controls: PropTypes.oneOf([0, 1, 2]),
     showinfo: PropTypes.bool,
     modestbranding: PropTypes.bool,
-    controls: PropTypes.oneOf([0,1,2]),
-    origin: PropTypes.string,
-    play: PropTypes.bool,
     rel: PropTypes.bool,
-    hidden: PropTypes.bool,
+    origin: PropTypes.string,
+    onError: PropTypes.func,
     onReady: PropTypes.func,
     onChangeState: PropTypes.func,
     onChangeQuality: PropTypes.func,
-    onError: PropTypes.func,
-    loop: PropTypes.bool,
-    fs: PropTypes.bool,
-    onFullScreenEnter: PropTypes.func,
-    onFullScreenExit: PropTypes.func
+    onProgress: PropTypes.func,
+    style: View.propTypes.style,
   };
 
-  static defaultProps = {
-    loop: false
-  };
-
-  _root: any;
-
-  _exportedProps: any;
-
-  constructor(props: any) {
+  constructor(props) {
     super(props);
-    this._exportedProps = NativeModules.YouTubeManager && NativeModules.YouTubeManager.exportedProps;
+    if (props.playsInline !== undefined) {
+      throw new Error('YouTube.android.js: `playsInline` prop was dropped. Please use `fullscreen`')
+    }
+
+    // iOS uses a YouTube iFrame under the hood. We need to create its initial params
+    // for a quick and clean load. After the initial loading, props changes will interact
+    // with the iframe via its instance's methods so it won't need to load the iframe again.
+    this.state = {
+      playerParams: parsePlayerParams(props),
+    };
   }
 
-  setNativeProps(nativeProps: any) {
-    this._root.setNativeProps(nativeProps);
+  shouldComponentUpdate() {
+    // Prevent unnecessary renders before the native component is ready to accept them
+    if (this._isReady) return true;
+    else return false;
   }
 
-  stopVideo() {
-    NativeModules.YouTubeManager.stopVideo(ReactNative.findNodeHandle(this));
+  _onError = (event) => {
+    if (this.props.onError) this.props.onError(event.nativeEvent);
   }
-  pauseVideo() {
-    NativeModules.YouTubeManager.pauseVideo(ReactNative.findNodeHandle(this));
+
+  _onReady = (event) => {
+    // Force render to handle any props that have changed since mounting, and let the
+    // component know it can render any future change
+    this.forceUpdate();
+    this._isReady = true;
+    if (this.props.onReady) this.props.onReady(event.nativeEvent);
   }
-  seekTo(seconds: number){
+
+  _onChangeState = (event) => {
+    if (this.props.onChangeState) this.props.onChangeState(event.nativeEvent);
+  }
+
+  _onChangeQuality = (event) => {
+    if (this.props.onChangeQuality) this.props.onChangeQuality(event.nativeEvent);
+  }
+
+  _onProgress = (event) => {
+    if (this.props.onProgress) this.props.onProgress(event.nativeEvent);
+  }
+
+  seekTo(seconds) {
     NativeModules.YouTubeManager.seekTo(ReactNative.findNodeHandle(this), parseInt(seconds, 10));
   }
-  componentWillMount() {
-    changeEvent = NativeAppEventEmitter.addListener(
-      'youtubeVideoChangeState',
-      (event) => {
-        if (event.state === 'ended' && this.props.loop) {
-          this.seekTo(0);
-        }
-        return this.props.onChangeState && this.props.onChangeState(event);
-      }
-    );
-    changeQualityEvent = NativeAppEventEmitter.addListener(
-      'youtubeVideoChangeQuality',
-      (event) => this.props.onChangeQuality && this.props.onChangeQuality(event)
-    );
-    readyEvent = NativeAppEventEmitter.addListener(
-      'youtubeVideoReady',
-      (event) => this.props.onReady && this.props.onReady()
-    );
-    progressEvent = NativeAppEventEmitter.addListener(
-      'youtubeProgress',
-      (event) => this.props.onProgress && this.props.onProgress(event)
-    );
-    errorEvent = NativeAppEventEmitter.addListener(
-      'youtubeVideoError',
-      (event) => this.props.onError && this.props.onError(event)
-    );
-    enterFullScreen = NativeAppEventEmitter.addListener(
-      'youtubeVideoEnterFullScreen',
-      (event) => this.props.onFullScreenEnter && this.props.onFullScreenEnter()
-    );
-    exitFullScreen = NativeAppEventEmitter.addListener(
-      'youtubeVideoExitFullScreen',
-      (event) => this.props.onFullScreenExit && this.props.onFullScreenExit()
-    );
+
+  nextVideo() {
+    NativeModules.YouTubeManager.nextVideo(ReactNative.findNodeHandle(this));
   }
 
-  componentWillUnmount() {
-    changeEvent.remove();
-    changeQualityEvent.remove();
-    readyEvent.remove();
-    progressEvent.remove();
-    errorEvent.remove();
-    enterFullScreen.remove();
-    exitFullScreen.remove();
+  previousVideo() {
+    NativeModules.YouTubeManager.previousVideo(ReactNative.findNodeHandle(this));
   }
-    render() {
-        var style = [styles.base, this.props.style];
-        var nativeProps = Object.assign({}, this.props);
-        nativeProps.style = style;
 
-        /*
-         * Try to use `playerParams` instead of settings `playsInline` and
-         * `videoId` individually.
-         */
-        if (this._exportedProps) {
-            if (this._exportedProps.playerParams) {
-                nativeProps.playerParams = {
-                    videoId: this.props.videoId,
-                };
-                delete nativeProps.videoId;
+  playVideoAt(index) {
+    NativeModules.YouTubeManager.playVideoAt(ReactNative.findNodeHandle(this), parseInt(index, 10));
+  }
 
-                nativeProps.playerParams.playerVars = {};
-
-                if (this.props.playsInline) {
-                    nativeProps.playerParams.playerVars.playsinline = 1;
-                    delete nativeProps.playsInline;
-                };
-                if (this.props.modestbranding) {
-                    nativeProps.playerParams.playerVars.modestbranding = 1;
-                    delete nativeProps.modestbranding;
-                };
-
-                if (this.props.showinfo!==undefined) {
-                    nativeProps.playerParams.playerVars.showinfo = this.props.showinfo ? 1 : 0;
-                    delete nativeProps.showinfo;
-                };
-                if (this.props.controls!==undefined) {
-                    nativeProps.playerParams.playerVars.controls = this.props.controls;
-                    delete nativeProps.controls;
-                };
-                if (this.props.origin!==undefined) {
-                    nativeProps.playerParams.playerVars.origin = this.props.origin;
-                    delete nativeProps.origin;
-                };
-                if (this.props.rel!==undefined) {
-                    nativeProps.playerParams.playerVars.rel = this.props.rel ? 1 : 0;
-                    delete nativeProps.rel;
-                };
-                if (this.props.fs!==undefined) {
-                    nativeProps.playerParams.playerVars.fs = this.props.fs ? 1 : 0;
-                    delete nativeProps.fs;
-                };
-            };
-        } else {
-            /*
-             * For compatibility issues with an older version where setting both
-             * `playsInline` and `videoId` in quick succession would cause the video
-             * to sometimes not play.
-             */
-            delete nativeProps.playsInline;
-        }
-
-        return <RCTYouTube {... nativeProps} />;
+  videosIndex() {
+    // Avoid calling the native method if there is only one video loaded for sure
+    if ((Array.isArray(this.props.videoIds) && !this.props.videoIds[1]) || this.props.videoId) {
+      return Promise.resolve(0);
     }
-}
 
-const styles = StyleSheet.create({
-    base: {
-        overflow: 'hidden',
-    },
-});
+    return new Promise((resolve, reject) =>
+      NativeModules.YouTubeManager
+        .videosIndex(ReactNative.findNodeHandle(this))
+        .then(index => resolve(index))
+        .catch(errorMessage => reject(errorMessage)));
+  }
+
+  // iFrame vars like `playsInline`, `showinfo` etc. are set only on iFrame load.
+  // This method will force a reload on the inner iFrame. Use it if you know the cost
+  // and still wants to refresh the iFrame's vars
+  reloadIframe() {
+    this.setState({ playerParams: parsePlayerParams(this.props) });
+  }
+
+  render() {
+    return (
+      <RCTYouTube
+        style={[{ overflow: 'hidden' }, this.props.style]}
+        playerParams={this.state.playerParams}
+        play={this.props.play}
+        videoId={this.props.videoId}
+        videoIds={this.props.videoIds}
+        playlistId={this.props.playlistId}
+        loopProp={this.props.loop}
+        onError={this._onError}
+        onReady={this._onReady}
+        onChangeState={this._onChangeState}
+        onChangeQuality={this._onChangeQuality}
+        onProgress={this._onProgress}
+      />
+    );
+  }
+}
