@@ -51,6 +51,7 @@ export default class YouTube extends React.Component {
     onReady: PropTypes.func,
     onChangeState: PropTypes.func,
     onChangeQuality: PropTypes.func,
+    onChangeFullscreen: PropTypes.func,
     onProgress: PropTypes.func,
     style: View.propTypes.style,
   };
@@ -93,6 +94,10 @@ export default class YouTube extends React.Component {
 
   _onChangeQuality = (event) => {
     if (this.props.onChangeQuality) this.props.onChangeQuality(event.nativeEvent);
+  }
+
+  _onChangeFullscreen = (event) => {
+    if (this.props.onChangeFullscreen) this.props.onChangeFullscreen(event.nativeEvent);
   }
 
   _onProgress = (event) => {
@@ -149,6 +154,7 @@ export default class YouTube extends React.Component {
         onReady={this._onReady}
         onChangeState={this._onChangeState}
         onChangeQuality={this._onChangeQuality}
+        onChangeFullscreen={this._onChangeFullscreen}
         onProgress={this._onProgress}
       />
     );
