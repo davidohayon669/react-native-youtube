@@ -145,6 +145,14 @@ export default class YouTube extends React.Component {
         .catch(errorMessage => reject(errorMessage)));
   }
 
+  currentTime() {
+    return new Promise((resolve, reject) =>
+      NativeModules.YouTubeModule
+        .currentTime(ReactNative.findNodeHandle(this._nativeComponentRef))
+        .then(currentTime => resolve(currentTime))
+        .catch(errorMessage => reject(errorMessage)));
+  }
+
   render() {
     return (
       <View style={[this.props.style, styles.container]}>
