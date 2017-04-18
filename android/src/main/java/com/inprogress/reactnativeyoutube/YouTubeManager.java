@@ -88,7 +88,6 @@ public class YouTubeManager extends SimpleViewManager<YouTubeView> {
         );
     }
 
-
     public int getVideosIndex(YouTubeView view) {
         return view.getVideosIndex();
     }
