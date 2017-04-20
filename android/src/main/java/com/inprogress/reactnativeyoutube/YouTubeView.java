@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Context;
+import android.content.pm.ActivityInfo;
 import android.widget.RelativeLayout;
 
 import com.facebook.react.bridge.Arguments;
@@ -13,8 +14,12 @@ import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.uimanager.events.RCTEventEmitter;
 import com.google.android.youtube.player.YouTubePlayerFragment;
 
+import android.util.Log;
+
 
 public class YouTubeView extends RelativeLayout {
+
+    public static final String TAG = "YouTubeView";
 
     YouTubePlayerController youtubeController;
     private YouTubePlayerFragment youTubePlayerFragment;
@@ -48,7 +53,11 @@ public class YouTubeView extends RelativeLayout {
             ft.remove(youTubePlayerFragment);
             ft.commit();
         } catch (Exception e) {
+            Log.e(TAG, "Exception thrown in onDetachedFromWindow method...", e);
         }
+        getReactContext()
+                .getCurrentActivity()
+                .setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         super.onDetachedFromWindow();
     }
 
