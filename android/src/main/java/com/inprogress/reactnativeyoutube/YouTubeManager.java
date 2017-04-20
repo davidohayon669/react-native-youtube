@@ -1,7 +1,6 @@
 package com.inprogress.reactnativeyoutube;
 
 import android.support.annotation.Nullable;
-import android.util.Log;
 
 import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.common.MapBuilder;
@@ -10,7 +9,6 @@ import com.facebook.react.uimanager.ThemedReactContext;
 import com.facebook.react.uimanager.annotations.ReactProp;
 
 import java.util.Map;
-
 
 public class YouTubeManager extends SimpleViewManager<YouTubeView> {
 
@@ -63,79 +61,57 @@ public class YouTubeManager extends SimpleViewManager<YouTubeView> {
     }
 
     @ReactProp(name = PROP_VIDEO_ID)
-    public void setPropVideoId(
-            YouTubeView view, @Nullable String param) {
-        //Log.e(PROP_VIDEO_ID,""+param);
+    public void setPropVideoId(YouTubeView view, @Nullable String param) {
         view.setVideoId(param);
     }
 
     @ReactProp(name = PROP_API_KEY)
-    public void setApiKey(
-            YouTubeView view, @Nullable String param) {
-        //Log.e(PROP_API_KEY,""+param);
+    public void setApiKey(YouTubeView view, @Nullable String param) {
         view.setApiKey(param);
     }
 
     @ReactProp(name = PROP_PLAY)
-    public void setPropPlay(
-            YouTubeView view, @Nullable Boolean param) {
-        Log.e(PROP_PLAY,""+param);
+    public void setPropPlay(YouTubeView view, @Nullable Boolean param) {
         view.setPlay(param);
     }
 
     @ReactProp(name = PROP_HIDDEN)
-    public void setPropHidden(
-            YouTubeView view, @Nullable Boolean param) {
-        //Log.e(PROP_HIDDEN,""+param);
+    public void setPropHidden(YouTubeView view, @Nullable Boolean param) {
         view.setHidden(param);
     }
 
     @ReactProp(name = PROP_INLINE)
-    public void setPropInline(
-            YouTubeView view, @Nullable Boolean param) {
-        //Log.e(PROP_INLINE,""+param);
+    public void setPropInline(YouTubeView view, @Nullable Boolean param) {
         view.setInline(param);
     }
 
     @ReactProp(name = PROP_REL)
-    public void setPropRel(
-            YouTubeView view, @Nullable Boolean param) {
-        //Log.e(PROP_REL,""+param);
+    public void setPropRel(YouTubeView view, @Nullable Boolean param) {
         view.setRelated(param);
     }
 
     @ReactProp(name = PROP_MODESTBRANDING)
-    public void setPropModestbranding(
-            YouTubeView view, @Nullable Boolean param) {
-        //Log.e(PROP_MODESTBRANDING,""+param);
+    public void setPropModestbranding(YouTubeView view, @Nullable Boolean param) {
         view.setModestbranding(param);
     }
 
     @ReactProp(name = PROP_LOOP)
-    public void setPropLoop(
-            YouTubeView view, @Nullable Boolean param) {
-        //Log.e(PROP_LOOP,""+param);
+    public void setPropLoop(YouTubeView view, @Nullable Boolean param) {
         view.setLoop(param);
     }
 
     @ReactProp(name = PROP_CONTROLS)
-    public void setPropControls(
-            YouTubeView view, @Nullable Integer param) {
-        //Log.e(PROP_CONTROLS,""+param);
+    public void setPropControls(YouTubeView view, @Nullable Integer param) {
         view.setControls(param);
     }
 
     @ReactProp(name = PROP_SHOW_INFO)
-    public void setPropShowInfo(
-            YouTubeView view, @Nullable Boolean param) {
-        //Log.e(PROP_SHOW_INFO,""+param);
+    public void setPropShowInfo(YouTubeView view, @Nullable Boolean param) {
         view.setShowInfo(param);
     }
 
     @ReactProp(name = PROP_FULLSCREEN)
-    public void setPropFullscreen(
-            YouTubeView view, @Nullable Boolean param) {
-        //Log.e(PROP_FULLSCREEN,""+param);
+    public void setPropFullscreen(YouTubeView view, @Nullable Boolean param) {
         view.setFullscreen(param);
     }
 }
