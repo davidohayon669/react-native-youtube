@@ -41,7 +41,14 @@
     var error = false;
 
     YT.ready(function() {
-        player = new YT.Player('player', %@);
+        // related videos disable
+        var opts = Object.assign(%@, {
+          playerVars: {
+            rel: 0
+          }
+        });
+
+        player = new YT.Player('player', opts);
         player.setSize(window.innerWidth, window.innerHeight);
         window.location.href = 'ytplayer://onYouTubeIframeAPIReady';
 
