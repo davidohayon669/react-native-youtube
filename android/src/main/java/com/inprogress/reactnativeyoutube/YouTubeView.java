@@ -41,9 +41,11 @@ public class YouTubeView extends FrameLayout {
 
     @Override
     protected void onDetachedFromWindow() {
-        FragmentManager fragmentManager = getReactContext().getCurrentActivity().getFragmentManager();
-        if (mYouTubePlayerFragment != null) {
-            fragmentManager.beginTransaction().remove(mYouTubePlayerFragment).commit();
+        if (getReactContext().getCurrentActivity() != null) {
+          FragmentManager fragmentManager = getReactContext().getCurrentActivity().getFragmentManager();
+          if (mYouTubePlayerFragment != null) {
+              fragmentManager.beginTransaction().remove(mYouTubePlayerFragment).commit();
+          }
         }
     }
 
