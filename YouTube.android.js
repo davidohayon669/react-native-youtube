@@ -2,9 +2,11 @@
  * @providesModule YouTube
  */
 
-import React, { PropTypes } from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import ReactNative, {
   View,
+  ViewPropTypes,
   Text,
   StyleSheet,
   requireNativeComponent,
@@ -23,7 +25,7 @@ const RCTYouTube = requireNativeComponent('ReactYouTube', YouTube, {
   },
 });
 
-export default class YouTube extends React.Component {
+export default class YouTube extends Component {
   static propTypes = {
     apiKey: PropTypes.string.isRequired,
     videoId: PropTypes.string,
@@ -39,7 +41,7 @@ export default class YouTube extends React.Component {
     onChangeState: PropTypes.func,
     onChangeQuality: PropTypes.func,
     onChangeFullscreen: PropTypes.func,
-    style: View.propTypes.style,
+    style: (ViewPropTypes && ViewPropTypes.style) || View.propTypes.style,
   };
 
   static defaultProps = {
