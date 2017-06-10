@@ -133,6 +133,15 @@ export default class YouTube extends React.Component {
         .catch(errorMessage => reject(errorMessage)));
   }
 
+  currentTime() {
+
+    return new Promise((resolve, reject) =>
+      NativeModules.YouTubeManager
+        .currentTime(ReactNative.findNodeHandle(this))
+        .then(currentTime => resolve(currentTime))
+        .catch(errorMessage => reject(errorMessage)));
+  }
+
   // iFrame vars like `playsInline`, `showinfo` etc. are set only on iFrame load.
   // This method will force a reload on the inner iFrame. Use it if you know the cost
   // and still wants to refresh the iFrame's vars
