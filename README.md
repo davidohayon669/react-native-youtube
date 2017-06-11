@@ -63,7 +63,7 @@ The iOS implementation of this player uses the official YouTube iFrame under the
 * `onChangeQuality`: Sends the current quality of video playback on `e.quality`.
 * `onError`: Sends any errors before and during video playback on `e.error`.
 * `onChangeFullscreen`: Called when the player enters or exits the fullscreen mode on `e.isFullscreen`.
-* `onProgress` *(iOS)*: Sends any time progress made on `e.currentTime` and `e.duration`.
+* `onProgress` *(iOS)*: Periodically sends any time progress made on `e.currentTime` and `e.duration`.
 
 ## Methods
 
@@ -71,7 +71,8 @@ The iOS implementation of this player uses the official YouTube iFrame under the
 * `nextVideo()`: Skip to next video on a playlist (`videoIds` or `playlistId`). When `loop` is true, will skip to the first video from the last. If called on a single video, will restart the video.
 * `previousVideo()`: opposite of `nextVideo()`.
 * `playVideoAt(index)`: Will start playing the video at `index` (zero-based) position in a playlist (`videoIds` or `playlistId`. Not supported for `playlistId` on Android).
-* `videosIndex()`: A Promise that returns the `index` (zero-based) of the video currently played in a playlist (`videoIds` or `playlistId`. Not supported for `playlistId` on Android).
+* `videosIndex()`: A Promise that returns the `index` (zero-based) number of the video currently played in a playlist (`videoIds` or `playlistId`. Not supported for `playlistId` on Android) or an errorMessage string.
+* `currentTime()` *(Android)*: A Promise that return the `currentTime` of the played video (in seconds) or an errorMessage string. Should be used as a replacement for `onProgress` on Android.
 * `reloadIframe()` *(iOS)*: Specific props (`fullscreen`, `modestbranding`, `showinfo`, `rel`, `controls`, `origin`) can only be set at mounting and initial loading of the underlying WebView that holds the YouTube iFrame (Those are `<iframe>` parameters). If you want to changed one of them during the lifecycle of the component you should know the usability cost of loading the WebView again and use this method right after the component was rendered with the updated prop.
 
 ## Installation

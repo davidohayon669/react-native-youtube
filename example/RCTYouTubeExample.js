@@ -162,6 +162,20 @@ class RCTYouTubeExample extends React.Component {
             </TouchableOpacity>
           </View>}
 
+        {/* Update Progress with currentTime() (Android) */}
+        {Platform.OS === 'android' &&
+          <View style={styles.buttonGroup}>
+            <TouchableOpacity
+              style={styles.button}
+              onPress={() => this._youTubeRef && this._youTubeRef.currentTime()
+                .then(currentTime => this.setState({ currentTime }))
+                .catch(errorMessage => this.setState({ error: errorMessage }))
+              }
+            >
+              <Text style={styles.buttonText}>Update Progress (Android)</Text>
+            </TouchableOpacity>
+          </View>}
+
         {/* Reload iFrame for updated props (Only needed for iOS) */}
         {Platform.OS === 'ios' &&
           <View style={styles.buttonGroup}>
@@ -176,12 +190,16 @@ class RCTYouTubeExample extends React.Component {
         <Text style={styles.instructions}>{this.state.isReady ? 'Player is ready' : 'Player setting up...'}</Text>
         <Text style={styles.instructions}>Status: {this.state.status}</Text>
         <Text style={styles.instructions}>Quality: {this.state.quality}</Text>
-        {Platform.OS === 'ios' &&
-          <Text style={styles.instructions}>
-            Progress: {Math.trunc(this.state.currentTime)}s
-            ({Math.trunc(this.state.duration / 60)}:{Math.trunc(this.state.duration % 60)}s)
-          </Text>
-        }
+
+        {/* Show Progress */}
+        <Text style={styles.instructions}>
+          Progress: {Math.trunc(this.state.currentTime)}s
+          {Platform.OS === 'ios'
+            ? <Text> ({Math.trunc(this.state.duration / 60)}:{Math.trunc(this.state.duration % 60)}s)</Text>
+            : <Text> (Click Update Progress)</Text>
+          }
+        </Text>
+
         <Text style={styles.instructions}>{this.state.error ? 'Error: ' + this.state.error : ''}</Text>
 
       </ScrollView>
