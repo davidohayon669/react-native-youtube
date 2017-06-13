@@ -2,8 +2,14 @@
  * @providesModule YouTube
  */
 
-import React, { PropTypes } from 'react';
-import ReactNative, { View, requireNativeComponent, NativeModules } from 'react-native';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import ReactNative, { 
+  View, 
+  requireNativeComponent, 
+  NativeModules, 
+  ViewPropTypes 
+} from 'react-native';
 
 const RCTYouTube = requireNativeComponent('RCTYouTube', null);
 
@@ -53,7 +59,7 @@ export default class YouTube extends React.Component {
     onChangeQuality: PropTypes.func,
     onChangeFullscreen: PropTypes.func,
     onProgress: PropTypes.func,
-    style: View.propTypes.style,
+    style: (ViewPropTypes && ViewPropTypes.style) || View.propTypes.style,
   };
 
   constructor(props) {
