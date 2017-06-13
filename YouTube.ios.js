@@ -59,7 +59,7 @@ export default class YouTube extends React.Component {
   constructor(props) {
     super(props);
     if (props.playsInline !== undefined) {
-      throw new Error('YouTube.android.js: `playsInline` prop was dropped. Please use `fullscreen`')
+      throw new Error('YouTube.ios.js: `playsInline` prop was dropped. Please use `fullscreen`')
     }
 
     // iOS uses a YouTube iFrame under the hood. We need to create its initial params
