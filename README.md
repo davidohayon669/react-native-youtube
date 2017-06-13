@@ -15,7 +15,7 @@ Uses Google's official [youtube-ios-player-helper](https://github.com/youtube/yo
     this._youTubePlayer = component;
   }}
   videoId="KVZ-P-ZI6W4"           // The YouTube video ID
-  playlist="PLF797E961509B4EB5"   // A playlist's ID, overridden by `videoId`
+  playlistId="PLF797E961509B4EB5"   // A playlist's ID, overridden by `videoId`
   play={true}                     // control playback of video with true/false
   fullscreen={true}               // control whether the video should play in fullscreen or inline
   loop={true}                     // control whether the video should loop when ended
