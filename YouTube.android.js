@@ -10,7 +10,7 @@ import ReactNative, {
   requireNativeComponent,
   UIManager,
   NativeModules,
-  BackAndroid,
+  BackHandler,
 } from 'react-native';
 
 const RCTYouTube = requireNativeComponent('ReactYouTube', YouTube, {
@@ -59,7 +59,7 @@ export default class YouTube extends React.Component {
   }
 
   componentWillMount() {
-    BackAndroid.addEventListener('hardwareBackPress', this._backAndroidHandler);
+    BackHandler.addEventListener('hardwareBackPress', this._backAndroidHandler);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -70,7 +70,7 @@ export default class YouTube extends React.Component {
   }
 
   componentWillUnmount() {
-    BackAndroid.removeEventListener('hardwareBackPress', this._backAndroidHandler);
+    BackHandler.removeEventListener('hardwareBackPress', this._backAndroidHandler);
   }
 
   _backAndroidHandler = () => {
