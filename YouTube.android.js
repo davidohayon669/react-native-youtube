@@ -10,8 +10,11 @@ import ReactNative, {
   requireNativeComponent,
   UIManager,
   NativeModules,
-  BackAndroid,
+  BackAndroid as DeprecatedBackAndroid,
+  BackHandler,
 } from 'react-native';
+
+const BackAndroid = BackHandler || DeprecatedBackAndroid;
 
 const RCTYouTube = requireNativeComponent('ReactYouTube', YouTube, {
   nativeOnly: {
