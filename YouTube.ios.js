@@ -2,18 +2,18 @@
  * @providesModule YouTube
  */
 
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
-import ReactNative, { 
-  View, 
-  requireNativeComponent, 
-  NativeModules, 
-  ViewPropTypes 
+import ReactNative, {
+  View,
+  requireNativeComponent,
+  NativeModules,
+  ViewPropTypes,
 } from 'react-native';
 
 const RCTYouTube = requireNativeComponent('RCTYouTube', null);
 
-const parsePlayerParams = (props) => ({
+const parsePlayerParams = props => ({
   videoId: Array.isArray(props.videoIds) ? props.videoIds[0] : props.videoId,
   playlistId: props.playlistId,
   playerVars: {
@@ -65,7 +65,7 @@ export default class YouTube extends React.Component {
   constructor(props) {
     super(props);
     if (props.playsInline !== undefined) {
-      throw new Error('YouTube.ios.js: `playsInline` prop was dropped. Please use `fullscreen`')
+      throw new Error('YouTube.ios.js: `playsInline` prop was dropped. Please use `fullscreen`');
     }
 
     // iOS uses a YouTube iFrame under the hood. We need to create its initial params

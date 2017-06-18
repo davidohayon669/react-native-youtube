@@ -2,7 +2,7 @@
  * @providesModule YouTube
  */
 
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import ReactNative, {
   View,
@@ -25,7 +25,7 @@ const RCTYouTube = requireNativeComponent('ReactYouTube', YouTube, {
   },
 });
 
-export default class YouTube extends Component {
+export default class YouTube extends React.Component {
   static propTypes = {
     apiKey: PropTypes.string.isRequired,
     videoId: PropTypes.string,
@@ -51,7 +51,7 @@ export default class YouTube extends Component {
   constructor(props) {
     super(props);
     if (props.playsInline !== undefined) {
-      throw new Error('YouTube.android.js: `playsInline` prop was dropped. Please use `fullscreen`')
+      throw new Error('YouTube.android.js: `playsInline` prop was dropped. Please use `fullscreen`');
     }
 
     this.state = {
@@ -67,7 +67,7 @@ export default class YouTube extends Component {
   componentWillReceiveProps(nextProps) {
     // Translate next `fullscreen` prop to state
     if (nextProps.fullscreen !== this.props.fullscreen) {
-      this.setState({ fullscreen: nextProps.fullscreen })
+      this.setState({ fullscreen: nextProps.fullscreen });
     }
   }
 
@@ -77,8 +77,8 @@ export default class YouTube extends Component {
 
   _backAndroidHandler = () => {
     if (this.state.fullscreen) {
-      this.setState({ fullscreen: false })
-      return true
+      this.setState({ fullscreen: false });
+      return true;
     }
     return false;
   }

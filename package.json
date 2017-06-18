@@ -21,10 +21,12 @@
     "url": "https://github.com/inProgress-team/react-native-youtube/issues"
   },
   "homepage": "https://github.com/inProgress-team/react-native-youtube#readme",
+  "dependencies": {
+    "prop-types": "^15.5.0"
+  },
   "peerDependencies": {
     "react": ">=15.3.2",
-    "react-native": ">=0.37",
-    "prop-types": "^15.5.10"
+    "react-native": ">=0.37"
   },
   "rnpm": {
     "android": {
@@ -33,5 +35,5 @@
     "assets": [
       "assets"
     ]
-  },
+  }
 }
