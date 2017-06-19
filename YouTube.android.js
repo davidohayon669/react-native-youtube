@@ -10,11 +10,11 @@ import ReactNative, {
   requireNativeComponent,
   UIManager,
   NativeModules,
-  BackAndroid as DeprecatedBackAndroid,
-  BackHandler,
+  BackAndroid,
+  BackHandler as BackHandlerModule,
 } from 'react-native';
 
-const BackAndroid = BackHandler || DeprecatedBackAndroid;
+const BackHandler = BackHandlerModule || BackAndroid;
 
 const RCTYouTube = requireNativeComponent('ReactYouTube', YouTube, {
   nativeOnly: {
@@ -62,7 +62,7 @@ export default class YouTube extends React.Component {
   }
 
   componentWillMount() {
-    BackAndroid.addEventListener('hardwareBackPress', this._backAndroidHandler);
+    BackHandler.addEventListener('hardwareBackPress', this._backPress);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -73,10 +73,10 @@ export default class YouTube extends React.Component {
   }
 
   componentWillUnmount() {
-    BackAndroid.removeEventListener('hardwareBackPress', this._backAndroidHandler);
+    BackHandler.removeEventListener('hardwareBackPress', this._backPress);
   }
 
-  _backAndroidHandler = () => {
+  _backPress = () => {
     if (this.state.fullscreen) {
       this.setState({ fullscreen: false })
       return true
