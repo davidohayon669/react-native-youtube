@@ -124,6 +124,10 @@ export default class YouTube extends React.Component {
     NativeModules.YouTubeManager.playVideoAt(ReactNative.findNodeHandle(this), parseInt(index, 10));
   }
 
+  pauseVideo() {
+    NativeModules.YouTubeManager.pauseVideo(ReactNative.findNodeHandle(this));
+  }
+
   videosIndex() {
     // Avoid calling the native method if there is only one video loaded for sure
     if ((Array.isArray(this.props.videoIds) && !this.props.videoIds[1]) || this.props.videoId) {
