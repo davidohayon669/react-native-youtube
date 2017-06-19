@@ -139,6 +139,14 @@ export default class YouTube extends React.Component {
     );
   }
 
+  playVideo() {
+    NativeModules.YouTubeManager.playVideo(ReactNative.findNodeHandle(this));
+  }
+
+  pauseVideo() {
+    NativeModules.YouTubeManager.pauseVideo(ReactNative.findNodeHandle(this));
+  }
+
   videosIndex() {
     return new Promise((resolve, reject) =>
       NativeModules.YouTubeModule

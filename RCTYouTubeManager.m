@@ -82,6 +82,30 @@ RCT_EXPORT_METHOD(playVideoAt:(nonnull NSNumber *)reactTag index:(nonnull NSNumb
     }];
 }
 
+RCT_EXPORT_METHOD(playVideo:(nonnull NSNumber *)reactTag)
+{
+    [self.bridge.uiManager addUIBlock:^(__unused RCTUIManager *uiManager, NSDictionary<NSNumber *, UIView *> *viewRegistry) {
+        RCTYouTube *youtube = (RCTYouTube*)viewRegistry[reactTag];
+        if ([youtube isKindOfClass:[RCTYouTube class]]) {
+            [youtube playVideo];
+        } else {
+            RCTLogError(@"Cannot playVideo: %@ (tag #%@) is not RCTYouTube", youtube, reactTag);
+        }
+    }];
+}
+
+RCT_EXPORT_METHOD(pauseVideo:(nonnull NSNumber *)reactTag)
+{
+    [self.bridge.uiManager addUIBlock:^(__unused RCTUIManager *uiManager, NSDictionary<NSNumber *, UIView *> *viewRegistry) {
+        RCTYouTube *youtube = (RCTYouTube*)viewRegistry[reactTag];
+        if ([youtube isKindOfClass:[RCTYouTube class]]) {
+            [youtube pauseVideo];
+        } else {
+            RCTLogError(@"Cannot pauseVideo: %@ (tag #%@) is not RCTYouTube", youtube, reactTag);
+        }
+    }];
+}
+
 RCT_EXPORT_METHOD(videosIndex:(nonnull NSNumber *)reactTag resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
 {
     [self.bridge.uiManager addUIBlock:^(__unused RCTUIManager *uiManager, NSDictionary<NSNumber *, UIView *> *viewRegistry) {
