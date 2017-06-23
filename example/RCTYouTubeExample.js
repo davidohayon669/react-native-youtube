@@ -208,9 +208,7 @@ class RCTYouTubeExample extends React.Component {
 
 const styles = StyleSheet.create({
   container: {
-    paddingVertical: 10,
-    flex: 1,
-    backgroundColor: '#F5FCFF',
+    backgroundColor: 'white',
   },
   welcome: {
     fontSize: 20,
