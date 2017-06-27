@@ -109,24 +109,18 @@ The Android version of this component is based on the official Java [YouTube And
 
 These specific hacks are sufficiently solving these related problems in the example app in this repo and also in a private app that I develop which uses standard views and the (now deprecated) NavigationExperimental. On a virtual AVD (Nexus 5X) and on a real Nexus 5X, with React-Native 0.37 through 0.45.
 
-##### How do we solve this?
-Different configurations and environments can still persist these problems so we must find better and more general ways of mitigating them. **The best thing anybody who tackle these errors can do, before posting an issue**, is to try setting up and running the example app in this repo and see if this problem persist. If it is than the problem is probably with the development environment and / or hardware. If not, the problem is probably with other libraries or custom components, and the way they are used in conjunction with this component in the faulty app. Try to understand the nature of the limitations of the native component and gather as much information before posting an issue, even then, better add to #161.
+*How do we solve this?*
+
+Different configurations and environments can still persist these problems so we must find better and more general ways of mitigating them. **The best thing anybody who encounters these errors can do, before posting an issue**, is try to set up and run the example app in this repo and see if the same behavior persist. If it is, then the problem is probably with the development environment and / or hardware. If not, the problem is probably with other libraries or custom components, and the way they are used in conjunction with this component. Try to understand the nature of the limitations of the native component and gather as much information before posting an issue, even then, better add to [#161](https://github.com/inProgress-team/react-native-youtube/issues/161).
 
 #### No player controls in Android
-The Android version can sometimes disable the players control even when the controls are explicitly set to be shown. There is no explanation to this behavior yet. This bug is managed in #131.
+The Android version can sometimes disable the players control even when the controls are explicitly set to be shown. There is no explanation to this behavior yet. This bug is managed in [#131](https://github.com/inProgress-team/react-native-youtube/issues/161).
 
 #### Multiple `<YouTube />` instances on Android
 The YouTube API for Android is a *singleton*. What it means is that unlike the iOS implementation, no two players can be mounted and play a video at the same time. If you have two scenes that happen to live together, or come one after the other (such as when navigating to a new scene), The new `<YouTube />` Will take the focus of the singleton and play the video, but after being unmounted, the older mounted `<YouTube />` will not be able to take the role back, and will need to be re-mounted.
 
-#### Android and Virtual Devices (AVDs)
-Virtual devices running inside a desktop are usually much slower than a real device. For that reason, certain irregular behaviors can occur with the native player such as when the player fails to reposition correctly inside React-Native's views hierarchy and will only appear after another render of an ancestor view. In other times some of the player's internal mechanisms that prevent it from playing while being covered, or when the view is too small, will trigger for no good reason.
-
-These behaviors can be pretty worrisome, and wrongfully get you to think the library is broken. At this point these irregularities seems to be unavoidable due to the way React-Native works and the too many moving parts that work in coordination. **Make sure to test your app on a real device to check if these irregularities persist. Most of them will not occur on an average hardware.**
-
-These possible irregularities should be further taken care of by maintainers.
-
-## Example and Development
-This repository includes an example project that can be used for viewing, developing and testing all functionalities on a dedicated clean app project.
+## Example App and Development
+This repository includes an example project that can be used for trying, developing and testing all functionalities on a dedicated clean app project.
 
 First copy the git repository and install the React-Native project inside `example`
 
@@ -141,7 +135,7 @@ rnpm link
 Then build and run with `react-native run-ios` / `react-native run-android` or your favorite IDE.
 
 #### For Developers
-The `react-native-youtube` dependency in the example's `package.json` points back to the working directory root at `file:../` so you can re-install it with `npm install react-native-youtube@file:../` (type this inside `example` directory) and test your changes on the example app right on the spot.
+The `react-native-youtube` dependency in the example's `package.json` points back to the working directory root at `file:../` so you can re-install it with `npm install react-native-youtube@file:../` (type this inside `example` directory) and test your changes on the example app immediately.
 
 ## Authors
 * Param Aggarwal (paramaggarwal@gmail.com)
