@@ -10,7 +10,7 @@ import {
   Dimensions,
   Platform,
 } from 'react-native';
-import YouTube from 'react-native-youtube';
+import {YouTube, YouTubeStandalone} from 'react-native-youtube';
 
 class RCTYouTubeExample extends React.Component {
   state = {
@@ -64,6 +64,28 @@ class RCTYouTubeExample extends React.Component {
             ? e => this.setState({ duration: e.duration, currentTime: e.currentTime })
             : undefined}
         />
+
+        {/* Standalone Player */}
+        {Platform.OS === 'android' &&
+          <View style={styles.buttonGroup}>
+            <TouchableOpacity
+              style={styles.button}
+              onPress={() =>
+                // You must have an apiKey for the player to load in Android
+                YouTubeStandalone.playVideo(
+                  "",
+                  "KVZ-P-ZI6W4",
+                  false,
+                  false,
+                  0
+                )
+                  .then(() => console.log("Player Finished"))
+                  .catch(errorMessage => this.setState({ error: errorMessage }))}
+            >
+              <Text style={styles.buttonText}>Standalone Player</Text>
+            </TouchableOpacity>
+          </View>
+        }
 
         {/* Playing / Looping */}
         <View style={styles.buttonGroup}>
