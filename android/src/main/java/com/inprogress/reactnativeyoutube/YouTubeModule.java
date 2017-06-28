@@ -117,7 +117,6 @@ public class YouTubeModule extends ReactContextBaseJavaModule {
       mPickerPromise = promise;
 
       try {
-        // final Intent galleryIntent = new Intent(Intent.ACTION_PICK);
         final Intent intent = YouTubeStandalonePlayer.createVideoIntent(
           currentActivity, apiKey, video_id, startTimeMillis, autoplay, lightboxMode);
 
