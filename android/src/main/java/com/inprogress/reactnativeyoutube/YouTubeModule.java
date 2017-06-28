@@ -13,7 +13,6 @@ import com.facebook.react.bridge.BaseActivityEventListener;
 import com.facebook.react.bridge.ActivityEventListener;
 import android.app.Activity;
 import android.content.Intent;
-import android.widget.Toast;
 import android.content.pm.ResolveInfo;
 import com.google.android.youtube.player.YouTubeInitializationResult;
 import com.google.android.youtube.player.YouTubeStandalonePlayer;
@@ -47,7 +46,6 @@ public class YouTubeModule extends ReactContextBaseJavaModule {
               } else {
                   String errorMessage =
                       String.format("There was an error initializing the YouTubePlayer (%1$s)", errorReason.toString());
-                  Toast.makeText(activity, errorMessage, Toast.LENGTH_LONG).show();
                   mPickerPromise.reject(E_PLAYER_ERROR, errorMessage);
               }
             } else {
