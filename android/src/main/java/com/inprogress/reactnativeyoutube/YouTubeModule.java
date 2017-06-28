@@ -9,7 +9,6 @@ import com.facebook.react.uimanager.NativeViewHierarchyManager;
 import com.facebook.react.uimanager.UIBlock;
 import com.facebook.react.uimanager.UIManagerModule;
 
-// JT
 import com.facebook.react.bridge.BaseActivityEventListener;
 import com.facebook.react.bridge.ActivityEventListener;
 import android.app.Activity;
@@ -25,7 +24,6 @@ public class YouTubeModule extends ReactContextBaseJavaModule {
 
     private ReactApplicationContext mReactContext;
 
-    // JT
     private static final int REQ_START_STANDALONE_PLAYER = 1;
     private static final int REQ_RESOLVE_SERVICE_MISSING = 2;
     private static final String E_FAILED_TO_SHOW_PLAYER = "E_FAILED_TO_SHOW_PLAYER";
@@ -66,7 +64,6 @@ public class YouTubeModule extends ReactContextBaseJavaModule {
         super(reactContext);
         mReactContext = reactContext;
 
-        // JT
         mReactContext.addActivityEventListener(mActivityEventListener);
     }
 
@@ -109,7 +106,6 @@ public class YouTubeModule extends ReactContextBaseJavaModule {
         }
     }
 
-    // JT
     @ReactMethod
     public void playVideo(final String apiKey, final String video_id, final boolean autoplay, final boolean lightboxMode, final int startTimeMillis, final Promise promise) {
       Activity currentActivity = getCurrentActivity();
