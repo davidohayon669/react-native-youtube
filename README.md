@@ -29,14 +29,14 @@ Uses Google's official [youtube-ios-player-helper](https://github.com/youtube/yo
   style={{ alignSelf: 'stretch', height: 300, backgroundColor: 'black', marginVertical: 10 }}
 />
 ```
-```javascript
-this._youTubePlayer.seekTo(20);
-this._youTubePlayer.nextVideo();
-this._youTubePlayer.previousVideo();
-this._youTubePlayer.playVideoAt(2);
-```
 
-## Properties
+## API
+### YouTube Component
+#### Importing
+```javascript
+import YouTube from 'react-native-youtube'
+```
+#### Properties
 * `apiKey` *(Android)*: This parameter is required on Android for the YouTube API to work. [More Info](https://developers.google.com/youtube/android/player/register).
 * `videoId`: The YouTube video ID to play. Can be changed while mounted to change the video playing.
 * `videoIds`: An array of YouTube video IDs to be played as an interactive playlist. Can be changed while mounted. Overridden at start by `videoId`.
@@ -54,7 +54,7 @@ Can be changed while mounted. Overridden at start by `videoId` and `videoIds`.
 
 The iOS implementation of this player uses the official YouTube iFrame under the hood, so most parameters behavior [can be further understood here.](https://developers.google.com/youtube/player_parameters)
 
-## Events
+#### Events
 * `onReady`: Called once when the video player is setup.
 * `onChangeState`: Sends the current state of the player on `e.state`. Common values are `buffering`/`playing`/`paused` and more.
 * `onChangeQuality`: Sends the current quality of video playback on `e.quality`.
@@ -62,7 +62,7 @@ The iOS implementation of this player uses the official YouTube iFrame under the
 * `onChangeFullscreen`: Called when the player enters or exits the fullscreen mode on `e.isFullscreen`.
 * `onProgress` *(iOS)*: Periodically sends any time progress made on `e.currentTime` and `e.duration`.
 
-## Methods
+#### Methods
 * `seekTo(seconds)`: Seeks to a specified time in the video.
 * `nextVideo()`: Skip to next video on a playlist (`videoIds` or `playlistId`). When `loop` is true, will skip to the first video from the last. If called on a single video, will restart the video.
 * `previousVideo()`: opposite of `nextVideo()`.
@@ -70,6 +70,22 @@ The iOS implementation of this player uses the official YouTube iFrame under the
 * `videosIndex()`: A Promise that returns the `index` (zero-based) number of the video currently played in a playlist (`videoIds` or `playlistId`. Not supported for `playlistId` on Android) or an errorMessage string.
 * `currentTime()` *(Android)*: A Promise that return the `currentTime` of the played video (in seconds) or an errorMessage string. Should be used as a replacement for `onProgress` on Android.
 * `reloadIframe()` *(iOS)*: Specific props (`fullscreen`, `modestbranding`, `showinfo`, `rel`, `controls`, `origin`) can only be set at mounting and initial loading of the underlying WebView that holds the YouTube iFrame (Those are `<iframe>` parameters). If you want to changed one of them during the lifecycle of the component you should know the usability cost of loading the WebView again and use this method right after the component was rendered with the updated prop.
+
+### Standalone Player (available only for Android)
+#### Importing
+```javascript
+import { YouTubeStandaloneAndroid } from 'react-native-youtube';
+```
+
+#### `YouTubeStandaloneAndroid.playVideo(options)` (Static)
+A static method that returns a Promise to launch a standalone YouTube player with a specific video.
+
+`options` is an object with properties:
+* `apiKey` (string): Your developer YouTube API key. **Required**.
+* `videoId` (string): The YouTube Video ID to play. **Required**.
+* `autoplay` (boolean): Should the video start automatically, Default: `false`.
+* `lightboxMode` (boolean): Should the video play inside a lightbox instead of fullscreen. Default: `false`.
+* `startTime` (number): Optional starting time of the video (in seconds). Default: `0`.
 
 ## Installation
 This component is confirmed to be working on react-native ~0.37 - ~0.45

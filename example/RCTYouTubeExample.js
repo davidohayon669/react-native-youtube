@@ -10,7 +10,7 @@ import {
   Dimensions,
   Platform,
 } from 'react-native';
-import {YouTube, YouTubeStandalone} from 'react-native-youtube';
+import YouTube, { YouTubeStandaloneAndroid } from 'react-native-youtube';
 
 class RCTYouTubeExample extends React.Component {
   state = {
@@ -40,8 +40,8 @@ class RCTYouTubeExample extends React.Component {
             this._youTubeRef = component;
           }}
 
-          // You must have an apiKey for the player to load in Android
-          apiKey=""
+          // You must have an API Key for the player to load in Android
+          apiKey="YOUR_API_KEY"
 
           // Un-comment one of videoId / videoIds / playlist.
           // You can also edit these props while Hot-Loading in development mode to see how
@@ -64,28 +64,6 @@ class RCTYouTubeExample extends React.Component {
             ? e => this.setState({ duration: e.duration, currentTime: e.currentTime })
             : undefined}
         />
-
-        {/* Standalone Player */}
-        {Platform.OS === 'android' &&
-          <View style={styles.buttonGroup}>
-            <TouchableOpacity
-              style={styles.button}
-              onPress={() =>
-                // You must have an apiKey for the player to load in Android
-                YouTubeStandalone.playVideo(
-                  "",
-                  "KVZ-P-ZI6W4",
-                  false,
-                  false,
-                  0
-                )
-                  .then(() => console.log("Player Finished"))
-                  .catch(errorMessage => this.setState({ error: errorMessage }))}
-            >
-              <Text style={styles.buttonText}>Standalone Player</Text>
-            </TouchableOpacity>
-          </View>
-        }
 
         {/* Playing / Looping */}
         <View style={styles.buttonGroup}>
@@ -196,6 +174,27 @@ class RCTYouTubeExample extends React.Component {
               <Text style={styles.buttonText}>Update Progress (Android)</Text>
             </TouchableOpacity>
           </View>}
+
+          {/* Standalone Player (Android) */}
+          {Platform.OS === 'android' && YouTubeStandaloneAndroid &&
+            <View style={styles.buttonGroup}>
+              <TouchableOpacity
+                style={styles.button}
+                onPress={() =>
+                  YouTubeStandaloneAndroid.playVideo({
+                    apiKey: "YOUR_API_KEY",
+                    videoId: "KVZ-P-ZI6W4",
+                    autoplay: true,
+                    lightboxMode: false,
+                    startTime: 124.5,
+                  })
+                    .then(() => console.log("Standalone Player Finished"))
+                    .catch(errorMessage => this.setState({ error: errorMessage }))}
+              >
+                <Text style={styles.buttonText}>Launch Standalone Player (Android)</Text>
+              </TouchableOpacity>
+            </View>
+          }
 
         {/* Reload iFrame for updated props (Only needed for iOS) */}
         {Platform.OS === 'ios' &&

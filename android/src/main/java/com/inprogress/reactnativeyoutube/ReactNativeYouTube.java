@@ -19,6 +19,8 @@ public class ReactNativeYouTube implements ReactPackage {
         List<NativeModule> modules = new ArrayList<>();
         YouTubeModule youTubeModule = new YouTubeModule(reactContext);
         modules.add(youTubeModule);
+        YouTubeStandaloneModule youTubeStandaloneModule = new YouTubeStandaloneModule(reactContext);
+        modules.add(youTubeStandaloneModule);
         return modules;
     }
 
