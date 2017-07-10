@@ -23,7 +23,7 @@ public class YouTubeView extends FrameLayout {
         init();
     }
 
-    private ReactContext getReactContext() {
+    public ReactContext getReactContext() {
         return (ReactContext) getContext();
     }
 
@@ -42,10 +42,10 @@ public class YouTubeView extends FrameLayout {
     @Override
     protected void onDetachedFromWindow() {
         if (getReactContext().getCurrentActivity() != null) {
-          FragmentManager fragmentManager = getReactContext().getCurrentActivity().getFragmentManager();
-          if (mYouTubePlayerFragment != null) {
-              fragmentManager.beginTransaction().remove(mYouTubePlayerFragment).commit();
-          }
+            FragmentManager fragmentManager = getReactContext().getCurrentActivity().getFragmentManager();
+            if (mYouTubePlayerFragment != null) {
+                fragmentManager.beginTransaction().remove(mYouTubePlayerFragment).commit();
+            }
         }
     }
 

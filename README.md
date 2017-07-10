@@ -105,7 +105,7 @@ Then at the project's root folder type:
 
 (This step can also be done manually by adding `../node_modules/react-native-youtube/assets/YTPlayerView-iframe-player.html` to your Xcode project's root directory)
 
-**IMPORTANT! (Android Only)**: The Android implementation of this component needs to have the official YouTube app installed on the device. Otherwise an error event will trigger with `SERVICE_MISSING`.
+**IMPORTANT! (Android Only)**: The Android implementation of this component needs to have the official YouTube app installed on the device. Otherwise the user will be prompted to install / activate the app, and an error event will be triggered with `SERVICE_MISSING`/`SERVICE_DISABLED`.
 
 #### OPTIONAL: Activated sound when iPhone (iOS) is on vibrate mode
 Open AppDelegate.m and add :

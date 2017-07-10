@@ -1,6 +1,5 @@
 package com.inprogress.reactnativeyoutube;
 
-import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
@@ -63,8 +62,11 @@ public class YouTubePlayerController implements
     }
 
     @Override
-    public void onInitializationFailure(YouTubePlayer.Provider provider, YouTubeInitializationResult youTubeInitializationResult) {
-        mYouTubeView.receivedError(youTubeInitializationResult.toString());
+    public void onInitializationFailure(YouTubePlayer.Provider provider, YouTubeInitializationResult result) {
+        if (result.isUserRecoverableError()) {
+            result.getErrorDialog(mYouTubeView.getReactContext().getCurrentActivity(), 0).show();
+        }
+        mYouTubeView.receivedError(result.toString());
     }
 
     @Override
