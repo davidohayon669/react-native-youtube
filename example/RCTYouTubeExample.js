@@ -44,15 +44,9 @@ class RCTYouTubeExample extends React.Component {
           // Un-comment one of videoId / videoIds / playlist.
           // You can also edit these props while Hot-Loading in development mode to see how
           // it affects the loaded native module
-          // videoId="KVZ-P-ZI6W4"
-          videoIds={[
-            'HcXNPI-IPPM',
-            'XXlZfc1TrD0',
-            'czcjU1w-c6k',
-            'zV2aYno9xGc',
-          ]}
+          videoId="KVZ-P-ZI6W4"
+          // videoIds={['HcXNPI-IPPM', 'XXlZfc1TrD0', 'czcjU1w-c6k', 'zV2aYno9xGc']}
           // playlistId="PLF797E961509B4EB5"
-
           play={this.state.isPlaying}
           loop={this.state.isLooping}
           fullscreen={this.state.fullscreen}
