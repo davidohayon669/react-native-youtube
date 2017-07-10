@@ -54,7 +54,9 @@ export default class YouTube extends React.Component {
   constructor(props) {
     super(props);
     if (props.playsInline !== undefined) {
-      throw new Error('YouTube.android.js: `playsInline` prop was dropped. Please use `fullscreen`');
+      throw new Error(
+        'YouTube.android.js: `playsInline` prop was dropped. Please use `fullscreen`',
+      );
     }
 
     this.state = {
@@ -84,13 +86,13 @@ export default class YouTube extends React.Component {
       return true;
     }
     return false;
-  }
+  };
 
-  _onError = (event) => {
+  _onError = event => {
     if (this.props.onError) this.props.onError(event.nativeEvent);
-  }
+  };
 
-  _onReady = (event) => {
+  _onReady = event => {
     // The Android YouTube native module is pretty problematic when it comes to
     // mounting correctly and rendering inside React-Native's views hierarchy.
     // For now we must trigger some layout change to force a real render on it,
@@ -100,21 +102,24 @@ export default class YouTube extends React.Component {
     // its containing view.
     this.setState({ moduleMargin: StyleSheet.hairlineWidth });
     if (this.props.onReady) this.props.onReady(event.nativeEvent);
-  }
+  };
 
-  _onChangeState = (event) => {
+  _onChangeState = event => {
     if (this.props.onChangeState) this.props.onChangeState(event.nativeEvent);
-  }
+  };
 
-  _onChangeQuality = (event) => {
-    if (this.props.onChangeQuality) this.props.onChangeQuality(event.nativeEvent);
-  }
+  _onChangeQuality = event => {
+    if (this.props.onChangeQuality)
+      this.props.onChangeQuality(event.nativeEvent);
+  };
 
-  _onChangeFullscreen = (event) => {
+  _onChangeFullscreen = event => {
     const { isFullscreen } = event.nativeEvent;
-    if (this.state.fullscreen !== isFullscreen) this.setState({ fullscreen: isFullscreen });
-    if (this.props.onChangeFullscreen) this.props.onChangeFullscreen(event.nativeEvent);
-  }
+    if (this.state.fullscreen !== isFullscreen)
+      this.setState({ fullscreen: isFullscreen });
+    if (this.props.onChangeFullscreen)
+      this.props.onChangeFullscreen(event.nativeEvent);
+  };
 
   seekTo(seconds) {
     UIManager.dispatchViewManagerCommand(
@@ -153,7 +158,8 @@ export default class YouTube extends React.Component {
       NativeModules.YouTubeModule
         .videosIndex(ReactNative.findNodeHandle(this._nativeComponentRef))
         .then(index => resolve(index))
-        .catch(errorMessage => reject(errorMessage)));
+        .catch(errorMessage => reject(errorMessage)),
+    );
   }
 
   currentTime() {
@@ -161,14 +167,15 @@ export default class YouTube extends React.Component {
       NativeModules.YouTubeModule
         .currentTime(ReactNative.findNodeHandle(this._nativeComponentRef))
         .then(currentTime => resolve(currentTime))
-        .catch(errorMessage => reject(errorMessage)));
+        .catch(errorMessage => reject(errorMessage)),
+    );
   }
 
   render() {
     return (
       <View style={[styles.container, this.props.style]}>
         <RCTYouTube
-          ref={(component) => {
+          ref={component => {
             this._nativeComponentRef = component;
           }}
           {...this.props}

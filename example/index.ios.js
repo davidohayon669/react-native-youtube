@@ -1,1 +1,1 @@
-require('./RCTYouTubeExample')
+require('./RCTYouTubeExample');
