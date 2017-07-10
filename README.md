@@ -11,22 +11,17 @@ Uses Google's official [youtube-ios-player-helper](https://github.com/youtube/yo
 ## Usage
 ```javascript
 <YouTube
-  ref={(component) => {
-    this._youTubePlayer = component;
-  }}
-  videoId="KVZ-P-ZI6W4"           // The YouTube video ID
-  playlistId="PLF797E961509B4EB5"   // A playlist's ID, overridden by `videoId`
-  play={true}                     // control playback of video with true/false
-  fullscreen={true}               // control whether the video should play in fullscreen or inline
-  loop={true}                     // control whether the video should loop when ended
+  videoId="KVZ-P-ZI6W4"   // The YouTube video ID
+  play={true}             // control playback of video with true/false
+  fullscreen={true}       // control whether the video should play in fullscreen or inline
+  loop={true}             // control whether the video should loop when ended
 
   onReady={e => this.setState({ isReady: true })}
   onChangeState={e => this.setState({ status: e.state })}
   onChangeQuality={e => this.setState({ quality: e.quality })}
   onError={e => this.setState({ error: e.error })}
-  onProgress={e => this.setState({ currentTime: e.currentTime, duration: e.duration })}
 
-  style={{ alignSelf: 'stretch', height: 300, backgroundColor: 'black', marginVertical: 10 }}
+  style={{ alignSelf: 'stretch', height: 300 }}
 />
 ```
 
@@ -37,20 +32,20 @@ Uses Google's official [youtube-ios-player-helper](https://github.com/youtube/yo
 import YouTube from 'react-native-youtube'
 ```
 #### Properties
-* `apiKey` *(Android)*: This parameter is required on Android for the YouTube API to work. [More Info](https://developers.google.com/youtube/android/player/register).
-* `videoId`: The YouTube video ID to play. Can be changed while mounted to change the video playing.
-* `videoIds`: An array of YouTube video IDs to be played as an interactive playlist. Can be changed while mounted. Overridden at start by `videoId`.
-* `playlistId`: A YouTube Playlist's ID to play as an interactive playlist.
+* `apiKey` (string, *Android*): Your YouTube developer API Key. This parameter is **required**. [More Info](https://developers.google.com/youtube/android/player/register).
+* `videoId` (string): The YouTube video ID to play. Can be changed while mounted to change the video playing.
+* `videoIds` (strings array): YouTube video IDs to be played as an interactive playlist. Can be changed while mounted. Overridden at start by `videoId`.
+* `playlistId` (string): A YouTube Playlist's ID to play as an interactive playlist.
 Can be changed while mounted. Overridden at start by `videoId` and `videoIds`.
-* `play`: Controls playback of video with `true`/`false`. Setting it as `true` in the beginning itself makes the video autoplay on loading. Default `false`.
-* `loop`: Loops the video. Default `false`.
-* `fullscreen`: Controls whether the video should play inline or in fullscreen. Default `false`.
-* `controls`: A number parameter to decide on the player's controls scheme. Supported values are `0`, `1`, `2`. Default `1`. On iOS the numbers conform to [These Parameters](https://developers.google.com/youtube/player_parameters?hl=en#controls). On Android the mapping is `0 = CHROMELSEE`, `1 = DEFAULT`, `2 = MINIMAL` ([More Info](https://developers.google.com/youtube/android/player/reference/com/google/android/youtube/player/YouTubePlayer.PlayerStyle)).
-* `showFullscreenButton`: Show or hide Fullscreen button. Default `true`.
-* `showinfo` *(iOS)*: Setting the parameter's value to false causes the player to not display information like the video title and uploader before the video starts playing. Default `true`.
-* `modestbranding` *(iOS)*: This parameter lets you use a YouTube player that does not show a YouTube logo. Default `false`.
-* `origin` *(iOS)*: This string parameter provides an extra security measure for the iFrame API.
-* `rel` *(iOS)*: Show related videos at the end of the video. Default `true`.
+* `play` (boolean): Controls playback of video with `true`/`false`. Setting it as `true` in the beginning itself makes the video autoplay on loading. Default: `false`.
+* `loop` (boolean): Loops the video. Default: `false`.
+* `fullscreen` (boolean): Controls whether the video should play inline or in fullscreen. Default: `false`.
+* `controls` (number): Sets the player's controls scheme. Supported values are `0`, `1`, `2`. Default: `1`. On iOS the numbers conform to [These Parameters](https://developers.google.com/youtube/player_parameters?hl=en#controls). On Android the mapping is `0 = CHROMELSEE`, `1 = DEFAULT`, `2 = MINIMAL` ([More Info](https://developers.google.com/youtube/android/player/reference/com/google/android/youtube/player/YouTubePlayer.PlayerStyle)).
+* `showFullscreenButton` (boolean): Show or hide Fullscreen button. Default: `true`.
+* `showinfo` (boolean, *iOS*): Setting the parameter's value to false causes the player to not display information like the video title and uploader before the video starts playing. Default: `true`.
+* `modestbranding` (boolean, *iOS*): This parameter lets you use a YouTube player that does not show a YouTube logo. Default: `false`.
+* `origin` (string, *iOS*): This parameter provides an extra security measure for the iFrame API.
+* `rel` (boolean, *iOS*): Show related videos at the end of the video. Default: `true`.
 
 The iOS implementation of this player uses the official YouTube iFrame under the hood, so most parameters behavior [can be further understood here.](https://developers.google.com/youtube/player_parameters)
 
@@ -67,9 +62,9 @@ The iOS implementation of this player uses the official YouTube iFrame under the
 * `nextVideo()`: Skip to next video on a playlist (`videoIds` or `playlistId`). When `loop` is true, will skip to the first video from the last. If called on a single video, will restart the video.
 * `previousVideo()`: opposite of `nextVideo()`.
 * `playVideoAt(index)`: Will start playing the video at `index` (zero-based) position in a playlist (`videoIds` or `playlistId`. Not supported for `playlistId` on Android).
-* `videosIndex()`: A Promise that returns the `index` (zero-based) number of the video currently played in a playlist (`videoIds` or `playlistId`. Not supported for `playlistId` on Android) or an errorMessage string.
-* `currentTime()` *(Android)*: A Promise that return the `currentTime` of the played video (in seconds) or an errorMessage string. Should be used as a replacement for `onProgress` on Android.
-* `reloadIframe()` *(iOS)*: Specific props (`fullscreen`, `modestbranding`, `showinfo`, `rel`, `controls`, `origin`) can only be set at mounting and initial loading of the underlying WebView that holds the YouTube iFrame (Those are `<iframe>` parameters). If you want to changed one of them during the lifecycle of the component you should know the usability cost of loading the WebView again and use this method right after the component was rendered with the updated prop.
+* `videosIndex()`: Returns a Promise that results with the `index` (zero-based) number of the video currently played in a playlist (`videoIds` or `playlistId`. Not supported for `playlistId` on Android) or errors with an errorMessage string.
+* `currentTime()` *(Android)*: Returns a Promise that results with the `currentTime` of the played video (in seconds) or errors with an errorMessage string. Should be used as an alternative for Android to `onProgress` event on iOS.
+* `reloadIframe()` *(iOS)*: Specific props (`fullscreen`, `modestbranding`, `showinfo`, `rel`, `controls`, `origin`) can only be set at mounting and initial loading of the underlying WebView that holds the YouTube iFrame (Those are `<iframe>` parameters). If you want to change one of them during the lifecycle of the component, you should know the usability cost of loading the WebView again, and use this method right after the component received the updated prop.
 
 ### Standalone Player (available only for Android)
 #### Importing
@@ -90,21 +85,21 @@ A static method that returns a Promise to launch a standalone YouTube player wit
 ## Installation
 This component is confirmed to be working on react-native ~0.37 - ~0.45
 
-* Install the latest version to your `package.json`:
+Install the latest version to your `package.json`:
 
 `$ npm install react-native-youtube -S`
 
-* Link the library to your iOS and Android projects with:
+Link the library to your iOS and Android projects with:
 
 `$ react-native link`
 
-**IMPORTANT! (iOS Only)**: To link assets/YTPlayerView-iframe-player.html to your project `react-native link` is not enough (As of RN ~0.37). You will need to *also* use the older tool it is based on, `rnpm` (This step must be done **after** `react-native link`):
+**IMPORTANT! (iOS Only)**: To link `assets/YTPlayerView-iframe-player.html` to your project, `react-native link` is not enough (As of RN ~0.37 - ~0.45). You will need to *also* use the older tool it is based on, `rnpm` (This step must be done **after** `react-native link`):
 
-* First, if you don't have it installed, globally install `rnpm` (Version 1.9.0):
+First, if you don't have it installed, globally install `rnpm` (^1.9.0):
 
 `$ npm install -g rnpm`
 
-* Then at the project's root folder type:
+Then at the project's root folder type:
 
 `$ rnpm link`
 
