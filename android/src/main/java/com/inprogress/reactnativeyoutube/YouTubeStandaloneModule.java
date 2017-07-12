@@ -10,11 +10,14 @@ import com.facebook.react.bridge.Promise;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
+import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.uimanager.IllegalViewOperationException;
 
 import com.google.android.youtube.player.YouTubeInitializationResult;
 import com.google.android.youtube.player.YouTubeStandalonePlayer;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class YouTubeStandaloneModule extends ReactContextBaseJavaModule {
@@ -29,6 +32,11 @@ public class YouTubeStandaloneModule extends ReactContextBaseJavaModule {
     private static final String E_ACTIVITY_DOES_NOT_EXIST = "E_ACTIVITY_DOES_NOT_EXIST";
 
     private Promise mPickerPromise;
+
+    private static final int PLAY_VIDEO = 0;
+    private static final int PLAY_PLAYLIST = 1;
+    private static final int PLAY_VIDEO_LIST = 2;
+
 
     private final ActivityEventListener mActivityEventListener = new BaseActivityEventListener() {
 
@@ -77,13 +85,58 @@ public class YouTubeStandaloneModule extends ReactContextBaseJavaModule {
             return;
         }
 
+        final Intent intent = YouTubeStandalonePlayer.createVideoIntent(
+                    currentActivity, apiKey, videoId, startTimeMillis, autoplay, lightboxMode);
+
+        play(intent, promise);
+    }
+
+    @ReactMethod
+    public void playPlaylist(final String apiKey, final String playlistId, final boolean autoplay, final boolean lightboxMode, final int startIndex, final int startTimeMillis, final Promise promise) {
+        Activity currentActivity = getCurrentActivity();
+
+        if (currentActivity == null) {
+            promise.reject(E_ACTIVITY_DOES_NOT_EXIST, "Activity doesn't exist");
+            return;
+        }
+
+        final Intent intent = YouTubeStandalonePlayer.createPlaylistIntent(
+                    currentActivity, apiKey, playlistId, startIndex, startTimeMillis, autoplay, lightboxMode);
+
+        play(intent, promise);
+    }
+    @ReactMethod
+    public void playVideos(final String apiKey, final ReadableArray videosId, final boolean autoplay, final boolean lightboxMode, final int startIndex, final int startTimeMillis, final Promise promise) {
+        Activity currentActivity = getCurrentActivity();
+
+        if (currentActivity == null) {
+            promise.reject(E_ACTIVITY_DOES_NOT_EXIST, "Activity doesn't exist");
+            return;
+        }
+        
+        final List<String> mVideoIds = new ArrayList<String>();
+        for (int i = 0; i < videosId.size(); i++) {
+            mVideoIds.add(videosId.getString(i));
+        }
+
+        final Intent intent = YouTubeStandalonePlayer.createVideosIntent(
+                    currentActivity, apiKey, mVideoIds, startIndex, startTimeMillis, autoplay, lightboxMode);
+        
+        play(intent, promise);
+    }
+
+    private void play(final Intent intent, final Promise promise) {
+        Activity currentActivity = getCurrentActivity();
+
+        if (currentActivity == null) {
+            promise.reject(E_ACTIVITY_DOES_NOT_EXIST, "Activity doesn't exist");
+            return;
+        }
+
         // Store the promise to resolve/reject when picker returns data
         mPickerPromise = promise;
 
         try {
-            final Intent intent = YouTubeStandalonePlayer.createVideoIntent(
-                currentActivity, apiKey, videoId, startTimeMillis, autoplay, lightboxMode);
-
             if (intent != null) {
                 if (canResolveIntent(intent)) {
                     currentActivity.startActivityForResult(intent, REQ_START_STANDALONE_PLAYER);
