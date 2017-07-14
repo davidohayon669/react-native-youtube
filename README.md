@@ -72,6 +72,18 @@ The iOS implementation of this player uses the official YouTube iFrame under the
 import { YouTubeStandaloneAndroid } from 'react-native-youtube';
 ```
 
+#### Example
+```javascript
+YouTubeStandaloneAndroid.playVideo({
+  apiKey: 'YOUR_API_KEY',     // Your YouTube Developer API Key
+  videoId: 'KVZ-P-ZI6W4',     // YouTube video ID
+  autoplay: true,             // Autoplay the video
+  startTime: 120,             // Starting point of video (in seconds)
+})
+  .then(() => console.log('Standalone Player Exited'))
+  .catch(errorMessage => console.error(errorMessage))
+```
+
 #### `YouTubeStandaloneAndroid.playVideo(options)` (Static)
 A static method that returns a Promise to launch a standalone YouTube player with a specific video.
 
