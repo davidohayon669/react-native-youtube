@@ -82,6 +82,17 @@ A static method that returns a Promise to launch a standalone YouTube player wit
 * `lightboxMode` (boolean): Should the video play inside a lightbox instead of fullscreen. Default: `false`.
 * `startTime` (number): Optional starting time of the video (in seconds). Default: `0`.
 
+#### `YouTubeStandaloneAndroid.playVideos(options)` (Static)
+A static method that returns a Promise to launch a standalone YouTube player with a specific video.
+
+`options` is an object with properties:
+* `apiKey` (string): Your developer YouTube API key. **Required**.
+* `videoIds` (strings array): The list of video IDs to be played. **Required**.
+* `autoplay` (boolean): Should the video start automatically, Default: `false`.
+* `lightboxMode` (boolean): Should the video play inside a lightbox instead of fullscreen. Default: `false`.
+* `startIndex` (number): The index position of the video to play first. Default: `0`.
+* `startTime` (number): Optional starting time of the video (in seconds). Default: `0`.
+
 #### `YouTubeStandaloneAndroid.playPlaylist(options)` (Static)
 A static method that returns a Promise to launch a standalone YouTube player with a specific video.
 
@@ -90,20 +101,8 @@ A static method that returns a Promise to launch a standalone YouTube player wit
 * `playlistId` (string): The YouTube Playlist ID to play. **Required**.
 * `autoplay` (boolean): Should the video start automatically, Default: `false`.
 * `lightboxMode` (boolean): Should the video play inside a lightbox instead of fullscreen. Default: `false`.
-* `startIndex` (number): The index of the video to play first. Default: `0`.
+* `startIndex` (number): The index position of the video to play first. Default: `0`.
 * `startTime` (number): Optional starting time of the video (in seconds). Default: `0`.
-
-#### `YouTubeStandaloneAndroid.playVideos(options)` (Static)
-A static method that returns a Promise to launch a standalone YouTube player with a specific video.
-
-`options` is an object with properties:
-* `apiKey` (string): Your developer YouTube API key. **Required**.
-* `videosId` (strings array): The list of videos to be played. **Required**.
-* `autoplay` (boolean): Should the video start automatically, Default: `false`.
-* `lightboxMode` (boolean): Should the video play inside a lightbox instead of fullscreen. Default: `false`.
-* `startIndex` (number): The index of the video to play first. Default: `0`.
-* `startTime` (number): Optional starting time of the video (in seconds). Default: `0`.
-
 
 ## Installation
 This component is confirmed to be working on react-native ~0.37 - ~0.45

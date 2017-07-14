@@ -6,7 +6,13 @@ const { YouTubeStandaloneModule } = NativeModules;
 export const YouTubeStandaloneAndroid = !YouTubeStandaloneModule
   ? null
   : {
-    playVideo: ({ apiKey, videoId, autoplay = false, lightboxMode = false, startTime = 0 }) =>
+      playVideo: ({
+        apiKey,
+        videoId,
+        autoplay = false,
+        lightboxMode = false,
+        startTime = 0,
+      }) =>
         new Promise((resolve, reject) =>
           YouTubeStandaloneModule.playVideo(
             apiKey,
@@ -18,7 +24,27 @@ export const YouTubeStandaloneAndroid = !YouTubeStandaloneModule
             .then(() => resolve())
             .catch(errorMessage => reject(errorMessage)),
         ),
-    playPlaylist: ({
+      playVideos: ({
+        apiKey,
+        videoIds,
+        autoplay = false,
+        lightboxMode = false,
+        startIndex = 0,
+        startTime = 0,
+      }) =>
+        new Promise((resolve, reject) =>
+          YouTubeStandaloneModule.playVideos(
+            apiKey,
+            videoIds,
+            autoplay,
+            lightboxMode,
+            Number.parseInt(startIndex, 10),
+            Number.parseInt(startTime * 1000, 10),
+          )
+            .then(() => resolve())
+            .catch(errorMessage => reject(errorMessage)),
+        ),
+      playPlaylist: ({
         apiKey,
         playlistId,
         autoplay = false,
@@ -32,30 +58,10 @@ export const YouTubeStandaloneAndroid = !YouTubeStandaloneModule
             playlistId,
             autoplay,
             lightboxMode,
-            Number.parseInt(startIndex * 1000, 10),
+            Number.parseInt(startIndex, 10),
             Number.parseInt(startTime * 1000, 10),
           )
             .then(() => resolve())
             .catch(errorMessage => reject(errorMessage)),
         ),
-    playVideos: ({
-        apiKey,
-        videosId = [],
-        autoplay = false,
-        lightboxMode = false,
-        startIndex = 0,
-        startTime = 0,
-      }) =>
-        new Promise((resolve, reject) =>
-          YouTubeStandaloneModule.playVideos(
-            apiKey,
-            videosId,
-            autoplay,
-            lightboxMode,
-            Number.parseInt(startIndex * 1000, 10),
-            Number.parseInt(startTime * 1000, 10),
-          )
-            .then(() => resolve())
-            .catch(errorMessage => reject(errorMessage)),
-        ),
-  };
+    };

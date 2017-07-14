@@ -33,11 +33,6 @@ public class YouTubeStandaloneModule extends ReactContextBaseJavaModule {
 
     private Promise mPickerPromise;
 
-    private static final int PLAY_VIDEO = 0;
-    private static final int PLAY_PLAYLIST = 1;
-    private static final int PLAY_VIDEO_LIST = 2;
-
-
     private final ActivityEventListener mActivityEventListener = new BaseActivityEventListener() {
 
         @Override
@@ -92,6 +87,26 @@ public class YouTubeStandaloneModule extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod
+    public void playVideos(final String apiKey, final ReadableArray videoIds, final boolean autoplay, final boolean lightboxMode, final int startIndex, final int startTimeMillis, final Promise promise) {
+        Activity currentActivity = getCurrentActivity();
+
+        if (currentActivity == null) {
+            promise.reject(E_ACTIVITY_DOES_NOT_EXIST, "Activity doesn't exist");
+            return;
+        }
+
+        final List<String> videoIdsList = new ArrayList<String>();
+        for (int i = 0; i < videoIds.size(); i++) {
+            videoIdsList.add(videoIds.getString(i));
+        }
+
+        final Intent intent = YouTubeStandalonePlayer.createVideosIntent(
+                    currentActivity, apiKey, videoIdsList, startIndex, startTimeMillis, autoplay, lightboxMode);
+
+        play(intent, promise);
+    }
+
+    @ReactMethod
     public void playPlaylist(final String apiKey, final String playlistId, final boolean autoplay, final boolean lightboxMode, final int startIndex, final int startTimeMillis, final Promise promise) {
         Activity currentActivity = getCurrentActivity();
 
@@ -103,25 +118,6 @@ public class YouTubeStandaloneModule extends ReactContextBaseJavaModule {
         final Intent intent = YouTubeStandalonePlayer.createPlaylistIntent(
                     currentActivity, apiKey, playlistId, startIndex, startTimeMillis, autoplay, lightboxMode);
 
-        play(intent, promise);
-    }
-    @ReactMethod
-    public void playVideos(final String apiKey, final ReadableArray videosId, final boolean autoplay, final boolean lightboxMode, final int startIndex, final int startTimeMillis, final Promise promise) {
-        Activity currentActivity = getCurrentActivity();
-
-        if (currentActivity == null) {
-            promise.reject(E_ACTIVITY_DOES_NOT_EXIST, "Activity doesn't exist");
-            return;
-        }
-        
-        final List<String> mVideoIds = new ArrayList<String>();
-        for (int i = 0; i < videosId.size(); i++) {
-            mVideoIds.add(videosId.getString(i));
-        }
-
-        final Intent intent = YouTubeStandalonePlayer.createVideosIntent(
-                    currentActivity, apiKey, mVideoIds, startIndex, startTimeMillis, autoplay, lightboxMode);
-        
         play(intent, promise);
     }
 
