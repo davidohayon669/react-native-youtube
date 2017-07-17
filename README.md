@@ -66,7 +66,25 @@ The iOS implementation of this player uses the official YouTube iFrame under the
 * `currentTime()` *(Android)*: Returns a Promise that results with the `currentTime` of the played video (in seconds) or errors with an errorMessage string. Should be used as an alternative for Android to `onProgress` event on iOS.
 * `reloadIframe()` *(iOS)*: Specific props (`fullscreen`, `modestbranding`, `showinfo`, `rel`, `controls`, `origin`) can only be set at mounting and initial loading of the underlying WebView that holds the YouTube iFrame (Those are `<iframe>` parameters). If you want to change one of them during the lifecycle of the component, you should know the usability cost of loading the WebView again, and use this method right after the component received the updated prop.
 
-### Standalone Player (available only for Android)
+### Standalone Player
+
+#### Setup (Android)
+
+The device should be able to access Youtube API, install Youtube app on android device.
+
+#### Setup (iOS)
+
+Using XCDYoutubeKit, on yout RN apps `Podfile` add these lines:
+
+```
+pod 'XCDYouTubeKit', '~> 2.5'
+```
+
+On your RN apps Project Navigator within Libraries folder add `RCTYouTube.xcodeproj` 
+from `./node_modules/react-native-youtube`
+
+On your RN apps Target > Build Phases > Link Binary with Libraries, add `libRCTYouTube.a`.
+
 #### Importing
 ```javascript
 import { YouTubeStandaloneAndroid } from 'react-native-youtube';

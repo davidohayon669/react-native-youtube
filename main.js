@@ -1,4 +1,4 @@
 import YouTube from './YouTube';
-export { YouTubeStandaloneAndroid } from './YouTubeStandalone.android';
+export { YouTubeStandalone } from './YouTubeStandalone';
 
 export default YouTube;
