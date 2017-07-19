@@ -1,16 +1,13 @@
 import React from 'react';
 import { NativeModules } from 'react-native';
 
-const { YTStandaloneModule } = NativeModules;
+const { YouTubeStandalone } = NativeModules;
 
-export const YouTubeStandalone = {
-    playVideo: ({
-      videoId
-    }) =>
-      new Promise((resolve, reject) => {
-        YTStandaloneModule.playVideo(videoId)
+export const YouTubeStandaloneIOS = {
+  playVideo: ({ videoId }) =>
+    new Promise((resolve, reject) => {
+      YouTubeStandalone.playVideo(videoId)
         .then(() => resolve())
-        .catch(errorMessage => reject(errorMessage))
-      },
-    ),
-  };
+        .catch(errorMessage => reject(errorMessage));
+    }),
+};

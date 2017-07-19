@@ -10,7 +10,10 @@ import {
   Dimensions,
   Platform,
 } from 'react-native';
-import YouTube, { YouTubeStandaloneAndroid } from 'react-native-youtube';
+import YouTube, {
+  YouTubeStandaloneAndroid,
+  YouTubeStandaloneIOS,
+} from 'react-native-youtube';
 
 class RCTYouTubeExample extends React.Component {
   state = {
@@ -253,6 +256,25 @@ class RCTYouTubeExample extends React.Component {
                   )}
             >
               <Text style={styles.buttonText}>Playlist</Text>
+            </TouchableOpacity>
+          </View>}
+
+        {/* Standalone Player (iOS) */}
+        {Platform.OS === 'ios' &&
+          YouTubeStandaloneIOS &&
+          <View style={styles.buttonGroup}>
+            <TouchableOpacity
+              style={styles.button}
+              onPress={() =>
+                YouTubeStandaloneIOS.playVideo({
+                  videoId: 'KVZ-P-ZI6W4',
+                })
+                  .then(() => console.log('Standalone Player Finished'))
+                  .catch(errorMessage =>
+                    this.setState({ error: errorMessage }),
+                  )}
+            >
+              <Text style={styles.buttonText}>Standalone: One Video</Text>
             </TouchableOpacity>
           </View>}
 
