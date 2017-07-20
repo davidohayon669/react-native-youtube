@@ -66,7 +66,31 @@ The iOS implementation of this player uses the official YouTube iFrame under the
 * `currentTime()` *(Android)*: Returns a Promise that results with the `currentTime` of the played video (in seconds) or errors with an errorMessage string. Should be used as an alternative for Android to `onProgress` event on iOS.
 * `reloadIframe()` *(iOS)*: Specific props (`fullscreen`, `modestbranding`, `showinfo`, `rel`, `controls`, `origin`) can only be set at mounting and initial loading of the underlying WebView that holds the YouTube iFrame (Those are `<iframe>` parameters). If you want to change one of them during the lifecycle of the component, you should know the usability cost of loading the WebView again, and use this method right after the component received the updated prop.
 
-### Standalone Player (available only for Android)
+### Standalone Player (iOS)
+#### Setup
+Standalone iOS player Uses [XCDYoutubeKit](https://github.com/0xced/XCDYouTubeKit) (**Warning**: XCDYoutubeKit doesn't conform to YouTube's Terms Of Use). Add the next line to your `Podfile` and run `pod install` inside `/ios` folder:
+```
+pod 'XCDYouTubeKit', '~> 2.5'
+```
+
+#### Importing
+```javascript
+import { YouTubeStandaloneIOS } from 'react-native-youtube';
+```
+
+#### Example
+```javascript
+YouTubeStandaloneIOS.playVideo('KVZ-P-ZI6W4')
+  .then(() => console.log('Standalone Player Exited'))
+  .catch(errorMessage => console.error(errorMessage))
+```
+
+#### `YouTubeStandaloneIOS.playVideo(videoId)` (Static)
+A static method that returns a Promise to launch a standalone YouTube player with a specific video.
+
+* `videoId` (string): The YouTube Video ID to play. **Required**.
+
+### Standalone Player (Android)
 #### Importing
 ```javascript
 import { YouTubeStandaloneAndroid } from 'react-native-youtube';
@@ -167,14 +191,19 @@ The YouTube API for Android is a *singleton*. What it means is that unlike the i
 ## Example App and Development
 This repository includes an example project that can be used for trying, developing and testing all functionalities on a dedicated clean app project.
 
-First copy the git repository and install the React-Native project inside `example`
-
+First copy the git repository and install the React-Native project inside `example`:
 ```sh
-git clone https://github.com/inProgress-team/react-native-youtube.git
-cd react-native-youtube/example
-npm install
-react-native link
-rnpm link
+$ git clone https://github.com/inProgress-team/react-native-youtube.git
+$ cd react-native-youtube/example
+$ npm install
+$ react-native link
+$ rnpm link
+```
+
+Don't forget to install the Pods if you want to test API that depends on XCDYoutubeKit:
+```sh
+$ cd ios
+$ pod install
 ```
 
 Then build and run with `react-native run-ios` / `react-native run-android` or your favorite IDE.
