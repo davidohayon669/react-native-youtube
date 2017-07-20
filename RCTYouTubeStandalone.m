@@ -11,7 +11,6 @@
 
 RCT_EXPORT_MODULE();
 
-
 RCT_REMAP_METHOD(playVideo,
                  playVideoWithResolver:(NSString*)videoId resolver:(RCTPromiseResolveBlock)resolve
                  rejecter:(RCTPromiseRejectBlock)reject)
