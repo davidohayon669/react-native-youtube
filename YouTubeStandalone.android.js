@@ -3,7 +3,9 @@ import { NativeModules } from 'react-native';
 
 const { YouTubeStandaloneModule } = NativeModules;
 
-export const YouTubeStandalone = {
+export const YouTubeStandaloneAndroid = !YouTubeStandaloneModule
+  ? null
+  : {
       playVideo: ({
         apiKey,
         videoId,

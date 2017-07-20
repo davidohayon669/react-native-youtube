@@ -11,8 +11,8 @@ import {
   Platform,
 } from 'react-native';
 import YouTube, {
-  YouTubeStandaloneAndroid,
   YouTubeStandaloneIOS,
+  YouTubeStandaloneAndroid,
 } from 'react-native-youtube';
 
 class RCTYouTubeExample extends React.Component {
@@ -195,6 +195,23 @@ class RCTYouTubeExample extends React.Component {
             </TouchableOpacity>
           </View>}
 
+        {/* Standalone Player (iOS) */}
+        {Platform.OS === 'ios' &&
+          YouTubeStandaloneIOS &&
+          <View style={styles.buttonGroup}>
+            <TouchableOpacity
+              style={styles.button}
+              onPress={() =>
+                YouTubeStandaloneIOS.playVideo('KVZ-P-ZI6W4')
+                  .then(() => console.log('iOS Standalone Player Finished'))
+                  .catch(errorMessage =>
+                    this.setState({ error: errorMessage }),
+                  )}
+            >
+              <Text style={styles.buttonText}>Launch Standalone Player</Text>
+            </TouchableOpacity>
+          </View>}
+
         {/* Standalone Player (Android) */}
         {Platform.OS === 'android' &&
           YouTubeStandaloneAndroid &&
@@ -209,7 +226,7 @@ class RCTYouTubeExample extends React.Component {
                   lightboxMode: false,
                   startTime: 124.5,
                 })
-                  .then(() => console.log('Standalone Player Finished'))
+                  .then(() => console.log('Android Standalone Player Finished'))
                   .catch(errorMessage =>
                     this.setState({ error: errorMessage }),
                   )}
@@ -232,7 +249,7 @@ class RCTYouTubeExample extends React.Component {
                   startIndex: 1,
                   startTime: 99.5,
                 })
-                  .then(() => console.log('Standalone Player Finished'))
+                  .then(() => console.log('Android Standalone Player Finished'))
                   .catch(errorMessage =>
                     this.setState({ error: errorMessage }),
                   )}
@@ -250,31 +267,12 @@ class RCTYouTubeExample extends React.Component {
                   startIndex: 2,
                   startTime: 100.5,
                 })
-                  .then(() => console.log('Standalone Player Finished'))
+                  .then(() => console.log('Android Standalone Player Finished'))
                   .catch(errorMessage =>
                     this.setState({ error: errorMessage }),
                   )}
             >
               <Text style={styles.buttonText}>Playlist</Text>
-            </TouchableOpacity>
-          </View>}
-
-        {/* Standalone Player (iOS) */}
-        {Platform.OS === 'ios' &&
-          YouTubeStandaloneIOS &&
-          <View style={styles.buttonGroup}>
-            <TouchableOpacity
-              style={styles.button}
-              onPress={() =>
-                YouTubeStandaloneIOS.playVideo({
-                  videoId: 'KVZ-P-ZI6W4',
-                })
-                  .then(() => console.log('Standalone Player Finished'))
-                  .catch(errorMessage =>
-                    this.setState({ error: errorMessage }),
-                  )}
-            >
-              <Text style={styles.buttonText}>Standalone: One Video</Text>
             </TouchableOpacity>
           </View>}
 
