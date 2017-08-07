@@ -24,7 +24,7 @@ public class ReactNativeYouTube implements ReactPackage {
         return modules;
     }
 
-    // Depreciated RN 0.47
+    // Backwards compatability for RN < 0.47
     public List<Class<? extends JavaScriptModule>> createJSModules() {
         return Collections.emptyList();
     }

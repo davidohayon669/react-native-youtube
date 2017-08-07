@@ -21,7 +21,6 @@
     "prop-types": "^15.5.0"
   },
   "peerDependencies": {
-    "react": ">=15.3.2",
     "react-native": ">=0.37"
   },
   "rnpm": {
