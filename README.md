@@ -209,7 +209,7 @@ $ pod install
 Then build and run with `react-native run-ios` / `react-native run-android` or your favorite IDE.
 
 #### For Developers
-The `react-native-youtube` dependency in the example's `package.json` points back to the working directory root at `file:../` so you can re-install it with `npm install react-native-youtube@file:../` (type this inside `example` directory) and test your changes on the example app immediately.
+To be able to directly test your changes with the example app, re-install the package from the root directory with `npm i $(npm pack ..)`. This command packs the root directory into an npm package tar file and installs it locally to the example app.
 
 ## Authors
 * Param Aggarwal (paramaggarwal@gmail.com)
