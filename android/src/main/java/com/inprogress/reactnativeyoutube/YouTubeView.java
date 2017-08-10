@@ -1,6 +1,8 @@
 package com.inprogress.reactnativeyoutube;
 
 import android.app.FragmentManager;
+import android.os.Parcelable;
+import android.support.annotation.Nullable;
 import android.util.Log;
 import android.widget.FrameLayout;
 
@@ -17,6 +19,7 @@ public class YouTubeView extends FrameLayout {
 
     private YouTubePlayerController mYoutubeController;
     private YouTubePlayerFragment mYouTubePlayerFragment;
+    private boolean mHasSavedInstance = false;
 
     public YouTubeView(ReactContext context) {
         super(context);
@@ -33,10 +36,20 @@ public class YouTubeView extends FrameLayout {
         mYoutubeController = new YouTubePlayerController(this);
     }
 
+    @Nullable
+    @Override
+    protected Parcelable onSaveInstanceState() {
+        mHasSavedInstance = true;
+        return super.onSaveInstanceState();
+    }
+
     @Override
     protected void onAttachedToWindow() {
-        FragmentManager fragmentManager = getReactContext().getCurrentActivity().getFragmentManager();
-        fragmentManager.beginTransaction().add(getId(), mYouTubePlayerFragment).commit();
+        if (!mHasSavedInstance) {
+            FragmentManager fragmentManager = getReactContext().getCurrentActivity().getFragmentManager();
+            fragmentManager.beginTransaction().add(getId(), mYouTubePlayerFragment).commit();
+        }
+        super.onAttachedToWindow();
     }
 
     @Override
@@ -47,6 +60,7 @@ public class YouTubeView extends FrameLayout {
                 fragmentManager.beginTransaction().remove(mYouTubePlayerFragment).commit();
             }
         }
+        super.onDetachedFromWindow();
     }
 
     public void seekTo(int second) {
