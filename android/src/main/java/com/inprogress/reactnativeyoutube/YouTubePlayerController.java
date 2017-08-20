@@ -154,6 +154,10 @@ public class YouTubePlayerController implements
       return mYouTubePlayer.getCurrentTimeMillis() / 1000;
     }
 
+    public int getDuration() {
+      return mYouTubePlayer.getDurationMillis() / 1000;
+    }
+
     public void nextVideo() {
         if (isLoaded()) {
             if (mYouTubePlayer.hasNext()) mYouTubePlayer.next();

@@ -59,4 +59,21 @@ public class YouTubeModule extends ReactContextBaseJavaModule {
             promise.reject(E_MODULE_ERROR, e);
         }
     }
+
+    @ReactMethod
+    public void duration(final int reactTag, final Promise promise) {
+        try {
+            UIManagerModule uiManager = mReactContext.getNativeModule(UIManagerModule.class);
+            uiManager.addUIBlock(new UIBlock() {
+                public void execute (NativeViewHierarchyManager nvhm) {
+                    YouTubeView youTubeView = (YouTubeView) nvhm.resolveView(reactTag);
+                    YouTubeManager youTubeManager = (YouTubeManager) nvhm.resolveViewManager(reactTag);
+                    int duration = youTubeManager.getDuration(youTubeView);
+                    promise.resolve(duration);
+                }
+            });
+        } catch (IllegalViewOperationException e) {
+            promise.reject(E_MODULE_ERROR, e);
+        }
+    }
 }

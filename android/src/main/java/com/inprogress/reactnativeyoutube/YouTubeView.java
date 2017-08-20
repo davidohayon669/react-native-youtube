@@ -71,6 +71,10 @@ public class YouTubeView extends FrameLayout {
         return mYoutubeController.getCurrentTime();
     }
 
+    public int getDuration() {
+        return mYoutubeController.getDuration();
+    }
+
     public void nextVideo() {
         mYoutubeController.nextVideo();
     }

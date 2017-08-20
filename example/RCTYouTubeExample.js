@@ -32,7 +32,6 @@ class RCTYouTubeExample extends React.Component {
       <ScrollView
         style={styles.container}
         onLayout={({ nativeEvent: { layout: { width } } }) => {
-          console.log(width);
           if (!this.state.containerMounted) this.setState({ containerMounted: true });
           if (this.state.containerWidth !== width) this.setState({ containerWidth: width });
         }}
@@ -54,7 +53,7 @@ class RCTYouTubeExample extends React.Component {
             // Un-comment one of videoId / videoIds / playlist.
             // You can also edit these props while Hot-Loading in development mode to see how
             // it affects the loaded native module
-            videoId="KVZ-P-ZI6W4"
+            videoId="ncw4ISEU5ik"
             // videoIds={['HcXNPI-IPPM', 'XXlZfc1TrD0', 'czcjU1w-c6k', 'uMK0prafzw0']}
             // playlistId="PLF797E961509B4EB5"
             play={this.state.isPlaying}
@@ -179,19 +178,25 @@ class RCTYouTubeExample extends React.Component {
             </TouchableOpacity>
           </View>}
 
-        {/* Update Progress with currentTime() (Android) */}
+        {/* Update Progress & Duration (Android) */}
         {Platform.OS === 'android' &&
           <View style={styles.buttonGroup}>
             <TouchableOpacity
               style={styles.button}
-              onPress={() =>
-                this._youTubeRef &&
-                this._youTubeRef
-                  .currentTime()
-                  .then(currentTime => this.setState({ currentTime }))
-                  .catch(errorMessage => this.setState({ error: errorMessage }))}
+              onPress={() => {
+                if (this._youTubeRef) {
+                  this._youTubeRef
+                    .currentTime()
+                    .then(currentTime => this.setState({ currentTime }))
+                    .catch(errorMessage => this.setState({ error: errorMessage }));
+                  this._youTubeRef
+                    .duration()
+                    .then(duration => this.setState({ duration }))
+                    .catch(errorMessage => this.setState({ error: errorMessage }));
+                }
+              }}
             >
-              <Text style={styles.buttonText}>Update Progress (Android)</Text>
+              <Text style={styles.buttonText}>Update Progress & Duration (Android)</Text>
             </TouchableOpacity>
           </View>}
 
@@ -286,12 +291,8 @@ class RCTYouTubeExample extends React.Component {
 
         {/* Show Progress */}
         <Text style={styles.instructions}>
-          Progress: {Math.trunc(this.state.currentTime)}s
-          {Platform.OS === 'ios'
-            ? <Text>
-                {' '}({Math.trunc(this.state.duration / 60)}:{Math.trunc(this.state.duration % 60)}s)
-              </Text>
-            : <Text> (Click Update Progress)</Text>}
+          Progress: {Math.trunc(this.state.currentTime)}s ({Math.trunc(this.state.duration / 60)}:{Math.trunc(this.state.duration % 60)}s)
+          {Platform.OS !== 'ios' && <Text> (Click Update Progress & Duration)</Text>}
         </Text>
 
         <Text style={styles.instructions}>
@@ -305,7 +306,6 @@ class RCTYouTubeExample extends React.Component {
 const styles = StyleSheet.create({
   container: {
     backgroundColor: 'white',
-    // width: 300,
   },
   welcome: {
     fontSize: 20,

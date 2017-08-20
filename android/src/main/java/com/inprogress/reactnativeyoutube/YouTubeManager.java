@@ -92,6 +92,10 @@ public class YouTubeManager extends SimpleViewManager<YouTubeView> {
         return view.getCurrentTime();
     }
 
+    public int getDuration(YouTubeView view) {
+        return view.getDuration();
+    }
+
     public int getVideosIndex(YouTubeView view) {
         return view.getVideosIndex();
     }
