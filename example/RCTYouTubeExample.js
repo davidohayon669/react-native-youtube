@@ -10,10 +10,7 @@ import {
   Dimensions,
   Platform,
 } from 'react-native';
-import YouTube, {
-  YouTubeStandaloneIOS,
-  YouTubeStandaloneAndroid,
-} from 'react-native-youtube';
+import YouTube, { YouTubeStandaloneIOS, YouTubeStandaloneAndroid } from 'react-native-youtube';
 
 class RCTYouTubeExample extends React.Component {
   state = {
@@ -26,11 +23,20 @@ class RCTYouTubeExample extends React.Component {
     duration: 0,
     currentTime: 0,
     fullscreen: false,
+    containerMounted: false,
+    containerWidth: null,
   };
 
   render() {
     return (
-      <ScrollView style={styles.container}>
+      <ScrollView
+        style={styles.container}
+        onLayout={({ nativeEvent: { layout: { width } } }) => {
+          console.log(width);
+          if (!this.state.containerMounted) this.setState({ containerMounted: true });
+          if (this.state.containerWidth !== width) this.setState({ containerWidth: width });
+        }}
+      >
         <Text style={styles.welcome}>
           {'<YouTube /> component for\n React Native.'}
         </Text>
@@ -38,39 +44,38 @@ class RCTYouTubeExample extends React.Component {
           http://github.com/inProgress-team/react-native-youtube
         </Text>
 
-        <YouTube
-          ref={component => {
-            this._youTubeRef = component;
-          }}
-          // You must have an API Key for the player to load in Android
-          apiKey="YOUR_API_KEY"
-          // Un-comment one of videoId / videoIds / playlist.
-          // You can also edit these props while Hot-Loading in development mode to see how
-          // it affects the loaded native module
-          videoId="KVZ-P-ZI6W4"
-          // videoIds={['HcXNPI-IPPM', 'XXlZfc1TrD0', 'czcjU1w-c6k', 'uMK0prafzw0']}
-          // playlistId="PLF797E961509B4EB5"
-          play={this.state.isPlaying}
-          loop={this.state.isLooping}
-          fullscreen={this.state.fullscreen}
-          controls={1}
-          style={styles.player}
-          onError={e => this.setState({ error: e.error })}
-          onReady={e => this.setState({ isReady: true })}
-          onChangeState={e => this.setState({ status: e.state })}
-          onChangeQuality={e => this.setState({ quality: e.quality })}
-          onChangeFullscreen={e =>
-            this.setState({ fullscreen: e.isFullscreen })}
-          onProgress={
-            Platform.OS === 'ios'
-              ? e =>
-                  this.setState({
-                    duration: e.duration,
-                    currentTime: e.currentTime,
-                  })
-              : undefined
-          }
-        />
+        {this.state.containerMounted &&
+          <YouTube
+            ref={component => {
+              this._youTubeRef = component;
+            }}
+            // You must have an API Key for the player to load in Android
+            apiKey="YOUR_API_KEY"
+            // Un-comment one of videoId / videoIds / playlist.
+            // You can also edit these props while Hot-Loading in development mode to see how
+            // it affects the loaded native module
+            videoId="KVZ-P-ZI6W4"
+            // videoIds={['HcXNPI-IPPM', 'XXlZfc1TrD0', 'czcjU1w-c6k', 'uMK0prafzw0']}
+            // playlistId="PLF797E961509B4EB5"
+            play={this.state.isPlaying}
+            loop={this.state.isLooping}
+            fullscreen={this.state.fullscreen}
+            controls={1}
+            style={[
+              { height: PixelRatio.roundToNearestPixel(this.state.containerWidth / (16 / 9)) },
+              styles.player,
+            ]}
+            onError={e => this.setState({ error: e.error })}
+            onReady={e => this.setState({ isReady: true })}
+            onChangeState={e => this.setState({ status: e.state })}
+            onChangeQuality={e => this.setState({ quality: e.quality })}
+            onChangeFullscreen={e => this.setState({ fullscreen: e.isFullscreen })}
+            onProgress={
+              Platform.OS === 'ios'
+                ? e => this.setState({ duration: e.duration, currentTime: e.currentTime })
+                : undefined
+            }
+          />}
 
         {/* Playing / Looping */}
         <View style={styles.buttonGroup}>
@@ -139,12 +144,9 @@ class RCTYouTubeExample extends React.Component {
               <TouchableOpacity
                 key={i}
                 style={styles.button}
-                onPress={() =>
-                  this._youTubeRef && this._youTubeRef.playVideoAt(i)}
+                onPress={() => this._youTubeRef && this._youTubeRef.playVideoAt(i)}
               >
-                <Text
-                  style={[styles.buttonText, styles.buttonTextSmall]}
-                >{`Video ${i}`}</Text>
+                <Text style={[styles.buttonText, styles.buttonTextSmall]}>{`Video ${i}`}</Text>
               </TouchableOpacity>,
             )}
           </View>}
@@ -187,9 +189,7 @@ class RCTYouTubeExample extends React.Component {
                 this._youTubeRef
                   .currentTime()
                   .then(currentTime => this.setState({ currentTime }))
-                  .catch(errorMessage =>
-                    this.setState({ error: errorMessage }),
-                  )}
+                  .catch(errorMessage => this.setState({ error: errorMessage }))}
             >
               <Text style={styles.buttonText}>Update Progress (Android)</Text>
             </TouchableOpacity>
@@ -204,9 +204,7 @@ class RCTYouTubeExample extends React.Component {
               onPress={() =>
                 YouTubeStandaloneIOS.playVideo('KVZ-P-ZI6W4')
                   .then(() => console.log('iOS Standalone Player Finished'))
-                  .catch(errorMessage =>
-                    this.setState({ error: errorMessage }),
-                  )}
+                  .catch(errorMessage => this.setState({ error: errorMessage }))}
             >
               <Text style={styles.buttonText}>Launch Standalone Player</Text>
             </TouchableOpacity>
@@ -227,9 +225,7 @@ class RCTYouTubeExample extends React.Component {
                   startTime: 124.5,
                 })
                   .then(() => console.log('Android Standalone Player Finished'))
-                  .catch(errorMessage =>
-                    this.setState({ error: errorMessage }),
-                  )}
+                  .catch(errorMessage => this.setState({ error: errorMessage }))}
             >
               <Text style={styles.buttonText}>Standalone: One Video</Text>
             </TouchableOpacity>
@@ -238,21 +234,14 @@ class RCTYouTubeExample extends React.Component {
               onPress={() =>
                 YouTubeStandaloneAndroid.playVideos({
                   apiKey: 'YOUR_API_KEY',
-                  videoIds: [
-                    'HcXNPI-IPPM',
-                    'XXlZfc1TrD0',
-                    'czcjU1w-c6k',
-                    'uMK0prafzw0',
-                  ],
+                  videoIds: ['HcXNPI-IPPM', 'XXlZfc1TrD0', 'czcjU1w-c6k', 'uMK0prafzw0'],
                   autoplay: false,
                   lightboxMode: true,
                   startIndex: 1,
                   startTime: 99.5,
                 })
                   .then(() => console.log('Android Standalone Player Finished'))
-                  .catch(errorMessage =>
-                    this.setState({ error: errorMessage }),
-                  )}
+                  .catch(errorMessage => this.setState({ error: errorMessage }))}
             >
               <Text style={styles.buttonText}>Videos</Text>
             </TouchableOpacity>
@@ -268,9 +257,7 @@ class RCTYouTubeExample extends React.Component {
                   startTime: 100.5,
                 })
                   .then(() => console.log('Android Standalone Player Finished'))
-                  .catch(errorMessage =>
-                    this.setState({ error: errorMessage }),
-                  )}
+                  .catch(errorMessage => this.setState({ error: errorMessage }))}
             >
               <Text style={styles.buttonText}>Playlist</Text>
             </TouchableOpacity>
@@ -281,8 +268,7 @@ class RCTYouTubeExample extends React.Component {
           <View style={styles.buttonGroup}>
             <TouchableOpacity
               style={styles.button}
-              onPress={() =>
-                this._youTubeRef && this._youTubeRef.reloadIframe()}
+              onPress={() => this._youTubeRef && this._youTubeRef.reloadIframe()}
             >
               <Text style={styles.buttonText}>Reload iFrame (iOS)</Text>
             </TouchableOpacity>
@@ -319,6 +305,7 @@ class RCTYouTubeExample extends React.Component {
 const styles = StyleSheet.create({
   container: {
     backgroundColor: 'white',
+    // width: 300,
   },
   welcome: {
     fontSize: 20,
@@ -347,9 +334,6 @@ const styles = StyleSheet.create({
     marginBottom: 5,
   },
   player: {
-    height: PixelRatio.roundToNearestPixel(
-      Dimensions.get('window').width / (16 / 9),
-    ),
     alignSelf: 'stretch',
     marginVertical: 10,
   },
