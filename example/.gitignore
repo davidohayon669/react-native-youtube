@@ -52,3 +52,6 @@ buck-out/
 fastlane/report.xml
 fastlane/Preview.html
 fastlane/screenshots
+
+# react-native-youtube extras
+package-lock.json

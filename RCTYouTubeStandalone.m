@@ -12,7 +12,8 @@
 RCT_EXPORT_MODULE();
 
 RCT_REMAP_METHOD(playVideo,
-                 playVideoWithResolver:(NSString*)videoId resolver:(RCTPromiseResolveBlock)resolve
+                 playVideoWithResolver:(NSString*)videoId
+                 resolver:(RCTPromiseResolveBlock)resolve
                  rejecter:(RCTPromiseRejectBlock)reject)
 {
     #ifndef XCD_YOUTUBE_KIT_INSTALLED
