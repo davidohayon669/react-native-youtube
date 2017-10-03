@@ -51,6 +51,7 @@ export default class YouTube extends React.Component {
     controls: PropTypes.oneOf([0, 1, 2]),
     showinfo: PropTypes.bool,
     modestbranding: PropTypes.bool,
+    showFullscreenButton: PropTypes.bool,
     rel: PropTypes.bool,
     origin: PropTypes.string,
     onError: PropTypes.func,
@@ -64,11 +65,6 @@ export default class YouTube extends React.Component {
 
   constructor(props) {
     super(props);
-    if (props.playsInline !== undefined) {
-      throw new Error(
-        'YouTube.ios.js: `playsInline` prop was dropped. Please use `fullscreen`',
-      );
-    }
 
     // iOS uses a YouTube iFrame under the hood. We need to create its initial params
     // for a quick and clean load. After the initial loading, props changes will interact

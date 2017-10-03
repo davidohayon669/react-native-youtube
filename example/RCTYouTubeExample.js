@@ -69,11 +69,7 @@ class RCTYouTubeExample extends React.Component {
             onChangeState={e => this.setState({ status: e.state })}
             onChangeQuality={e => this.setState({ quality: e.quality })}
             onChangeFullscreen={e => this.setState({ fullscreen: e.isFullscreen })}
-            onProgress={
-              Platform.OS === 'ios'
-                ? e => this.setState({ duration: e.duration, currentTime: e.currentTime })
-                : undefined
-            }
+            onProgress={e => this.setState({ duration: e.duration, currentTime: e.currentTime })}
           />}
 
         {/* Playing / Looping */}

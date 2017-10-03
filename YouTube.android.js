@@ -53,11 +53,6 @@ export default class YouTube extends React.Component {
 
   constructor(props) {
     super(props);
-    if (props.playsInline !== undefined) {
-      throw new Error(
-        'YouTube.android.js: `playsInline` prop was dropped. Please use `fullscreen`',
-      );
-    }
 
     this.state = {
       moduleMargin: StyleSheet.hairlineWidth * 2,
