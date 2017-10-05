@@ -1,6 +1,7 @@
 package com.inprogress.reactnativeyoutube;
 
 import android.app.FragmentManager;
+import android.os.Build;
 import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.util.Log;
@@ -56,8 +57,20 @@ public class YouTubeView extends FrameLayout {
     protected void onDetachedFromWindow() {
         if (getReactContext().getCurrentActivity() != null) {
             FragmentManager fragmentManager = getReactContext().getCurrentActivity().getFragmentManager();
+
+            // Code crashes with java.lang.IllegalStateException: Activity has been destroyed
+            // if our activity has been destroyed when this runs
             if (mYouTubePlayerFragment != null) {
-                fragmentManager.beginTransaction().remove(mYouTubePlayerFragment).commit();
+                boolean isDestroyed = false;
+
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                    isDestroyed = getReactContext().getCurrentActivity().isDestroyed();
+                }
+
+                if (!isDestroyed) {
+                    // https://stackoverflow.com/a/34508430/61072
+                    fragmentManager.beginTransaction().remove(mYouTubePlayerFragment).commitAllowingStateLoss();
+                }
             }
         }
         super.onDetachedFromWindow();
