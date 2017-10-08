@@ -119,6 +119,15 @@ public class YouTubeView extends FrameLayout {
         reactContext.getJSModule(RCTEventEmitter.class).receiveEvent(getId(), "ready", event);
     }
 
+    public void didChangeToSeeking(int milliSeconds) {
+        WritableMap event = Arguments.createMap();
+        event.putString("state", "seeking");
+        event.putInt("milliSeconds", milliSeconds);
+        event.putInt("target", getId());
+        ReactContext reactContext = (ReactContext) getContext();
+        reactContext.getJSModule(RCTEventEmitter.class).receiveEvent(getId(), "state", event);
+    }
+
     public void didChangeToState(String param) {
         WritableMap event = Arguments.createMap();
         event.putString("state", param);
