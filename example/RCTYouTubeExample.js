@@ -1,6 +1,5 @@
 import React from 'react';
 import {
-  AppRegistry,
   StyleSheet,
   View,
   Text,
@@ -12,7 +11,7 @@ import {
 } from 'react-native';
 import YouTube, { YouTubeStandaloneIOS, YouTubeStandaloneAndroid } from 'react-native-youtube';
 
-class RCTYouTubeExample extends React.Component {
+export default class RCTYouTubeExample extends React.Component {
   state = {
     isReady: false,
     status: null,
@@ -59,7 +58,7 @@ class RCTYouTubeExample extends React.Component {
             play={this.state.isPlaying}
             loop={this.state.isLooping}
             fullscreen={this.state.fullscreen}
-            controls={1}
+            controls={0}
             style={[
               { height: PixelRatio.roundToNearestPixel(this.state.containerWidth / (16 / 9)) },
               styles.player,
@@ -334,5 +333,3 @@ const styles = StyleSheet.create({
     marginVertical: 10,
   },
 });
-
-AppRegistry.registerComponent('RCTYouTubeExample', () => RCTYouTubeExample);
