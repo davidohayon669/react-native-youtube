@@ -105,7 +105,9 @@ public class YouTubePlayerController implements
     }
 
     @Override
-    public void onSeekTo(int i) { }
+    public void onSeekTo(int i) {
+        mYouTubeView.didChangeToSeeking(i);
+    }
 
     @Override
     public void onLoading() {
