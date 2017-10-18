@@ -58,7 +58,7 @@ export default class RCTYouTubeExample extends React.Component {
             play={this.state.isPlaying}
             loop={this.state.isLooping}
             fullscreen={this.state.fullscreen}
-            controls={0}
+            controls={1}
             style={[
               { height: PixelRatio.roundToNearestPixel(this.state.containerWidth / (16 / 9)) },
               styles.player,

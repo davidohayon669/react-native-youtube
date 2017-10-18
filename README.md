@@ -51,7 +51,7 @@ The iOS implementation of this player uses the official YouTube iFrame under the
 
 #### Events
 * `onReady`: Called once when the video player is setup.
-* `onChangeState`: Sends the current state of the player on `e.state`. Common values are `buffering`/`playing`/`paused` and more.
+* `onChangeState`: Sends the current state of the player on `e.state`. Common values are `buffering`/`playing`/`paused` and more (on Android there is also a `seeking` state that comes with the location of the playback in seconds on `e.currentTime`).
 * `onChangeQuality`: Sends the current quality of video playback on `e.quality`.
 * `onError`: Sends any errors before and during video playback on `e.error`.
 * `onChangeFullscreen`: Called when the player enters or exits the fullscreen mode on `e.isFullscreen`.
