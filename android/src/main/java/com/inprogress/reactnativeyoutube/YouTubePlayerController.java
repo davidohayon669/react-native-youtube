@@ -3,6 +3,7 @@ package com.inprogress.reactnativeyoutube;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
+import android.os.Handler;
 
 import com.google.android.youtube.player.YouTubeInitializationResult;
 import com.google.android.youtube.player.YouTubePlayer;
@@ -11,6 +12,7 @@ import com.facebook.react.bridge.ReadableArray;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.lang.Runnable;
 
 
 public class YouTubePlayerController implements
@@ -38,6 +40,7 @@ public class YouTubePlayerController implements
     private boolean mFullscreen = false;
     private int mControls = 1;
     private boolean mShowFullscreenButton = true;
+    private boolean mResumePlay = true;
 
     public YouTubePlayerController(YouTubeView youTubeView) {
         mYouTubeView = youTubeView;
@@ -296,6 +299,19 @@ public class YouTubePlayerController implements
         return mVideosIndex;
     }
 
+    public void onVideoFragmentResume() {
+        if (isResumePlay() && mYouTubePlayer != null) {
+            // For some reason calling mYouTubePlayer.play() right away is ineffective
+            final Handler handler = new Handler();
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                   mYouTubePlayer.play();
+                }
+            }, 1);
+        }
+    }
+
     private boolean isPlay() {
         return mPlay;
     }
@@ -310,6 +326,10 @@ public class YouTubePlayerController implements
 
     private int getControls() {
         return mControls;
+    }
+
+    private boolean isResumePlay() {
+        return mResumePlay;
     }
 
     /**
@@ -364,5 +384,9 @@ public class YouTubePlayerController implements
     public void setShowFullscreenButton(boolean show) {
         mShowFullscreenButton = show;
         if (isLoaded()) updateShowFullscreenButton();
+    }
+
+    public void setResumePlay(boolean resumePlay) {
+        mResumePlay = resumePlay;
     }
 }

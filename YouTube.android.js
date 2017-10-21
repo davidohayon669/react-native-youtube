@@ -39,6 +39,7 @@ export default class YouTube extends React.Component {
     fullscreen: PropTypes.bool,
     controls: PropTypes.oneOf([0, 1, 2]),
     showFullscreenButton: PropTypes.bool,
+    resumePlayAndroid: PropTypes.bool,
     onError: PropTypes.func,
     onReady: PropTypes.func,
     onChangeState: PropTypes.func,
@@ -49,6 +50,7 @@ export default class YouTube extends React.Component {
 
   static defaultProps = {
     showFullscreenButton: true,
+    resumePlayAndroid: true,
   };
 
   constructor(props) {

@@ -46,6 +46,7 @@ Can be changed while mounted. Overridden at start by `videoId` and `videoIds`.
 * `modestbranding` (boolean, *iOS*): This parameter lets you use a YouTube player that does not show a YouTube logo. Default: `false`.
 * `origin` (string, *iOS*): This parameter provides an extra security measure for the iFrame API.
 * `rel` (boolean, *iOS*): Show related videos at the end of the video. Default: `true`.
+* `resumePlayAndroid` (boolean, *Android*): Makes the video resume playback after the app resumes from background. Default: `true`.
 
 The iOS implementation of this player uses the official YouTube iFrame under the hood, so most parameters behavior [can be further understood here.](https://developers.google.com/youtube/player_parameters)
 
@@ -55,7 +56,7 @@ The iOS implementation of this player uses the official YouTube iFrame under the
 * `onChangeQuality`: Sends the current quality of video playback on `e.quality`.
 * `onError`: Sends any errors before and during video playback on `e.error`.
 * `onChangeFullscreen`: Called when the player enters or exits the fullscreen mode on `e.isFullscreen`.
-* `onProgress` *(iOS)*: Periodically sends any time progress made on `e.currentTime` and `e.duration`.
+* `onProgress` *(iOS)*: Called every 500ms with the time progress of the playback on `e.currentTime` and also duration on `e.duration`.
 
 #### Methods
 * `seekTo(seconds)`: Seeks to a specified time in the video.
