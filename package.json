@@ -1,6 +1,6 @@
 {
   "name": "react-native-youtube",
-  "version": "1.0.0-alpha.4",
+  "version": "1.0.1",
   "description": "A <YouTube/> component for React Native.",
   "main": "main.js",
   "scripts": {
@@ -10,19 +10,17 @@
     "type": "git",
     "url": "git+https://github.com/inProgress-team/react-native-youtube.git"
   },
-  "keywords": [
-    "youtube",
-    "react",
-    "react-native"
-  ],
+  "keywords": ["youtube", "react", "react-native"],
   "author": "Param Aggarwal",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/inProgress-team/react-native-youtube/issues"
   },
   "homepage": "https://github.com/inProgress-team/react-native-youtube#readme",
+  "dependencies": {
+    "prop-types": "^15.5.0"
+  },
   "peerDependencies": {
-    "react": ">=15.3.2",
     "react-native": ">=0.37"
   },
   "rnpm": {

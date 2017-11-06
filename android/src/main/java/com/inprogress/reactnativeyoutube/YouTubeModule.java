@@ -12,6 +12,8 @@ import com.facebook.react.uimanager.UIManagerModule;
 
 public class YouTubeModule extends ReactContextBaseJavaModule {
 
+    private static final String E_MODULE_ERROR = "E_MODULE_ERROR";
+
     private ReactApplicationContext mReactContext;
 
     public YouTubeModule(ReactApplicationContext reactContext) {
@@ -37,7 +39,7 @@ public class YouTubeModule extends ReactContextBaseJavaModule {
                 }
             });
         } catch (IllegalViewOperationException e) {
-            promise.reject("YouTubeModule.videosIndex() failed", e);
+            promise.reject(E_MODULE_ERROR, e);
         }
     }
 
@@ -54,7 +56,24 @@ public class YouTubeModule extends ReactContextBaseJavaModule {
                 }
             });
         } catch (IllegalViewOperationException e) {
-            promise.reject("YouTubeModule.currentTime() failed", e);
+            promise.reject(E_MODULE_ERROR, e);
+        }
+    }
+
+    @ReactMethod
+    public void duration(final int reactTag, final Promise promise) {
+        try {
+            UIManagerModule uiManager = mReactContext.getNativeModule(UIManagerModule.class);
+            uiManager.addUIBlock(new UIBlock() {
+                public void execute (NativeViewHierarchyManager nvhm) {
+                    YouTubeView youTubeView = (YouTubeView) nvhm.resolveView(reactTag);
+                    YouTubeManager youTubeManager = (YouTubeManager) nvhm.resolveViewManager(reactTag);
+                    int duration = youTubeManager.getDuration(youTubeView);
+                    promise.resolve(duration);
+                }
+            });
+        } catch (IllegalViewOperationException e) {
+            promise.reject(E_MODULE_ERROR, e);
         }
     }
 }

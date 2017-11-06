@@ -92,6 +92,10 @@ public class YouTubeManager extends SimpleViewManager<YouTubeView> {
         return view.getCurrentTime();
     }
 
+    public int getDuration(YouTubeView view) {
+        return view.getDuration();
+    }
+
     public int getVideosIndex(YouTubeView view) {
         return view.getVideosIndex();
     }
@@ -139,5 +143,10 @@ public class YouTubeManager extends SimpleViewManager<YouTubeView> {
     @ReactProp(name = "showFullscreenButton")
     public void setPropShowFullscreenButton(YouTubeView view, @Nullable boolean param) {
         view.setShowFullscreenButton(param);
+    }
+
+    @ReactProp(name = "resumePlayAndroid")
+    public void setPropResumePlay(YouTubeView view, @Nullable boolean param) {
+        view.setResumePlay(param);
     }
 }
