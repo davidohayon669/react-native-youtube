@@ -686,6 +686,11 @@ NSString static *const kYTPlayerSyndicationRegexPattern = @"^https://tpc.googles
     [playerParams setValue:@"100%" forKey:@"width"];
   }
 
+  //duy.nguyen added
+  [playerParams setValue:@"3" forKey:@"iv_load_policy"];
+  [playerParams setValue:@"false" forKey:@"showinfo"];
+  //end of duy.nguyen
+
   [playerParams setValue:playerCallbacks forKey:@"events"];
 
   if ([playerParams objectForKey:@"playerVars"]) {
