@@ -37,6 +37,7 @@ const parsePlayerParams = props => ({
     modestbranding: props.modestbranding === true ? 1 : undefined,
     rel: props.rel === false ? 0 : undefined,
     origin: props.origin,
+    iv_load_policy: props.iv_load_policy,
   },
 });
 
@@ -48,6 +49,7 @@ export default class YouTube extends React.Component {
     play: PropTypes.bool,
     loop: PropTypes.bool,
     fullscreen: PropTypes.bool,
+    iv_load_policy: PropTypes.oneOf([1, 3]),
     controls: PropTypes.oneOf([0, 1, 2]),
     showinfo: PropTypes.bool,
     modestbranding: PropTypes.bool,
