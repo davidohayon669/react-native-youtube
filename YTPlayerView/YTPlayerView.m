@@ -692,14 +692,35 @@ NSString static *const kYTPlayerSyndicationRegexPattern = @"^https://tpc.googles
     NSMutableDictionary *playerVars = [[NSMutableDictionary alloc] init];
     [playerVars addEntriesFromDictionary:[playerParams objectForKey:@"playerVars"]];
 
+    //duy.nguyen added
+    if (![playerVars objectForKey:@"iv_load_policy"]) {
+      [playerVars setValue:@"3" forKey:@"iv_load_policy"];
+    }
+
+    if (![playerVars objectForKey:@"showinfo"]) {
+      [playerVars setValue:@"false" forKey:@"showinfo"];
+    }
+    //end of duy.nguyen
+
     if (![playerVars objectForKey:@"origin"]) {
         self.originURL = [NSURL URLWithString:@"about:blank"];
     } else {
         self.originURL = [NSURL URLWithString: [playerVars objectForKey:@"origin"]];
     }
   } else {
+    //duy.nguyen added
+    NSMutableDictionary *playerVars = [[NSMutableDictionary alloc] init];
+    [playerVars setValue:@"3" forKey:@"iv_load_policy"];
+    [playerVars setValue:@"false" forKey:@"showinfo"];
+    [playerParams setValue:playerVars forKey:@"playerVars"];
+    //end of duy.nguyen
+
+    //duy.nguyen removed
+    /*
     // This must not be empty so we can render a '{}' in the output JSON
     [playerParams setValue:[[NSDictionary alloc] init] forKey:@"playerVars"];
+    */
+    //end of duy.nguyen
   }
 
   // Remove the existing webView to reset any state
