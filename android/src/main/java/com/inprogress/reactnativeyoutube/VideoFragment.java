@@ -19,8 +19,8 @@ public class VideoFragment extends YouTubePlayerFragment {
     public void onResume() {
         if(mYouTubeView != null){
             mYouTubeView.onVideoFragmentResume();
-            super.onResume();
         }
+        super.onResume(); 
     }
 }
 
