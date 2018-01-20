@@ -29,6 +29,7 @@ public class YouTubePlayerController implements
     private static final int PLAYLIST_MODE = 2;
 
     private boolean mIsLoaded = false;
+    private boolean mIsReady = false;
     private int mMode = 0;
     private int mVideosIndex = 0;
 
@@ -56,8 +57,7 @@ public class YouTubePlayerController implements
             updateFullscreen();
             updateShowFullscreenButton();
             updateControls();
-            mYouTubeView.playerViewDidBecomeReady();
-            setLoaded(true);
+
             if (mVideoId != null) loadVideo();
             else if (!mVideoIds.isEmpty()) loadVideos();
             else if (mPlaylistId != null) loadPlaylist();
@@ -120,6 +120,12 @@ public class YouTubePlayerController implements
     @Override
     public void onLoaded(String videoId) {
         if (isVideosMode()) setVideosIndex(mVideoIds.indexOf(videoId));
+
+        if (!mIsReady) {
+            mYouTubeView.playerViewDidBecomeReady();
+            setLoaded(true);
+            mIsReady = true;
+        }
     }
 
     @Override
