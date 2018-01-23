@@ -3,12 +3,15 @@
   "version": "1.0.1",
   "private": true,
   "scripts": {
-    "start": "node node_modules/react-native/local-cli/cli.js start",
-    "postinstall": "react-native link && rnpm link"
+    "start": "react-native start",
+    "postinstall": "react-native link && rnpm link",
+    "run-ios": "react-native run-ios",
+    "run-android": "react-native run-android"
   },
   "dependencies": {
     "react": "^16.2.0",
     "react-native": "^0.52.0",
-    "react-native-youtube": "^1.0.1"
+    "react-native-youtube": "^1.0.1",
+    "rnpm": "^1.9.0"
   }
 }
