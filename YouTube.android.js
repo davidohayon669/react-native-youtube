@@ -149,8 +149,7 @@ export default class YouTube extends React.Component {
 
   videosIndex() {
     return new Promise((resolve, reject) =>
-      NativeModules.YouTubeModule
-        .videosIndex(ReactNative.findNodeHandle(this._nativeComponentRef))
+      NativeModules.YouTubeModule.videosIndex(ReactNative.findNodeHandle(this._nativeComponentRef))
         .then(index => resolve(index))
         .catch(errorMessage => reject(errorMessage)),
     );
@@ -158,8 +157,7 @@ export default class YouTube extends React.Component {
 
   currentTime() {
     return new Promise((resolve, reject) =>
-      NativeModules.YouTubeModule
-        .currentTime(ReactNative.findNodeHandle(this._nativeComponentRef))
+      NativeModules.YouTubeModule.currentTime(ReactNative.findNodeHandle(this._nativeComponentRef))
         .then(currentTime => resolve(currentTime))
         .catch(errorMessage => reject(errorMessage)),
     );
@@ -167,8 +165,7 @@ export default class YouTube extends React.Component {
 
   duration() {
     return new Promise((resolve, reject) =>
-      NativeModules.YouTubeModule
-        .duration(ReactNative.findNodeHandle(this._nativeComponentRef))
+      NativeModules.YouTubeModule.duration(ReactNative.findNodeHandle(this._nativeComponentRef))
         .then(duration => resolve(duration))
         .catch(errorMessage => reject(errorMessage)),
     );

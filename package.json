@@ -23,10 +23,23 @@
   "peerDependencies": {
     "react-native": ">=0.37"
   },
+  "devDependencies": {
+    "prettier": "^1.10.2"
+  },
   "rnpm": {
     "android": {
       "packageInstance": "new ReactNativeYouTube()"
     },
     "assets": ["assets"]
+  },
+  "engines": {
+    "node": ">=8"
+  },
+  "prettier": {
+    "semi": true,
+    "singleQuote": true,
+    "trailingComma": "all",
+    "bracketSpacing": true,
+    "printWidth": 100
   }
 }
