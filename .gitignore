@@ -18,3 +18,9 @@ DerivedData
 *.xcuserstate
 .DS_Store
 .vscode/
+
+# Project specific
+#
+yarn.lock
+yarn-error.log
+node_modules
