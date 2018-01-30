@@ -53,6 +53,8 @@ export default class YouTube extends React.Component {
     resumePlayAndroid: true,
   };
 
+  _interval = null;
+
   constructor(props) {
     super(props);
 
@@ -64,6 +66,12 @@ export default class YouTube extends React.Component {
 
   componentWillMount() {
     BackHandler.addEventListener('hardwareBackPress', this._backPress);
+
+    // Periodically triggeting a forced unnoticable layout rendering until onReady to make sure the
+    // native loading progress is shown
+    this._interval = setInterval(() => {
+      this.setState({ moduleMargin: Math.random() / 2 });
+    }, 250);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -90,14 +98,16 @@ export default class YouTube extends React.Component {
   };
 
   _onReady = event => {
-    // The Android YouTube native module is pretty problematic when it comes to
-    // mounting correctly and rendering inside React-Native's views hierarchy.
-    // For now we must trigger some layout change to force a real render on it,
-    // right after the onReady event, so it will smoothly appear after ready.
-    // We also use the minimal margin to avoid `UNAUTHORIZED_OVERLAY` error from
-    // the native module that is very sensitive to being covered or even touching
-    // its containing view.
-    this.setState({ moduleMargin: StyleSheet.hairlineWidth });
+    clearInterval(this._interval);
+
+    // The Android YouTube native module is pretty problematic when it comes to mounting correctly
+    // and rendering inside React-Native's views hierarchy. For now we must trigger some layout
+    // changes to force a real render on it so it will smoothly appear after ready and show
+    // controls. We also use the minimal margin to avoid `UNAUTHORIZED_OVERLAY` error from the
+    // native module that is very sensitive to being covered or even touching its containing view.
+    setTimeout(() => {
+      this.setState({ moduleMargin: StyleSheet.hairlineWidth });
+    }, 250);
     if (this.props.onReady) this.props.onReady(event.nativeEvent);
   };
 
