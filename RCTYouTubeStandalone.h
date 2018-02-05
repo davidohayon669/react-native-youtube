@@ -8,6 +8,8 @@
 
 @interface RCTYouTubeStandalone: NSObject <RCTBridgeModule>
 
-- (void) moviePlayerPlaybackDidFinish:(NSNotification *)notification;
+#ifdef XCD_YOUTUBE_KIT_INSTALLED
+    - (void) moviePlayerPlaybackDidFinish:(NSNotification *)notification;
+#endif
 
 @end
