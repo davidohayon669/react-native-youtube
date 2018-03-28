@@ -4,20 +4,23 @@ import com.google.android.youtube.player.YouTubePlayerFragment;
 
 
 public class VideoFragment extends YouTubePlayerFragment {
-
-    private YouTubeView mYouTubeView;
-
-    public VideoFragment(YouTubeView youTubeView) {
-        mYouTubeView = youTubeView;
+    
+    public YouTubeView mYouTubeView;
+    
+    public VideoFragment() {
+        
     }
-
-    public static VideoFragment newInstance(YouTubeView youTubeView) {
-        return new VideoFragment(youTubeView);
+    
+    public static VideoFragment newInstance() {
+        return new VideoFragment();
     }
-
+    
     @Override
     public void onResume() {
-        mYouTubeView.onVideoFragmentResume();
-        super.onResume();
+        if(mYouTubeView != null){
+            mYouTubeView.onVideoFragmentResume();
+        }
+        super.onResume(); 
     }
 }
+
