@@ -105,7 +105,7 @@ RCT_EXPORT_METHOD(currentTime:(nonnull NSNumber *)reactTag resolver:(RCTPromiseR
     [self.bridge.uiManager addUIBlock:^(__unused RCTUIManager *uiManager, NSDictionary<NSNumber *, UIView *> *viewRegistry) {
         RCTYouTube *youtube = (RCTYouTube*)viewRegistry[reactTag];
         if ([youtube isKindOfClass:[RCTYouTube class]]) {
-            NSNumber *index = [NSNumber numberWithInt:[youtube currentTime]];
+            NSNumber *index = [NSNumber numberWithFloat:[youtube currentTime]];
             if (index) {
                 resolve(index);
             } else {
