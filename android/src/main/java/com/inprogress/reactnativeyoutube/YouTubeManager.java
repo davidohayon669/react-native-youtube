@@ -88,11 +88,11 @@ public class YouTubeManager extends SimpleViewManager<YouTubeView> {
         );
     }
 
-    public int getCurrentTime(YouTubeView view) {
+    public float getCurrentTime(YouTubeView view) {
         return view.getCurrentTime();
     }
 
-    public int getDuration(YouTubeView view) {
+    public float getDuration(YouTubeView view) {
         return view.getDuration();
     }
 

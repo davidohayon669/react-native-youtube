@@ -51,7 +51,7 @@ public class YouTubeModule extends ReactContextBaseJavaModule {
                 public void execute (NativeViewHierarchyManager nvhm) {
                     YouTubeView youTubeView = (YouTubeView) nvhm.resolveView(reactTag);
                     YouTubeManager youTubeManager = (YouTubeManager) nvhm.resolveViewManager(reactTag);
-                    int currentTime = youTubeManager.getCurrentTime(youTubeView);
+                    float currentTime = youTubeManager.getCurrentTime(youTubeView);
                     promise.resolve(currentTime);
                 }
             });
@@ -68,7 +68,7 @@ public class YouTubeModule extends ReactContextBaseJavaModule {
                 public void execute (NativeViewHierarchyManager nvhm) {
                     YouTubeView youTubeView = (YouTubeView) nvhm.resolveView(reactTag);
                     YouTubeManager youTubeManager = (YouTubeManager) nvhm.resolveViewManager(reactTag);
-                    int duration = youTubeManager.getDuration(youTubeView);
+                    float duration = youTubeManager.getDuration(youTubeView);
                     promise.resolve(duration);
                 }
             });
