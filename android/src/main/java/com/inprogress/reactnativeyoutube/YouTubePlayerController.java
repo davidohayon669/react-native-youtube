@@ -108,8 +108,8 @@ public class YouTubePlayerController implements
     }
 
     @Override
-    public void onSeekTo(int i) {
-        mYouTubeView.didChangeToSeeking(i);
+    public void onSeekTo(int newPositionMillis) {
+        mYouTubeView.didChangeToSeeking(newPositionMillis);
     }
 
     @Override
@@ -157,16 +157,16 @@ public class YouTubePlayerController implements
         mYouTubeView.receivedError(errorReason.toString());
     }
 
-    public void seekTo(int second) {
+    public void seekTo(float second) {
         if (isLoaded()) mYouTubePlayer.seekToMillis(second * 1000);
     }
 
-    public int getCurrentTime() {
-      return mYouTubePlayer.getCurrentTimeMillis() / 1000;
+    public float getCurrentTime() {
+      return mYouTubePlayer.getCurrentTimeMillis() / 1000.0;
     }
 
-    public int getDuration() {
-      return mYouTubePlayer.getDurationMillis() / 1000;
+    public float getDuration() {
+      return mYouTubePlayer.getDurationMillis() / 1000.0;
     }
 
     public void nextVideo() {
