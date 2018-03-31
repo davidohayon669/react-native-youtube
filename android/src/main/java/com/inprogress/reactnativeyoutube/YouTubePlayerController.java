@@ -158,15 +158,15 @@ public class YouTubePlayerController implements
     }
 
     public void seekTo(float second) {
-        if (isLoaded()) mYouTubePlayer.seekToMillis(second * 1000);
+        if (isLoaded()) mYouTubePlayer.seekToMillis((int)(second * 1000));
     }
 
     public float getCurrentTime() {
-      return mYouTubePlayer.getCurrentTimeMillis() / 1000.0;
+      return mYouTubePlayer.getCurrentTimeMillis() / 1000.f;
     }
 
     public float getDuration() {
-      return mYouTubePlayer.getDurationMillis() / 1000.0;
+      return mYouTubePlayer.getDurationMillis() / 1000.f;
     }
 
     public void nextVideo() {
