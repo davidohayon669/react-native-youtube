@@ -50,7 +50,7 @@ public class YouTubeManager extends SimpleViewManager<YouTubeView> {
         Assertions.assertNotNull(args);
         switch (commandType) {
             case COMMAND_SEEK_TO: {
-                view.seekTo(args.getInt(0));
+                view.seekTo((float)(args.getDouble(0)));
                 return;
             }
             case COMMAND_NEXT_VIDEO: {
