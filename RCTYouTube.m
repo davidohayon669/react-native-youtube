@@ -90,6 +90,8 @@
             @"isFullscreen": @(_isFullscreen),
             @"target": self.reactTag
         });
+        
+        [[UIApplication sharedApplication] setStatusBarHidden:NO];
     }
 }
 
