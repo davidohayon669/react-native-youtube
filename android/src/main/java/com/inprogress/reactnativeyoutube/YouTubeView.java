@@ -1,5 +1,6 @@
 package com.inprogress.reactnativeyoutube;
 
+import android.app.Activity;
 import android.app.FragmentManager;
 import android.os.Build;
 import android.os.Parcelable;
@@ -10,6 +11,7 @@ import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.ReactContext;
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.WritableMap;
+import com.facebook.react.uimanager.ThemedReactContext;
 import com.facebook.react.uimanager.events.RCTEventEmitter;
 
 
@@ -18,14 +20,20 @@ public class YouTubeView extends FrameLayout {
     private YouTubePlayerController mYouTubeController;
     private VideoFragment mVideoFragment;
     private boolean mHasSavedInstance = false;
+    private ThemedReactContext themedReactContext;
 
-    public YouTubeView(ReactContext context) {
+    public YouTubeView(ThemedReactContext context) {
         super(context);
+        themedReactContext = context;
         init();
     }
 
     public ReactContext getReactContext() {
-        return (ReactContext) getContext();
+        return themedReactContext;
+    }
+
+    private Activity getCurrentActivity () {
+        return (Activity) getReactContext().getBaseContext();
     }
 
     public void init() {
@@ -44,7 +52,7 @@ public class YouTubeView extends FrameLayout {
     @Override
     protected void onAttachedToWindow() {
         if (!mHasSavedInstance) {
-            FragmentManager fragmentManager = getReactContext().getCurrentActivity().getFragmentManager();
+            FragmentManager fragmentManager = getCurrentActivity().getFragmentManager();
             fragmentManager.beginTransaction().add(getId(), mVideoFragment).commit();
         }
         super.onAttachedToWindow();
@@ -52,8 +60,9 @@ public class YouTubeView extends FrameLayout {
 
     @Override
     protected void onDetachedFromWindow() {
-        if (getReactContext().getCurrentActivity() != null) {
-            FragmentManager fragmentManager = getReactContext().getCurrentActivity().getFragmentManager();
+
+        if (getCurrentActivity() != null) {
+            FragmentManager fragmentManager = getCurrentActivity().getFragmentManager();
 
             // Code crashes with java.lang.IllegalStateException: Activity has been destroyed
             // if our activity has been destroyed when this runs
@@ -61,7 +70,7 @@ public class YouTubeView extends FrameLayout {
                 boolean isDestroyed = false;
 
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-                    isDestroyed = getReactContext().getCurrentActivity().isDestroyed();
+                    isDestroyed = getCurrentActivity().isDestroyed();
                 }
 
                 if (!isDestroyed) {
