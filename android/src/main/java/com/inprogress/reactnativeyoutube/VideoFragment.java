@@ -7,17 +7,25 @@ public class VideoFragment extends YouTubePlayerFragment {
 
     private YouTubeView mYouTubeView;
 
-    public VideoFragment(YouTubeView youTubeView) {
+    public VideoFragment() {}
+
+
+    public void setYoutubeView(YouTubeView youTubeView) {
         mYouTubeView = youTubeView;
     }
 
     public static VideoFragment newInstance(YouTubeView youTubeView) {
-        return new VideoFragment(youTubeView);
+        VideoFragment fragment = new VideoFragment();
+        fragment.setYoutubeView(youTubeView);
+        return fragment;
     }
 
     @Override
     public void onResume() {
-        mYouTubeView.onVideoFragmentResume();
+        if (mYouTubeView != null) {
+            mYouTubeView.onVideoFragmentResume();
+        }
+
         super.onResume();
     }
 }
