@@ -60,3 +60,4 @@ buck-out/
 Pods
 yarn.lock
 package-lock.json
+react-native-youtube-*.tgz
