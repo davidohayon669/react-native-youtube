@@ -50,7 +50,7 @@ public class YouTubeManager extends SimpleViewManager<YouTubeView> {
         Assertions.assertNotNull(args);
         switch (commandType) {
             case COMMAND_SEEK_TO: {
-                view.seekTo(args.getInt(0));
+                view.seekTo((float)(args.getDouble(0)));
                 return;
             }
             case COMMAND_NEXT_VIDEO: {
@@ -88,11 +88,11 @@ public class YouTubeManager extends SimpleViewManager<YouTubeView> {
         );
     }
 
-    public int getCurrentTime(YouTubeView view) {
+    public float getCurrentTime(YouTubeView view) {
         return view.getCurrentTime();
     }
 
-    public int getDuration(YouTubeView view) {
+    public float getDuration(YouTubeView view) {
         return view.getDuration();
     }
 
