@@ -13,6 +13,7 @@ RCT_EXPORT_MODULE();
 
 RCT_REMAP_METHOD(playVideo,
                  playVideoWithResolver:(NSString*)videoId
+                 startTime:(NSNumber* _Nonnull)startTime
                  resolver:(RCTPromiseResolveBlock)resolve
                  rejecter:(RCTPromiseRejectBlock)reject)
 {
@@ -22,6 +23,8 @@ RCT_REMAP_METHOD(playVideo,
         dispatch_async(dispatch_get_main_queue(), ^{
             XCDYouTubeVideoPlayerViewController *videoPlayerViewController =
                 [[XCDYouTubeVideoPlayerViewController alloc] initWithVideoIdentifier:videoId];
+            NSTimeInterval initialPlaybackTime = [startTime doubleValue];
+            videoPlayerViewController.moviePlayer.initialPlaybackTime = initialPlaybackTime;
             [[NSNotificationCenter defaultCenter] addObserver:self
                                                      selector:@selector(moviePlayerPlaybackDidFinish:)
                                                          name:MPMoviePlayerPlaybackDidFinishNotification
