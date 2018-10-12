@@ -8,6 +8,14 @@ Uses Google's official [youtube-ios-player-helper](https://github.com/youtube/yo
 ## Screenshot
 ![Screenshot of the example app](https://github.com/inProgress-team/react-native-youtube/raw/master/Screenshot.png)
 
+## Install 
+
+```bash
+yarn add react-native-youtube
+# or npm install react-native-youtube --save
+react-native link react-native-youtube
+```
+
 ## Usage
 ```javascript
 <YouTube
