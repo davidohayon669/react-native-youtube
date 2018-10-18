@@ -5,8 +5,55 @@ Uses Google's official [youtube-ios-player-helper](https://github.com/youtube/yo
 
 **[Having problems with Android? Please read this first](https://github.com/inProgress-team/react-native-youtube#known-issues)**
 
+## Table of Contents ##
+* [Screenshot](#screenshot)
+* [Install](#install)
+* [Usage](#usage)
+* [API](#api)
+* [Known Issues](#known-issues)
+* [Example App and Development](#example-app-and-development)
+* [Authors](#authors)
+* [License](#license)
+
 ## Screenshot
 ![Screenshot of the example app](https://github.com/inProgress-team/react-native-youtube/raw/master/Screenshot.png)
+
+## Install
+This component is confirmed to be working on react-native ~0.37 - ~0.45
+
+Install the latest version to your `package.json`:
+
+```bash
+$ npm install react-native-youtube -S
+# or yarn install react-native-youtube
+```
+
+Link the library to your iOS and Android projects with:
+
+```bash
+$ react-native link react-native-youtube
+```
+
+**IMPORTANT! (iOS Only)**: To link `assets/YTPlayerView-iframe-player.html` to your project, `react-native link` is not enough (As of RN ~0.37 - ~0.45). You will need to *also* use the older tool it is based on, `rnpm` (This step must be done **after** `react-native link`):
+
+First, if you don't have it installed, globally install `rnpm` (^1.9.0):
+
+`$ npm install -g rnpm`
+
+Then at the project's root folder type:
+
+`$ rnpm link`
+
+(This step can also be done manually by adding `../node_modules/react-native-youtube/assets/YTPlayerView-iframe-player.html` to your Xcode project's root directory)
+
+**IMPORTANT! (Android Only)**: The Android implementation of this component needs to have the official YouTube app installed on the device. Otherwise the user will be prompted to install / activate the app, and an error event will be triggered with `SERVICE_MISSING`/`SERVICE_DISABLED`.
+
+#### OPTIONAL: Activated sound when iPhone (iOS) is on vibrate mode
+Open AppDelegate.m and add :
+
+* `#import <AVFoundation/AVFoundation.h>`
+
+* `[[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayback error: nil];` in your didFinishLaunchingWithOptions method
 
 ## Usage
 ```javascript
@@ -141,38 +188,6 @@ A static method that returns a Promise to launch a standalone YouTube player wit
 * `lightboxMode` (boolean): Should the video play inside a lightbox instead of fullscreen. Default: `false`.
 * `startIndex` (number): The index position of the video to play first. Default: `0`.
 * `startTime` (number): Optional starting time of the video (in seconds). Default: `0`.
-
-## Installation
-This component is confirmed to be working on react-native ~0.37 - ~0.45
-
-Install the latest version to your `package.json`:
-
-`$ npm install react-native-youtube -S`
-
-Link the library to your iOS and Android projects with:
-
-`$ react-native link`
-
-**IMPORTANT! (iOS Only)**: To link `assets/YTPlayerView-iframe-player.html` to your project, `react-native link` is not enough (As of RN ~0.37 - ~0.45). You will need to *also* use the older tool it is based on, `rnpm` (This step must be done **after** `react-native link`):
-
-First, if you don't have it installed, globally install `rnpm` (^1.9.0):
-
-`$ npm install -g rnpm`
-
-Then at the project's root folder type:
-
-`$ rnpm link`
-
-(This step can also be done manually by adding `../node_modules/react-native-youtube/assets/YTPlayerView-iframe-player.html` to your Xcode project's root directory)
-
-**IMPORTANT! (Android Only)**: The Android implementation of this component needs to have the official YouTube app installed on the device. Otherwise the user will be prompted to install / activate the app, and an error event will be triggered with `SERVICE_MISSING`/`SERVICE_DISABLED`.
-
-#### OPTIONAL: Activated sound when iPhone (iOS) is on vibrate mode
-Open AppDelegate.m and add :
-
-* `#import <AVFoundation/AVFoundation.h>`
-
-* `[[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayback error: nil];` in your didFinishLaunchingWithOptions method
 
 ## Known Issues
 #### `UNAUTHORIZED_OVERLAY` and `PLAYER_VIEW_TOO_SMALL` on Android
