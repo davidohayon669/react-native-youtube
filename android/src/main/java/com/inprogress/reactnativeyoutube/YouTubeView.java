@@ -29,7 +29,6 @@ public class YouTubeView extends FrameLayout {
     }
 
     public void init() {
-        inflate(getContext(), R.layout.youtube_layout, this);
         mVideoFragment = VideoFragment.newInstance(this);
         mYouTubeController = new YouTubePlayerController(this);
     }
