@@ -195,4 +195,18 @@ public class YouTubeView extends FrameLayout {
     public void setResumePlay(boolean bool) {
         mYouTubeController.setResumePlay(bool);
     }
+
+    /**
+     * Spread the onInitializationStarted event to the controller
+     */
+    public void onInitializationStarted() {
+      mYouTubeController.onInitializationStarted();
+    }
+
+    /**
+     * Spread the player released event to the controller
+     */
+    public void onPlayerRelease() {
+      mYouTubeController.onPlayerRelease();
+    }
 }
