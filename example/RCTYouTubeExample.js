@@ -63,7 +63,10 @@ export default class RCTYouTubeExample extends React.Component {
             ]}
             onError={e => this.setState({ error: e.error })}
             onReady={e => this.setState({ isReady: true })}
-            onChangeState={e => this.setState({ status: e.state })}
+            onChangeState={e => this.setState((prevState) => ({
+              status: e.state,
+              isPlaying: e.state === 'stopped' || e.state === 'paused' ? false : prevState.isPlaying
+            }))}
             onChangeQuality={e => this.setState({ quality: e.quality })}
             onChangeFullscreen={e => this.setState({ fullscreen: e.isFullscreen })}
             onProgress={e => this.setState({ duration: e.duration, currentTime: e.currentTime })}
