@@ -134,6 +134,7 @@ public class YouTubePlayerController implements
 
     @Override
     public void onLoaded(String videoId) {
+        mVideoId = videoId;
         if (isVideosMode()) setVideosIndex(mVideoIds.indexOf(videoId));
 
         mYouTubeView.playerViewDidBecomeReady();
