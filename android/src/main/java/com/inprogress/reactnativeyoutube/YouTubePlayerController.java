@@ -476,5 +476,6 @@ public class YouTubePlayerController implements
      */
     public void onPlayerRelease() {
       mPlayerAvailable = false;
+      mPlay = false;
     }
 }
