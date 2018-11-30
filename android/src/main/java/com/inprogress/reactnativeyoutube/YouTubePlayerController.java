@@ -136,11 +136,9 @@ public class YouTubePlayerController implements
     public void onLoaded(String videoId) {
         if (isVideosMode()) setVideosIndex(mVideoIds.indexOf(videoId));
 
-        if (!mIsReady) {
-            mYouTubeView.playerViewDidBecomeReady();
-            setLoaded(true);
-            mIsReady = true;
-        }
+        mYouTubeView.playerViewDidBecomeReady();
+        setLoaded(true);
+        mIsReady = true;
         automaticPlay();
     }
 
