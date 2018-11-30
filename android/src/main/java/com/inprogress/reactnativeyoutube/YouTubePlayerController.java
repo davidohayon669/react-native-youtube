@@ -42,6 +42,7 @@ public class YouTubePlayerController implements
     private int mControls = 1;
     private boolean mShowFullscreenButton = true;
     private boolean mResumePlay = true;
+    private boolean mJustResumed = false;
 
     /**
      * Tells if the player is available to request
@@ -99,6 +100,24 @@ public class YouTubePlayerController implements
     @Override
     public void onStopped() {
         mYouTubeView.didChangeToState("stopped");
+        /**
+         * ugly hack to trigger automatic video resume after the fragment went down
+         * @see {@link #onVideoFragmentResume()} for more details
+         */
+        if (mJustResumed) { // check if the fragment just resumed
+            if (isResumePlay()) { // check if the config ask use to do an automatic resume
+                /*
+                 * check if the video is already loaded, if so play the video directly
+                 * (the onLoaded event won't trigger so we cannot use it to play the video)
+                 * or
+                 * load the video (the onLoaded event will then take care of playing that video)
+                 */
+                if (isLoaded()) mYouTubePlayer.play();
+                else loadVideo();
+            }
+            // we consume the flag of resuming
+            mJustResumed = false;
+        }
     }
 
     @Override
@@ -358,17 +377,21 @@ public class YouTubePlayerController implements
     }
 
     public void onVideoFragmentResume() {
-        // if (!isPlayerAvailable()) return;
-        // if (isResumePlay() && mYouTubePlayer != null) {
-        //     // For some reason calling mYouTubePlayer.play() right away is ineffective
-        //     final Handler handler = new Handler();
-        //     handler.postDelayed(new Runnable() {
-        //         @Override
-        //         public void run() {
-        //            mYouTubePlayer.play();
-        //         }
-        //     }, 1);
-        // }
+      /**
+       * we tell that the fragment just resume
+       * in order to resume the video if the configuration allows it (resumePlayAndroid to true)
+       *
+       * /!\ We cannot just do a player.play() because of the youtube player api
+       * Indeed this library at each resume of the fragment trigger its current state
+       * It seems that this event is always "stopped" (probably because of the youtube player view not visible)
+       * In this case if we do a regular youtubeplayer.play(), the stop event will directly stop
+       * the play and stay as is.
+       *
+       * This is why We do a hack in the {@link #onStopped()} event on the youtube player library
+       * looking if the fragment just resumed and if so, will ask for a play if the configs allows to.
+       * @see {@link #onStopped()}
+       */
+      mJustResumed = true;
     }
 
     private boolean isPlay() {
