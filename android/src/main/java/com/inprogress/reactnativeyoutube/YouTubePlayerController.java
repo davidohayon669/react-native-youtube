@@ -412,13 +412,13 @@ public class YouTubePlayerController implements
     }
 
     public void setVideoIds(ReadableArray videoIds) {
-        if (!isPlayerAvailable()) return;
         if (videoIds != null) {
             setVideosIndex(0);
             mVideoIds.clear();
             for (int i = 0; i < videoIds.size(); i++) {
                 mVideoIds.add(videoIds.getString(i));
             }
+            if (!isPlayerAvailable()) return;
             if (isLoaded()) loadVideos();
         }
     }
