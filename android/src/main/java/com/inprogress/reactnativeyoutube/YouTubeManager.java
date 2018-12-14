@@ -46,11 +46,7 @@ public class YouTubeManager extends SimpleViewManager<YouTubeView> {
     @Override
     public void receiveCommand(YouTubeView view, int commandType, @Nullable ReadableArray args) {
 
-        if (view == null) {
-            throw new AssertionError();
-        }
-
-        if (args == null) {
+        if (view == null || args == null) {
             throw new AssertionError();
         }
 
