@@ -123,6 +123,14 @@ NSString static *const kYTPlayerSyndicationRegexPattern = @"^https://tpc.googles
   [self stringFromEvaluatingJavaScript:command];
 }
 
+- (void)mute {
+  [self stringFromEvaluatingJavaScript:@"player.mute();"];
+}
+
+- (void)unMute {
+  [self stringFromEvaluatingJavaScript:@"player.unMute();"];
+}
+
 #pragma mark - Cueing methods
 
 - (void)cueVideoById:(NSString *)videoId
