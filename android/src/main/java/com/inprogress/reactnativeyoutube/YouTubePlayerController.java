@@ -316,7 +316,6 @@ public class YouTubePlayerController implements
                         mYouTubePlayer.play();
                     } catch (IllegalStateException e) {
                         mYouTubeView.initPlayer();
-                        mYouTubePlayer.play();
                     }
                 }
             }, 1);
