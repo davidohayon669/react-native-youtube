@@ -47,7 +47,7 @@ public class YouTubeView extends FrameLayout {
     protected void onAttachedToWindow() {
         if (!mHasSavedInstance) {
             FragmentManager fragmentManager = getReactContext().getCurrentActivity().getFragmentManager();
-            fragmentManager.beginTransaction().add(getId(), mVideoFragment).commit();
+            fragmentManager.beginTransaction().add(getId(), mVideoFragment).commitAllowingStateLoss();
         }
         super.onAttachedToWindow();
     }
