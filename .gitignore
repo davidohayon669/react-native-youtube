@@ -24,3 +24,5 @@ DerivedData
 yarn.lock
 yarn-error.log
 node_modules
+android/.project
+example/android/.project
