@@ -39,15 +39,15 @@ public class YouTubeStandaloneModule extends ReactContextBaseJavaModule {
         public void onActivityResult(Activity activity, int requestCode, int resultCode, Intent intent) {
             if (requestCode == REQ_START_STANDALONE_PLAYER) {
                 if (mPickerPromise != null) {
-                    if (resultCode != Activity.RESULT_OK) {
+                    if (resultCode != Activity.RESULT_OK && intent != null) {
                         YouTubeInitializationResult errorReason =
-                            YouTubeStandalonePlayer.getReturnedInitializationResult(intent);
+                                YouTubeStandalonePlayer.getReturnedInitializationResult(intent);
                         if (errorReason.isUserRecoverableError()) {
                             errorReason.getErrorDialog(activity, requestCode).show();
                             mPickerPromise.reject(E_PLAYER_ERROR);
                         } else {
                             String errorMessage =
-                                String.format("There was an error initializing the YouTubePlayer (%1$s)", errorReason.toString());
+                                    String.format("There was an error initializing the YouTubePlayer (%1$s)", errorReason.toString());
                             mPickerPromise.reject(E_PLAYER_ERROR, errorMessage);
                         }
                     } else {
@@ -81,7 +81,7 @@ public class YouTubeStandaloneModule extends ReactContextBaseJavaModule {
         }
 
         final Intent intent = YouTubeStandalonePlayer.createVideoIntent(
-                    currentActivity, apiKey, videoId, startTimeMillis, autoplay, lightboxMode);
+                currentActivity, apiKey, videoId, startTimeMillis, autoplay, lightboxMode);
 
         play(intent, promise);
     }
@@ -101,7 +101,7 @@ public class YouTubeStandaloneModule extends ReactContextBaseJavaModule {
         }
 
         final Intent intent = YouTubeStandalonePlayer.createVideosIntent(
-                    currentActivity, apiKey, videoIdsList, startIndex, startTimeMillis, autoplay, lightboxMode);
+                currentActivity, apiKey, videoIdsList, startIndex, startTimeMillis, autoplay, lightboxMode);
 
         play(intent, promise);
     }
@@ -116,7 +116,7 @@ public class YouTubeStandaloneModule extends ReactContextBaseJavaModule {
         }
 
         final Intent intent = YouTubeStandalonePlayer.createPlaylistIntent(
-                    currentActivity, apiKey, playlistId, startIndex, startTimeMillis, autoplay, lightboxMode);
+                currentActivity, apiKey, playlistId, startIndex, startTimeMillis, autoplay, lightboxMode);
 
         play(intent, promise);
     }
@@ -139,7 +139,7 @@ public class YouTubeStandaloneModule extends ReactContextBaseJavaModule {
                 } else {
                     // Could not resolve the intent - must need to install or update the YouTube API service.
                     YouTubeInitializationResult.SERVICE_MISSING
-                        .getErrorDialog(currentActivity, REQ_RESOLVE_SERVICE_MISSING).show();
+                            .getErrorDialog(currentActivity, REQ_RESOLVE_SERVICE_MISSING).show();
                 }
             }
         } catch (Exception e) {
