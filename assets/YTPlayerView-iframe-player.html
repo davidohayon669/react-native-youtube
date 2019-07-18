@@ -54,12 +54,22 @@
              }
         }
 
-        window.setInterval(getCurrentTime, 500);
+        window.setInterval(getCurrentTime, 300);
 
     });
 
     function onReady(event) {
         window.location.href = 'ytplayer://onReady?data=' + event.data;
+        window.setTimeout(function(){
+            try {
+                if(window.frames[0]){
+                    var elements = window.frames[0].document.getElementsByClassName('ytp-chrome-top');
+                    if(elements[0]){
+                        elements[0].innerHTML = '';
+                    }
+                }
+            } catch (e){}
+        }, 1)
     }
 
     function onStateChange(event) {

@@ -67,6 +67,8 @@ The iOS implementation of this player uses the official YouTube iFrame under the
 * `currentTime()`: Returns a Promise that results with the `currentTime` of the played video (in seconds) or errors with an errorMessage string. Should be used as an alternative for Android to `onProgress` event on iOS.
 * `duration()` *(Android)*: Returns a Promise that results with the `duration` of the played video (in seconds) or errors with an errorMessage string. Should be used as an alternative for Android to `onProgress` event on iOS.
 * `reloadIframe()` *(iOS)*: Specific props (`fullscreen`, `modestbranding`, `showinfo`, `rel`, `controls`, `origin`) can only be set at mounting and initial loading of the underlying WebView that holds the YouTube iFrame (Those are `<iframe>` parameters). If you want to change one of them during the lifecycle of the component, you should know the usability cost of loading the WebView again, and use this method right after the component received the updated prop.
+* `mute()` *(iOS)*: Mutes (sets volume to 0) current iframe.
+* `unMute()` *(iOS)*: Unmutes (sets volume to 100) current iframe.
 
 ### Standalone Player (iOS)
 #### Setup

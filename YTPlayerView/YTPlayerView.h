@@ -271,6 +271,26 @@ typedef NS_ENUM(NSInteger, YTPlayerError) {
  */
 - (void)seekToSeconds:(float)seekToSeconds allowSeekAhead:(BOOL)allowSeekAhead;
 
+/**
+ * Mute
+ * the JavaScript API:
+ *   https://developers.google.com/youtube/iframe_api_reference#seekTo
+ *
+ * @param mutes video.
+ 
+ */
+- (void)mute;
+
+/**
+ * UnMute
+ * the JavaScript API:
+ *   https://developers.google.com/youtube/iframe_api_reference#seekTo
+ *
+ * @param unmutes video.
+ 
+ */
+- (void)unMute;
+
 #pragma mark - Queuing videos
 
 // Queueing functions for videos. These methods correspond to their JavaScript

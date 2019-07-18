@@ -128,7 +128,7 @@ export default class YouTube extends React.Component {
   seekTo(seconds) {
     UIManager.dispatchViewManagerCommand(
       ReactNative.findNodeHandle(this._nativeComponentRef),
-      UIManager.ReactYouTube.Commands.seekTo,
+      UIManager.getViewManagerConfig('ReactYouTube').Commands.seekTo,
       [parseInt(seconds, 10)],
     );
   }
@@ -136,7 +136,8 @@ export default class YouTube extends React.Component {
   nextVideo() {
     UIManager.dispatchViewManagerCommand(
       ReactNative.findNodeHandle(this._nativeComponentRef),
-      UIManager.ReactYouTube.Commands.nextVideo,
+      UIManager.getViewManagerConfig('ReactYouTube').Commands.nextVideo,
+      
       [],
     );
   }
@@ -144,7 +145,7 @@ export default class YouTube extends React.Component {
   previousVideo() {
     UIManager.dispatchViewManagerCommand(
       ReactNative.findNodeHandle(this._nativeComponentRef),
-      UIManager.ReactYouTube.Commands.previousVideo,
+      UIManager.getViewManagerConfig('ReactYouTube').Commands.previousVideo,
       [],
     );
   }
@@ -152,7 +153,7 @@ export default class YouTube extends React.Component {
   playVideoAt(index) {
     UIManager.dispatchViewManagerCommand(
       ReactNative.findNodeHandle(this._nativeComponentRef),
-      UIManager.ReactYouTube.Commands.playVideoAt,
+      UIManager.getViewManagerConfig('ReactYouTube').Commands.playVideoAt,
       [parseInt(index, 10)],
     );
   }

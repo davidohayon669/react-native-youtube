@@ -46,6 +46,30 @@ RCT_EXPORT_METHOD(seekTo:(nonnull NSNumber *)reactTag seconds:(nonnull NSNumber 
     }];
 }
 
+RCT_EXPORT_METHOD(mute:(nonnull NSNumber *)reactTag)
+{
+    [self.bridge.uiManager addUIBlock:^(__unused RCTUIManager *uiManager, NSDictionary<NSNumber *, UIView *> *viewRegistry) {
+        RCTYouTube *youtube = (RCTYouTube*)viewRegistry[reactTag];
+        if ([youtube isKindOfClass:[RCTYouTube class]]) {
+            [youtube mute];
+        } else {
+            RCTLogError(@"Cannot mute: %@ (tag #%@) is not RCTYouTube", youtube, reactTag);
+        }
+    }];
+}
+
+RCT_EXPORT_METHOD(unMute:(nonnull NSNumber *)reactTag)
+{
+    [self.bridge.uiManager addUIBlock:^(__unused RCTUIManager *uiManager, NSDictionary<NSNumber *, UIView *> *viewRegistry) {
+        RCTYouTube *youtube = (RCTYouTube*)viewRegistry[reactTag];
+        if ([youtube isKindOfClass:[RCTYouTube class]]) {
+            [youtube unMute];
+        } else {
+            RCTLogError(@"Cannot unMute: %@ (tag #%@) is not RCTYouTube", youtube, reactTag);
+        }
+    }];
+}
+
 RCT_EXPORT_METHOD(nextVideo:(nonnull NSNumber *)reactTag)
 {
     [self.bridge.uiManager addUIBlock:^(__unused RCTUIManager *uiManager, NSDictionary<NSNumber *, UIView *> *viewRegistry) {
