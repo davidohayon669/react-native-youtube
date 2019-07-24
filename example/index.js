@@ -1,4 +1,5 @@
 import { AppRegistry } from 'react-native';
-import RCTYouTubeExample from './RCTYouTubeExample';
+import ReactNativeYouTubeExample from './ReactNativeYouTubeExample';
+import { name as appName } from './app.json';
 
-AppRegistry.registerComponent('RCTYouTubeExample', () => RCTYouTubeExample);
+AppRegistry.registerComponent(appName, () => ReactNativeYouTubeExample);
