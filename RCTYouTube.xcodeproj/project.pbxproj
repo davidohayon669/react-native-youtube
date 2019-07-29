@@ -249,7 +249,6 @@
 			buildSettings = {
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(SRCROOT)/../../ios/**",
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
