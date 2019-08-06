@@ -35,7 +35,7 @@ export default class ReactNativeYouTubeExample extends React.Component {
           if (this.state.containerWidth !== width) this.setState({ containerWidth: width });
         }}
       >
-        <Text style={styles.welcome}>{'<YouTube /> component for\n React Native.'}</Text>
+        <Text style={styles.welcome}>{'<YouTube /> component for React Native.'}</Text>
         <Text style={styles.instructions}>
           http://github.com/inProgress-team/react-native-youtube
         </Text>

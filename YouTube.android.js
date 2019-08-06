@@ -58,14 +58,12 @@ export default class YouTube extends React.Component {
   constructor(props) {
     super(props);
 
+    BackHandler.addEventListener('hardwareBackPress', this._backPress);
+
     this.state = {
       moduleMargin: StyleSheet.hairlineWidth * 2,
       fullscreen: props.fullscreen,
     };
-  }
-
-  componentWillMount() {
-    BackHandler.addEventListener('hardwareBackPress', this._backPress);
 
     // Periodically triggeting a forced unnoticable layout rendering until onReady to make sure the
     // native loading progress is shown
@@ -74,10 +72,10 @@ export default class YouTube extends React.Component {
     }, 250);
   }
 
-  componentWillReceiveProps(nextProps) {
+  componentDidUpdate(prevProps) {
     // Translate next `fullscreen` prop to state
-    if (nextProps.fullscreen !== this.props.fullscreen) {
-      this.setState({ fullscreen: nextProps.fullscreen });
+    if (prevProps.fullscreen !== this.props.fullscreen) {
+      this.setState({ fullscreen: this.props.fullscreen });
     }
   }
 
@@ -128,7 +126,7 @@ export default class YouTube extends React.Component {
   seekTo(seconds) {
     UIManager.dispatchViewManagerCommand(
       ReactNative.findNodeHandle(this._nativeComponentRef),
-      UIManager.ReactYouTube.Commands.seekTo,
+      UIManager.getViewManagerConfig('ReactYouTube').Commands.seekTo,
       [parseInt(seconds, 10)],
     );
   }
@@ -136,7 +134,7 @@ export default class YouTube extends React.Component {
   nextVideo() {
     UIManager.dispatchViewManagerCommand(
       ReactNative.findNodeHandle(this._nativeComponentRef),
-      UIManager.ReactYouTube.Commands.nextVideo,
+      UIManager.getViewManagerConfig('ReactYouTube').Commands.nextVideo,
       [],
     );
   }
@@ -144,7 +142,7 @@ export default class YouTube extends React.Component {
   previousVideo() {
     UIManager.dispatchViewManagerCommand(
       ReactNative.findNodeHandle(this._nativeComponentRef),
-      UIManager.ReactYouTube.Commands.previousVideo,
+      UIManager.getViewManagerConfig('ReactYouTube').Commands.previousVideo,
       [],
     );
   }
@@ -152,7 +150,7 @@ export default class YouTube extends React.Component {
   playVideoAt(index) {
     UIManager.dispatchViewManagerCommand(
       ReactNative.findNodeHandle(this._nativeComponentRef),
-      UIManager.ReactYouTube.Commands.playVideoAt,
+      UIManager.getViewManagerConfig('ReactYouTube').Commands.playVideoAt,
       [parseInt(index, 10)],
     );
   }

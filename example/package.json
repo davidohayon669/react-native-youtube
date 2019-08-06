@@ -7,14 +7,15 @@
     "preinstall": "npm pack ..",
     "run-ios": "react-native run-ios",
     "run-android": "react-native run-android",
+    "install-root": "npm run pack-root && npm install react-native-youtube-2.0.0-beta.tgz",
     "pack-root": "npm pack ..",
     "test": "jest",
     "lint": "eslint ."
   },
   "dependencies": {
-    "react-native-youtube": "react-native-youtube-2.0.0-beta.tgz",
     "react": "16.8.6",
-    "react-native": "0.60.4"
+    "react-native": "0.60.4",
+    "react-native-youtube": "file:react-native-youtube-2.0.0-beta.tgz"
   },
   "devDependencies": {
     "@babel/core": "7.5.5",
