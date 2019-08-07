@@ -42,6 +42,15 @@ public class YouTubePlayerController implements
     private int mControls = 1;
     private boolean mShowFullscreenButton = true;
     private boolean mResumePlay = true;
+    private boolean mJustResumed = false;
+
+    /**
+     * Tells if the player is available to request
+     * @return true if the player is available, false if currently initializing
+     * or false if the player has been released
+     */
+    private boolean mPlayerAvailable = false;
+
 
     public YouTubePlayerController(YouTubeView youTubeView) {
         mYouTubeView = youTubeView;
@@ -51,6 +60,12 @@ public class YouTubePlayerController implements
     public void onInitializationSuccess(YouTubePlayer.Provider provider, YouTubePlayer youTubePlayer, boolean wasRestored) {
         if (!wasRestored) {
             mYouTubePlayer = youTubePlayer;
+
+            /*
+             * Now we are sure that the player is available
+             */
+            mPlayerAvailable = true;
+
             mYouTubePlayer.setPlayerStateChangeListener(this);
             mYouTubePlayer.setPlaybackEventListener(this);
             mYouTubePlayer.setOnFullscreenListener(this);
@@ -85,6 +100,24 @@ public class YouTubePlayerController implements
     @Override
     public void onStopped() {
         mYouTubeView.didChangeToState("stopped");
+        /**
+         * ugly hack to trigger automatic video resume after the fragment went down
+         * @see {@link #onVideoFragmentResume()} for more details
+         */
+        if (mJustResumed) { // check if the fragment just resumed
+            if (isResumePlay()) { // check if the config ask use to do an automatic resume
+                /*
+                 * check if the video is already loaded, if so play the video directly
+                 * (the onLoaded event won't trigger so we cannot use it to play the video)
+                 * or
+                 * load the video (the onLoaded event will then take care of playing that video)
+                 */
+                if (isLoaded()) mYouTubePlayer.play();
+                else loadVideo();
+            }
+            // we consume the flag of resuming
+            mJustResumed = false;
+        }
     }
 
     @Override
@@ -114,23 +147,36 @@ public class YouTubePlayerController implements
 
     @Override
     public void onLoading() {
+        setLoaded(false);
         mYouTubeView.didChangeToState("loading");
     }
 
     @Override
     public void onLoaded(String videoId) {
+        mVideoId = videoId;
         if (isVideosMode()) setVideosIndex(mVideoIds.indexOf(videoId));
 
-        if (!mIsReady) {
-            mYouTubeView.playerViewDidBecomeReady();
-            setLoaded(true);
-            mIsReady = true;
-        }
+        mYouTubeView.playerViewDidBecomeReady();
+        setLoaded(true);
+        mIsReady = true;
+        automaticPlay();
     }
 
     @Override
     public void onAdStarted() {
         mYouTubeView.didChangeToState("adStarted");
+    }
+
+    /**
+     * If video is loaded and play is requested (isPlay())
+     * It will start the video
+     */
+    private void automaticPlay() {
+      if (isLoaded() && isPlay()) {
+        mYouTubePlayer.play();
+      } else if (!isPlay()) {
+        mYouTubePlayer.pause();
+      }
     }
 
     @Override
@@ -158,18 +204,22 @@ public class YouTubePlayerController implements
     }
 
     public void seekTo(int second) {
+        if (!isPlayerAvailable()) return;
         if (isLoaded()) mYouTubePlayer.seekToMillis(second * 1000);
     }
 
     public int getCurrentTime() {
+      if (!isPlayerAvailable()) return 0;
       return mYouTubePlayer.getCurrentTimeMillis() / 1000;
     }
 
     public int getDuration() {
+      if (!isPlayerAvailable()) return 0;
       return mYouTubePlayer.getDurationMillis() / 1000;
     }
 
     public void nextVideo() {
+        if (!isPlayerAvailable()) return;
         if (isLoaded()) {
             if (mYouTubePlayer.hasNext()) mYouTubePlayer.next();
             else if (isLoop()) {
@@ -181,6 +231,7 @@ public class YouTubePlayerController implements
     }
 
     public void previousVideo() {
+        if (!isPlayerAvailable()) return;
         if (isLoaded()) {
             if (mYouTubePlayer.hasPrevious()) mYouTubePlayer.previous();
             else if (isLoop()) {
@@ -192,6 +243,7 @@ public class YouTubePlayerController implements
     }
 
     public void playVideoAt(int index) {
+        if (!isPlayerAvailable()) return;
         if (isLoaded() && isVideosMode()) {
             boolean indexIsInRange = setVideosIndex(index);
             if (indexIsInRange) loadVideos();
@@ -204,26 +256,43 @@ public class YouTubePlayerController implements
      **/
 
     private void loadVideo() {
-        if (isPlay()) mYouTubePlayer.loadVideo(mVideoId);
-        else mYouTubePlayer.cueVideo(mVideoId);
+        if (!isPlayerAvailable()) return;
+
+        /*
+         * we only cue the video in order to load it
+         * when the video will be loaded depending on the isPlay() boolean we
+         * will start it right away or wait for an user interaction
+         */
+        mYouTubePlayer.cueVideo(mVideoId);
         setVideosIndex(0);
         setVideoMode();
     }
 
     private void loadVideos() {
-        if (isPlay()) mYouTubePlayer.loadVideos(mVideoIds, getVideosIndex(), 0);
-        else mYouTubePlayer.cueVideos(mVideoIds, getVideosIndex(), 0);
+        if (!isPlayerAvailable()) return;
+        /*
+         * we only cue the video in order to load it
+         * when the video will be loaded depending on the isPlay() boolean we
+         * will start it right away or wait for an user interaction
+         */
+        mYouTubePlayer.cueVideos(mVideoIds, getVideosIndex(), 0);
         setVideosMode();
     }
 
     private void loadPlaylist() {
-        if (isPlay()) mYouTubePlayer.loadPlaylist(mPlaylistId);
-        else mYouTubePlayer.cuePlaylist(mPlaylistId);
+        if (!isPlayerAvailable()) return;
+        /*
+         * we only cue the playlist in order to load it
+         * when the video will be loaded depending on the isPlay() boolean we
+         * will start it right away or wait for an user interaction
+         */
+        mYouTubePlayer.cuePlaylist(mPlaylistId);
         setVideosIndex(0);
         setPlaylistMode();
     }
 
     private void updateControls() {
+        if (!isPlayerAvailable()) return;
         switch (mControls) {
             case 0:
                 mYouTubePlayer.setPlayerStyle(YouTubePlayer.PlayerStyle.CHROMELESS);
@@ -238,10 +307,12 @@ public class YouTubePlayerController implements
     }
 
     private void updateFullscreen() {
+        if (!isPlayerAvailable()) return;
         mYouTubePlayer.setFullscreen(mFullscreen);
     }
 
     private void updateShowFullscreenButton() {
+        if (!isPlayerAvailable()) return;
         mYouTubePlayer.setShowFullscreenButton(mShowFullscreenButton);
     }
 
@@ -306,16 +377,21 @@ public class YouTubePlayerController implements
     }
 
     public void onVideoFragmentResume() {
-        if (isResumePlay() && mYouTubePlayer != null) {
-            // For some reason calling mYouTubePlayer.play() right away is ineffective
-            final Handler handler = new Handler();
-            handler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                   mYouTubePlayer.play();
-                }
-            }, 1);
-        }
+      /**
+       * we tell that the fragment just resume
+       * in order to resume the video if the configuration allows it (resumePlayAndroid to true)
+       *
+       * /!\ We cannot just do a player.play() because of the youtube player api
+       * Indeed this library at each resume of the fragment trigger its current state
+       * It seems that this event is always "stopped" (probably because of the youtube player view not visible)
+       * In this case if we do a regular youtubeplayer.play(), the stop event will directly stop
+       * the play and stay as is.
+       *
+       * This is why We do a hack in the {@link #onStopped()} event on the youtube player library
+       * looking if the fragment just resumed and if so, will ask for a play if the configs allows to.
+       * @see {@link #onStopped()}
+       */
+      mJustResumed = true;
     }
 
     private boolean isPlay() {
@@ -334,6 +410,15 @@ public class YouTubePlayerController implements
         return mControls;
     }
 
+    /**
+     * Tells if the player is available to request
+     * @return true if the player is available, false if currently initializing
+     * or false if the player has been released
+     */
+    public boolean isPlayerAvailable() {
+      return mPlayerAvailable;
+    }
+
     private boolean isResumePlay() {
         return mResumePlay;
     }
@@ -344,6 +429,7 @@ public class YouTubePlayerController implements
 
     public void setVideoId(String videoId) {
         mVideoId = videoId;
+        if (!isPlayerAvailable()) return;
         if (isLoaded()) loadVideo();
     }
 
@@ -354,21 +440,20 @@ public class YouTubePlayerController implements
             for (int i = 0; i < videoIds.size(); i++) {
                 mVideoIds.add(videoIds.getString(i));
             }
+            if (!isPlayerAvailable()) return;
             if (isLoaded()) loadVideos();
         }
     }
 
     public void setPlaylistId(String playlistId) {
         mPlaylistId = playlistId;
+        if (!isPlayerAvailable()) return;
         if (isLoaded()) loadPlaylist();
     }
 
     public void setPlay(boolean play) {
         mPlay = play;
-        if (isLoaded()) {
-            if (isPlay()) mYouTubePlayer.play();
-            else mYouTubePlayer.pause();
-        }
+        automaticPlay();
     }
 
     public void setLoop(boolean loop) {
@@ -377,6 +462,7 @@ public class YouTubePlayerController implements
 
     public void setFullscreen(boolean fullscreen) {
         mFullscreen = fullscreen;
+        if (!isPlayerAvailable()) return;
         if (isLoaded()) updateFullscreen();
     }
 
@@ -388,11 +474,30 @@ public class YouTubePlayerController implements
     }
 
     public void setShowFullscreenButton(boolean show) {
+        if (!isPlayerAvailable()) return;
         mShowFullscreenButton = show;
         if (isLoaded()) updateShowFullscreenButton();
     }
 
     public void setResumePlay(boolean resumePlay) {
         mResumePlay = resumePlay;
+    }
+
+
+    public void onInitializationStarted() {
+        /*
+         * Initialization is in progress, we should not query the player
+         * during this time
+         */
+        mPlayerAvailable = false;
+    }
+
+    /**
+     * Called when the youtube fragment has destroyed its view
+     * And so release its player based on documentation
+     */
+    public void onPlayerRelease() {
+      mPlayerAvailable = false;
+      mPlay = false;
     }
 }

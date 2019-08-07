@@ -29,7 +29,6 @@ public class YouTubeView extends FrameLayout {
     }
 
     public void init() {
-        inflate(getContext(), R.layout.youtube_layout, this);
         mVideoFragment = VideoFragment.newInstance(this);
         mYouTubeController = new YouTubePlayerController(this);
     }
@@ -195,5 +194,19 @@ public class YouTubeView extends FrameLayout {
 
     public void setResumePlay(boolean bool) {
         mYouTubeController.setResumePlay(bool);
+    }
+
+    /**
+     * Spread the onInitializationStarted event to the controller
+     */
+    public void onInitializationStarted() {
+      mYouTubeController.onInitializationStarted();
+    }
+
+    /**
+     * Spread the player released event to the controller
+     */
+    public void onPlayerRelease() {
+      mYouTubeController.onPlayerRelease();
     }
 }
