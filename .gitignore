@@ -18,6 +18,9 @@ DerivedData
 *.xcuserstate
 .DS_Store
 .vscode/
+android/.idea/
+.idea/
+
 
 # Project specific
 #
