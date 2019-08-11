@@ -12,9 +12,9 @@ Uses Google's official [youtube-ios-player-helper](https://github.com/youtube/yo
 ```javascript
 <YouTube
   videoId="KVZ-P-ZI6W4"   // The YouTube video ID
-  play={true}             // control playback of video with true/false
-  fullscreen={true}       // control whether the video should play in fullscreen or inline
-  loop={true}             // control whether the video should loop when ended
+  play                    // control playback of video with true/false
+  fullscreen              // control whether the video should play in fullscreen or inline
+  loop                    // control whether the video should loop when ended
 
   onReady={e => this.setState({ isReady: true })}
   onChangeState={e => this.setState({ status: e.state })}
@@ -72,7 +72,7 @@ The iOS implementation of this player uses the official YouTube iFrame under the
 #### Setup
 Standalone iOS player Uses [XCDYoutubeKit](https://github.com/0xced/XCDYouTubeKit) (**Warning**: XCDYoutubeKit doesn't conform to YouTube's Terms Of Use). Add the next line to your `Podfile` and run `pod install` inside `/ios` folder:
 ```
-pod 'XCDYouTubeKit', '~> 2.5'
+pod 'XCDYouTubeKit', '~> 2.8'
 ```
 
 #### Importing
@@ -143,27 +143,12 @@ A static method that returns a Promise to launch a standalone YouTube player wit
 * `startTime` (number): Optional starting time of the video (in seconds). Default: `0`.
 
 ## Installation
-This component is confirmed to be working on react-native ~0.37 - ~0.45
 
 Install the latest version to your `package.json`:
 
 `$ npm install react-native-youtube -S`
 
-Link the library to your iOS and Android projects with:
-
-`$ react-native link`
-
-**IMPORTANT! (iOS Only)**: To link `assets/YTPlayerView-iframe-player.html` to your project, `react-native link` is not enough (As of RN ~0.37 - ~0.45). You will need to *also* use the older tool it is based on, `rnpm` (This step must be done **after** `react-native link`):
-
-First, if you don't have it installed, globally install `rnpm` (^1.9.0):
-
-`$ npm install -g rnpm`
-
-Then at the project's root folder type:
-
-`$ rnpm link`
-
-(This step can also be done manually by adding `../node_modules/react-native-youtube/assets/YTPlayerView-iframe-player.html` to your Xcode project's root directory)
+React Native automatically connects this native module to your iOS and Android projects. On Android this link is supported with Gradle and is done automatically after installation. On iOS the linking is done by Cocoapods, without the need to add this library to the `Podfile`, Just run `pod install` after installation.
 
 **IMPORTANT! (Android Only)**: The Android implementation of this component needs to have the official YouTube app installed on the device. Otherwise the user will be prompted to install / activate the app, and an error event will be triggered with `SERVICE_MISSING`/`SERVICE_DISABLED`.
 
@@ -193,25 +178,23 @@ The YouTube API for Android is a *singleton*. What it means is that unlike the i
 ## Example App and Development
 This repository includes an example project that can be used for trying, developing and testing all functionalities on a dedicated clean app project.
 
-First copy the git repository and install the React-Native project inside `example`:
+First, copy the git repository and install the React-Native project inside `/example`:
 ```sh
 $ git clone https://github.com/inProgress-team/react-native-youtube.git
 $ cd react-native-youtube/example
 $ npm install
-$ react-native link
-$ rnpm link
 ```
 
-Don't forget to install the Pods if you want to test API that depends on XCDYoutubeKit:
+For iOS, also install the Cocoapods
 ```sh
 $ cd ios
 $ pod install
 ```
 
-Then build and run with `react-native run-ios` / `react-native run-android` or your favorite IDE.
+Then build and run with `react-native run-ios` / `react-native run-android` or your preferred IDE.
 
 #### For Developers
-To be able to directly test your changes with the example app, re-install the package from the root directory with `npm i $(npm pack ..)`. This command packs the root directory into an npm package tar file and installs it locally to the example app.
+To be able to directly test your changes with the example app, re-install the package from the root directory with `npm run install-root` after each change. This command packs the root directory into an npm package `.tar` file and installs it locally to the example app.
 
 ## Authors
 * Param Aggarwal (paramaggarwal@gmail.com)
