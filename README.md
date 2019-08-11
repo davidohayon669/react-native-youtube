@@ -9,7 +9,7 @@ Uses Google's official [youtube-ios-player-helper](https://github.com/youtube/yo
 ![Screenshot of the example app](https://github.com/inProgress-team/react-native-youtube/raw/master/Screenshot.png)
 
 ## Usage
-```javascript
+```jsx
 <YouTube
   videoId="KVZ-P-ZI6W4"   // The YouTube video ID
   play                    // control playback of video with true/false
