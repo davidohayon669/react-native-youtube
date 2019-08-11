@@ -50,8 +50,8 @@ export default class ReactNativeYouTubeExample extends React.Component {
             // Un-comment one of videoId / videoIds / playlist.
             // You can also edit these props while Hot-Loading in development mode to see how
             // it affects the loaded native module
-            // videoId="ncw4ISEU5ik"
-            videoIds={['HcXNPI-IPPM', 'XXlZfc1TrD0', 'czcjU1w-c6k', 'uMK0prafzw0']}
+            videoId="ncw4ISEU5ik"
+            // videoIds={['qzYgSecGQww', 'XXlZfc1TrD0', 'czcjU1w-c6k', 'uMK0prafzw0']}
             // playlistId="PLF797E961509B4EB5"
             play={this.state.isPlaying}
             loop={this.state.isLooping}

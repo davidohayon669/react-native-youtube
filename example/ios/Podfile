@@ -36,6 +36,9 @@ target 'ReactNativeYouTubeExample' do
   use_native_modules!
 end
 
+# Include this to allow YouTubeStandaloneIOS player
+# pod 'XCDYouTubeKit', '~> 2.8'
+
 target 'ReactNativeYouTubeExample-tvOS' do
   # Pods for ReactNativeYouTubeExample-tvOS
 
