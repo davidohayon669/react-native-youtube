@@ -4,12 +4,12 @@ import { NativeModules } from 'react-native';
 const { YouTubeStandalone } = NativeModules;
 
 export const YouTubeStandaloneIOS = !YouTubeStandalone
-  ? null
-  : {
-      playVideo: videoId =>
-        new Promise((resolve, reject) => {
-          YouTubeStandalone.playVideo(videoId)
-            .then(() => resolve())
-            .catch(errorMessage => reject(errorMessage));
-        }),
+    ? null
+    : {
+        playVideo: (videoId, startTime = 0) =>
+            new Promise((resolve, reject) => {
+                YouTubeStandalone.playVideo(videoId, startTime)
+                .then(() => resolve())
+                .catch(errorMessage => reject(errorMessage));
+            }),
     };
