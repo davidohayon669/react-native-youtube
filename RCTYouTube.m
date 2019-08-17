@@ -65,6 +65,9 @@
 
     if (self.webView) {
         self.webView.frame = self.bounds;
+        if (@available(iOS 11.0, *)) {
+            self.webView.scrollView.contentInsetAdjustmentBehavior = UIScrollViewContentInsetAdjustmentNever;
+        }
     }
 }
 
