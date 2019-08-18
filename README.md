@@ -7,8 +7,35 @@ Uses Google's official [youtube-ios-player-helper](https://github.com/youtube/yo
 
 **Important!!!** - This README is for v2. [Latest README for v1 (mainly different installation) can be found here](https://github.com/inProgress-team/react-native-youtube/blob/v1.1.0/README.md)
 
+## Table of Contents ##
+* [Screenshot](#screenshot)
+* [Install](#install)
+* [Usage](#usage)
+* [API](#api)
+* [Known Issues](#known-issues)
+* [Example App and Development](#example-app-and-development)
+* [Authors](#authors)
+* [License](#license)
+
 ## Screenshot
 ![Screenshot of the example app](https://github.com/inProgress-team/react-native-youtube/raw/master/Screenshot.png)
+
+## Install
+
+Install the latest version to your `package.json`:
+
+`$ npm install react-native-youtube -S`
+
+React Native automatically connects this native module to your iOS and Android projects. On Android this link is supported with Gradle and is done automatically after installation. On iOS the linking is done by Cocoapods, without the need to add this library to the `Podfile`, Just run `pod install` after installation.
+
+**IMPORTANT! (Android Only)**: The Android implementation of this component needs to have the official YouTube app installed on the device. Otherwise the user will be prompted to install / activate the app, and an error event will be triggered with `SERVICE_MISSING`/`SERVICE_DISABLED`.
+
+#### OPTIONAL: Activated sound when iPhone (iOS) is on vibrate mode
+Open AppDelegate.m and add :
+
+* `#import <AVFoundation/AVFoundation.h>`
+
+* `[[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayback error: nil];` in your didFinishLaunchingWithOptions method
 
 ## Usage
 ```jsx
@@ -143,23 +170,6 @@ A static method that returns a Promise to launch a standalone YouTube player wit
 * `lightboxMode` (boolean): Should the video play inside a lightbox instead of fullscreen. Default: `false`.
 * `startIndex` (number): The index position of the video to play first. Default: `0`.
 * `startTime` (number): Optional starting time of the video (in seconds). Default: `0`.
-
-## Installation
-
-Install the latest version to your `package.json`:
-
-`$ npm install react-native-youtube -S`
-
-React Native automatically connects this native module to your iOS and Android projects. On Android this link is supported with Gradle and is done automatically after installation. On iOS the linking is done by Cocoapods, without the need to add this library to the `Podfile`, Just run `pod install` after installation.
-
-**IMPORTANT! (Android Only)**: The Android implementation of this component needs to have the official YouTube app installed on the device. Otherwise the user will be prompted to install / activate the app, and an error event will be triggered with `SERVICE_MISSING`/`SERVICE_DISABLED`.
-
-#### OPTIONAL: Activated sound when iPhone (iOS) is on vibrate mode
-Open AppDelegate.m and add :
-
-* `#import <AVFoundation/AVFoundation.h>`
-
-* `[[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayback error: nil];` in your didFinishLaunchingWithOptions method
 
 ## Known Issues
 #### `UNAUTHORIZED_OVERLAY` and `PLAYER_VIEW_TOO_SMALL` on Android
