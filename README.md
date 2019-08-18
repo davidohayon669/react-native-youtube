@@ -3,7 +3,9 @@ A `<YouTube />` component for React Native.
 
 Uses Google's official [youtube-ios-player-helper](https://github.com/youtube/youtube-ios-player-helper) for iOS and [YouTube Android Player API](https://developers.google.com/youtube/android/player/) for Android and exposes much of the API, as declaratively as possible, into React Native.
 
-**[Having problems with Android? Please read this first](https://github.com/inProgress-team/react-native-youtube#known-issues)**
+[Having problems with Android? Please read this first](https://github.com/inProgress-team/react-native-youtube#known-issues)
+
+**Important!!!** - This README is for v2. [Latest README for v1 (mainly different installation) can be found here](https://github.com/inProgress-team/react-native-youtube/blob/v1.1.0/README.md)
 
 ## Screenshot
 ![Screenshot of the example app](https://github.com/inProgress-team/react-native-youtube/raw/master/Screenshot.png)
