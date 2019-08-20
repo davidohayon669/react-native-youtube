@@ -114,4 +114,34 @@ RCT_EXPORT_METHOD(currentTime:(nonnull NSNumber *)reactTag resolver:(RCTPromiseR
     }];
 }
 
+RCT_EXPORT_METHOD(playbackRate:(nonnull NSNumber *)reactTag resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
+{
+    [self.bridge.uiManager addUIBlock:^(__unused RCTUIManager *uiManager, NSDictionary<NSNumber *, UIView *> *viewRegistry) {
+        RCTYouTube *youtube = (RCTYouTube*)viewRegistry[reactTag];
+        if ([youtube isKindOfClass:[RCTYouTube class]]) {
+            NSNumber *rate = [NSNumber numberWithInt:[youtube playbackRate]];
+            if (rate) {
+                resolve(rate);
+            } else {
+                NSError *error = nil;
+                reject(@"Error getting play back rate time of video from RCTYouTube", @"", error);
+            }
+        } else {
+            RCTLogError(@"Cannot playbackRate: %@ (tag #%@) is not RCTYouTube", youtube, reactTag);
+        }
+    }];
+}
+
+RCT_EXPORT_METHOD(setPlaybackRate:(nonnull NSNumber *)reactTag rate:(nonnull NSNumber *)rate)
+{
+    [self.bridge.uiManager addUIBlock:^(__unused RCTUIManager *uiManager, NSDictionary<NSNumber *, UIView *> *viewRegistry) {
+        RCTYouTube *youtube = (RCTYouTube*)viewRegistry[reactTag];
+        if ([youtube isKindOfClass:[RCTYouTube class]]) {
+            [youtube setPlaybackRate:(float)[rate floatValue]];
+        } else {
+            RCTLogError(@"Cannot setPlaybackRate: %@ (tag #%@) is not RCTYouTube", youtube, reactTag);
+        }
+    }];
+}
+
 @end

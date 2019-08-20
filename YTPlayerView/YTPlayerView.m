@@ -870,6 +870,10 @@ NSString static *const kYTPlayerSyndicationRegexPattern = @"^https://tpc.googles
         }
     }
 
+    // Add UserAgent to enable setPlaybackRate
+    NSDictionary *dictionary = [NSDictionary dictionaryWithObjectsAndKeys:@"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/535.19 (KHTML, like Gecko) Chrome/18.0.1025.45 Safari/535.19", @"UserAgent", nil];
+    [[NSUserDefaults standardUserDefaults] registerDefaults:dictionary];
+
     return webView;
 }
 
