@@ -1,6 +1,6 @@
 {
   "name": "ReactNativeYouTubeExample",
-  "version": "2.0.0-beta",
+  "version": "2.0.0-beta.1",
   "private": true,
   "scripts": {
     "start": "react-native start",
@@ -13,7 +13,7 @@
   "dependencies": {
     "react": "16.8.6",
     "react-native": "0.60.4",
-    "react-native-youtube": "file:react-native-youtube-2.0.0-beta.tgz"
+    "react-native-youtube": "file:react-native-youtube-2.0.0-beta.1.tgz"
   },
   "devDependencies": {
     "@babel/core": "7.5.5",
