@@ -5,8 +5,6 @@
   "scripts": {
     "start": "react-native start",
     "preinstall": "npm pack ..",
-    "run-ios": "react-native run-ios",
-    "run-android": "react-native run-android",
     "install-root": "npm run pack-root && npm install react-native-youtube-2.0.0-beta.tgz",
     "pack-root": "npm pack ..",
     "test": "jest",
