@@ -6,7 +6,6 @@ import {
   ScrollView,
   TouchableOpacity,
   PixelRatio,
-  Dimensions,
   Platform,
 } from 'react-native';
 import YouTube, { YouTubeStandaloneIOS, YouTubeStandaloneAndroid } from 'react-native-youtube';
