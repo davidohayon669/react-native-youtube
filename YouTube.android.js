@@ -1,7 +1,3 @@
-/**
- * @providesModule YouTube
- */
-
 import React from 'react';
 import PropTypes from 'prop-types';
 import ReactNative, {
@@ -55,6 +51,8 @@ export default class YouTube extends React.Component {
 
   _interval = null;
 
+  _nativeComponentRef = React.createRef();
+
   constructor(props) {
     super(props);
 
@@ -88,11 +86,14 @@ export default class YouTube extends React.Component {
       this.setState({ fullscreen: false });
       return true;
     }
+
     return false;
   };
 
   _onError = event => {
-    if (this.props.onError) this.props.onError(event.nativeEvent);
+    if (this.props.onError) {
+      this.props.onError(event.nativeEvent);
+    }
   };
 
   _onReady = event => {
@@ -106,26 +107,38 @@ export default class YouTube extends React.Component {
     setTimeout(() => {
       this.setState({ moduleMargin: StyleSheet.hairlineWidth });
     }, 250);
-    if (this.props.onReady) this.props.onReady(event.nativeEvent);
+
+    if (this.props.onReady) {
+      this.props.onReady(event.nativeEvent);
+    }
   };
 
   _onChangeState = event => {
-    if (this.props.onChangeState) this.props.onChangeState(event.nativeEvent);
+    if (this.props.onChangeState) {
+      this.props.onChangeState(event.nativeEvent);
+    }
   };
 
   _onChangeQuality = event => {
-    if (this.props.onChangeQuality) this.props.onChangeQuality(event.nativeEvent);
+    if (this.props.onChangeQuality) {
+      this.props.onChangeQuality(event.nativeEvent);
+    }
   };
 
   _onChangeFullscreen = event => {
     const { isFullscreen } = event.nativeEvent;
-    if (this.state.fullscreen !== isFullscreen) this.setState({ fullscreen: isFullscreen });
-    if (this.props.onChangeFullscreen) this.props.onChangeFullscreen(event.nativeEvent);
+    if (this.state.fullscreen !== isFullscreen) {
+      this.setState({ fullscreen: isFullscreen });
+    }
+
+    if (this.props.onChangeFullscreen) {
+      this.props.onChangeFullscreen(event.nativeEvent);
+    }
   };
 
   seekTo(seconds) {
     UIManager.dispatchViewManagerCommand(
-      ReactNative.findNodeHandle(this._nativeComponentRef),
+      ReactNative.findNodeHandle(this._nativeComponentRef.current),
       UIManager.getViewManagerConfig('ReactYouTube').Commands.seekTo,
       [parseInt(seconds, 10)],
     );
@@ -133,7 +146,7 @@ export default class YouTube extends React.Component {
 
   nextVideo() {
     UIManager.dispatchViewManagerCommand(
-      ReactNative.findNodeHandle(this._nativeComponentRef),
+      ReactNative.findNodeHandle(this._nativeComponentRef.current),
       UIManager.getViewManagerConfig('ReactYouTube').Commands.nextVideo,
       [],
     );
@@ -141,7 +154,7 @@ export default class YouTube extends React.Component {
 
   previousVideo() {
     UIManager.dispatchViewManagerCommand(
-      ReactNative.findNodeHandle(this._nativeComponentRef),
+      ReactNative.findNodeHandle(this._nativeComponentRef.current),
       UIManager.getViewManagerConfig('ReactYouTube').Commands.previousVideo,
       [],
     );
@@ -149,43 +162,32 @@ export default class YouTube extends React.Component {
 
   playVideoAt(index) {
     UIManager.dispatchViewManagerCommand(
-      ReactNative.findNodeHandle(this._nativeComponentRef),
+      ReactNative.findNodeHandle(this._nativeComponentRef.current),
       UIManager.getViewManagerConfig('ReactYouTube').Commands.playVideoAt,
       [parseInt(index, 10)],
     );
   }
 
-  videosIndex() {
-    return new Promise((resolve, reject) =>
-      NativeModules.YouTubeModule.videosIndex(ReactNative.findNodeHandle(this._nativeComponentRef))
-        .then(index => resolve(index))
-        .catch(errorMessage => reject(errorMessage)),
+  videosIndex = () =>
+    NativeModules.YouTubeModule.videosIndex(
+      ReactNative.findNodeHandle(this._nativeComponentRef.current),
     );
-  }
 
-  currentTime() {
-    return new Promise((resolve, reject) =>
-      NativeModules.YouTubeModule.currentTime(ReactNative.findNodeHandle(this._nativeComponentRef))
-        .then(currentTime => resolve(currentTime))
-        .catch(errorMessage => reject(errorMessage)),
+  currentTime = () =>
+    NativeModules.YouTubeModule.currentTime(
+      ReactNative.findNodeHandle(this._nativeComponentRef.current),
     );
-  }
 
-  duration() {
-    return new Promise((resolve, reject) =>
-      NativeModules.YouTubeModule.duration(ReactNative.findNodeHandle(this._nativeComponentRef))
-        .then(duration => resolve(duration))
-        .catch(errorMessage => reject(errorMessage)),
+  duration = () =>
+    NativeModules.YouTubeModule.duration(
+      ReactNative.findNodeHandle(this._nativeComponentRef.current),
     );
-  }
 
   render() {
     return (
       <View style={[styles.container, this.props.style]}>
         <RCTYouTube
-          ref={component => {
-            this._nativeComponentRef = component;
-          }}
+          ref={this._nativeComponentRef}
           {...this.props}
           fullscreen={this.state.fullscreen}
           style={[styles.module, { margin: this.state.moduleMargin }]}

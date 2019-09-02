@@ -8,6 +8,7 @@ import {
   PixelRatio,
   Platform,
   Button,
+  Dimensions,
 } from 'react-native';
 import YouTube, { YouTubeStandaloneIOS, YouTubeStandaloneAndroid } from 'react-native-youtube';
 
@@ -22,67 +23,54 @@ export default class ReactNativeYouTubeExample extends React.Component {
     duration: 0,
     currentTime: 0,
     fullscreen: false,
-    containerMounted: false,
-    containerWidth: null,
+    // containerMounted: true,
+    playerWidth: Dimensions.get('window').width,
   };
+
+  _youTubeRef = React.createRef();
 
   render() {
     return (
-      <ScrollView
-        style={styles.container}
-        onLayout={({ nativeEvent: { layout } }) => {
-          if (!this.state.containerMounted) {
-            this.setState({ containerMounted: true });
-          }
-
-          if (this.state.containerWidth !== layout.width) {
-            this.setState({ containerWidth: layout.width });
-          }
-        }}
-      >
+      <ScrollView style={styles.container}>
         <Text style={styles.welcome}>{'<YouTube /> component for React Native.'}</Text>
 
-        {this.state.containerMounted && (
-          <YouTube
-            ref={component => {
-              this._youTubeRef = component;
-            }}
-            // You must have an API Key for the player to load in Android
-            apiKey="YOUR_API_KEY"
-            // Un-comment one of videoId / videoIds / playlist.
-            // You can also edit these props while Hot-Loading in development mode to see how
-            // it affects the loaded native module
-            videoId="ncw4ISEU5ik"
-            // videoIds={['qzYgSecGQww', 'XXlZfc1TrD0', 'czcjU1w-c6k', 'uMK0prafzw0']}
-            // playlistId="PLF797E961509B4EB5"
-            play={this.state.isPlaying}
-            loop={this.state.isLooping}
-            fullscreen={this.state.fullscreen}
-            controls={1}
-            style={[
-              { height: PixelRatio.roundToNearestPixel(this.state.containerWidth / (16 / 9)) },
-              styles.player,
-            ]}
-            onError={e => {
-              this.setState({ error: e.error });
-            }}
-            onReady={e => {
-              this.setState({ isReady: true });
-            }}
-            onChangeState={e => {
-              this.setState({ status: e.state });
-            }}
-            onChangeQuality={e => {
-              this.setState({ quality: e.quality });
-            }}
-            onChangeFullscreen={e => {
-              this.setState({ fullscreen: e.isFullscreen });
-            }}
-            onProgress={e => {
-              this.setState({ duration: e.duration, currentTime: e.currentTime });
-            }}
-          />
-        )}
+        <YouTube
+          ref={this._youTubeRef}
+          // You must have an API Key for the player to load in Android
+          apiKey="YOUR_API_KEY"
+          // Un-comment one of videoId / videoIds / playlist.
+          // You can also edit these props while Hot-Loading in development mode to see how
+          // it affects the loaded native module
+          videoId="ncw4ISEU5ik"
+          // videoIds={['uMK0prafzw0', 'qzYgSecGQww', 'XXlZfc1TrD0', 'czcjU1w-c6k']}
+          // playlistId="PLF797E961509B4EB5"
+          play={this.state.isPlaying}
+          loop={this.state.isLooping}
+          fullscreen={this.state.fullscreen}
+          controls={1}
+          style={[
+            { height: PixelRatio.roundToNearestPixel(this.state.playerWidth / (16 / 9)) },
+            styles.player,
+          ]}
+          onError={e => {
+            this.setState({ error: e.error });
+          }}
+          onReady={e => {
+            this.setState({ isReady: true });
+          }}
+          onChangeState={e => {
+            this.setState({ status: e.state });
+          }}
+          onChangeQuality={e => {
+            this.setState({ quality: e.quality });
+          }}
+          onChangeFullscreen={e => {
+            this.setState({ fullscreen: e.isFullscreen });
+          }}
+          onProgress={e => {
+            this.setState({ duration: e.duration, currentTime: e.currentTime });
+          }}
+        />
 
         {/* Playing / Looping */}
         <View style={styles.buttonGroup}>
@@ -108,8 +96,8 @@ export default class ReactNativeYouTubeExample extends React.Component {
           <Button
             title="Previous Video"
             onPress={() => {
-              if (this._youTubeRef) {
-                this._youTubeRef.previousVideo();
+              if (this._youTubeRef.current) {
+                this._youTubeRef.current.previousVideo();
               }
             }}
           />
@@ -117,8 +105,8 @@ export default class ReactNativeYouTubeExample extends React.Component {
           <Button
             title="Next Video"
             onPress={() => {
-              if (this._youTubeRef) {
-                this._youTubeRef.nextVideo();
+              if (this._youTubeRef.current) {
+                this._youTubeRef.current.nextVideo();
               }
             }}
           />
@@ -129,8 +117,8 @@ export default class ReactNativeYouTubeExample extends React.Component {
           <Button
             title="15 Seconds"
             onPress={() => {
-              if (this._youTubeRef) {
-                this._youTubeRef.seekTo(15);
+              if (this._youTubeRef.current) {
+                this._youTubeRef.current.seekTo(15);
               }
             }}
           />
@@ -138,8 +126,8 @@ export default class ReactNativeYouTubeExample extends React.Component {
           <Button
             title="2 Minutes"
             onPress={() => {
-              if (this._youTubeRef) {
-                this._youTubeRef.seekTo(2 * 60);
+              if (this._youTubeRef.current) {
+                this._youTubeRef.current.seekTo(2 * 60);
               }
             }}
           />
@@ -147,25 +135,25 @@ export default class ReactNativeYouTubeExample extends React.Component {
           <Button
             title="15 Minutes"
             onPress={() => {
-              if (this._youTubeRef) {
-                this._youTubeRef.seekTo(15 * 60);
+              if (this._youTubeRef.current) {
+                this._youTubeRef.current.seekTo(15 * 60);
               }
             }}
           />
         </View>
 
         {/* Play specific video in a videoIds array by index */}
-        {this._youTubeRef &&
-          this._youTubeRef.props.videoIds &&
-          Array.isArray(this._youTubeRef.props.videoIds) && (
+        {this._youTubeRef.current &&
+          this._youTubeRef.current.props.videoIds &&
+          Array.isArray(this._youTubeRef.current.props.videoIds) && (
             <View style={styles.buttonGroup}>
-              {this._youTubeRef.props.videoIds.map((videoId, i) => (
+              {this._youTubeRef.current.props.videoIds.map((videoId, i) => (
                 <React.Fragment key={i}>
                   <Button
                     title={`Video ${i}`}
                     onPress={() => {
-                      if (this._youTubeRef) {
-                        this._youTubeRef.playVideoAt(i);
+                      if (this._youTubeRef.current) {
+                        this._youTubeRef.current.playVideoAt(i);
                       }
                     }}
                   />
@@ -180,8 +168,8 @@ export default class ReactNativeYouTubeExample extends React.Component {
           <Button
             title={'Get Videos Index: ' + this.state.videosIndex}
             onPress={() => {
-              if (this._youTubeRef) {
-                this._youTubeRef
+              if (this._youTubeRef.current) {
+                this._youTubeRef.current
                   .videosIndex()
                   .then(index => this.setState({ videosIndex: index }))
                   .catch(errorMessage => this.setState({ error: errorMessage }));
@@ -208,13 +196,13 @@ export default class ReactNativeYouTubeExample extends React.Component {
             <Button
               title="Update Progress & Duration (Android)"
               onPress={() => {
-                if (this._youTubeRef) {
-                  this._youTubeRef
+                if (this._youTubeRef.current) {
+                  this._youTubeRef.current
                     .currentTime()
                     .then(currentTime => this.setState({ currentTime }))
                     .catch(errorMessage => this.setState({ error: errorMessage }));
-                } else {
-                  this._youTubeRef
+
+                  this._youTubeRef.current
                     .duration()
                     .then(duration => this.setState({ duration }))
                     .catch(errorMessage => this.setState({ error: errorMessage }));
@@ -309,8 +297,8 @@ export default class ReactNativeYouTubeExample extends React.Component {
             <Button
               title="Reload iFrame (iOS)"
               onPress={() => {
-                if (this._youTubeRef) {
-                  this._youTubeRef.reloadIframe();
+                if (this._youTubeRef.current) {
+                  this._youTubeRef.current.reloadIframe();
                 }
               }}
             />
