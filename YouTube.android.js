@@ -8,11 +8,8 @@ import ReactNative, {
   requireNativeComponent,
   UIManager,
   NativeModules,
-  BackAndroid,
-  BackHandler as BackHandlerModule,
+  BackHandler,
 } from 'react-native';
-
-const BackHandler = BackHandlerModule || BackAndroid;
 
 const RCTYouTube = requireNativeComponent('ReactYouTube', YouTube, {
   nativeOnly: {
@@ -41,7 +38,7 @@ export default class YouTube extends React.Component {
     onChangeState: PropTypes.func,
     onChangeQuality: PropTypes.func,
     onChangeFullscreen: PropTypes.func,
-    style: (ViewPropTypes && ViewPropTypes.style) || View.propTypes.style,
+    style: ViewPropTypes.style,
   };
 
   static defaultProps = {

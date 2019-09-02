@@ -58,7 +58,7 @@ export default class YouTube extends React.Component {
     onChangeQuality: PropTypes.func,
     onChangeFullscreen: PropTypes.func,
     onProgress: PropTypes.func,
-    style: (ViewPropTypes && ViewPropTypes.style) || View.propTypes.style,
+    style: ViewPropTypes.style,
   };
 
   constructor(props) {
