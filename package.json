@@ -10,7 +10,11 @@
     "type": "git",
     "url": "git+https://github.com/inProgress-team/react-native-youtube.git"
   },
-  "keywords": ["youtube", "react", "react-native"],
+  "keywords": [
+    "youtube",
+    "react",
+    "react-native"
+  ],
   "author": "Param Aggarwal",
   "license": "MIT",
   "bugs": {
@@ -22,5 +26,8 @@
   },
   "peerDependencies": {
     "react-native": ">=0.60"
+  },
+  "devDependencies": {
+    "prettier": "^1.18.2"
   }
 }
