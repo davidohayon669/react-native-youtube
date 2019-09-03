@@ -23,7 +23,6 @@ export default class ReactNativeYouTubeExample extends React.Component {
     duration: 0,
     currentTime: 0,
     fullscreen: false,
-    // containerMounted: true,
     playerWidth: Dimensions.get('window').width,
   };
 
