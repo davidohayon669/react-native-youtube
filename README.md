@@ -3,18 +3,47 @@ A `<YouTube />` component for React Native.
 
 Uses Google's official [youtube-ios-player-helper](https://github.com/youtube/youtube-ios-player-helper) for iOS and [YouTube Android Player API](https://developers.google.com/youtube/android/player/) for Android and exposes much of the API, as declaratively as possible, into React Native.
 
-**[Having problems with Android? Please read this first](https://github.com/inProgress-team/react-native-youtube#known-issues)**
+[Having problems with Android? Please read this first](https://github.com/inProgress-team/react-native-youtube#known-issues)
+
+**Important!!!** - This README is for v2. [Latest README for v1 (mainly different installation) can be found here](https://github.com/inProgress-team/react-native-youtube/blob/v1.1.0/README.md)
+
+## Table of Contents ##
+* [Screenshot](#screenshot)
+* [Install](#install)
+* [Usage](#usage)
+* [API](#api)
+* [Known Issues](#known-issues)
+* [Example App and Development](#example-app-and-development)
+* [Authors](#authors)
+* [License](#license)
 
 ## Screenshot
 ![Screenshot of the example app](https://github.com/inProgress-team/react-native-youtube/raw/master/Screenshot.png)
 
+## Install
+
+Install the latest version to your `package.json`:
+
+`$ npm install react-native-youtube -S`
+
+React Native automatically connects this native module to your iOS and Android projects. On Android this link is supported with Gradle and is done automatically after installation. On iOS the linking is done by Cocoapods, without the need to add this library to the `Podfile`, Just run `pod install` after installation.
+
+**IMPORTANT! (Android Only)**: The Android implementation of this component needs to have the official YouTube app installed on the device. Otherwise the user will be prompted to install / activate the app, and an error event will be triggered with `SERVICE_MISSING`/`SERVICE_DISABLED`.
+
+#### OPTIONAL: Activated sound when iPhone (iOS) is on vibrate mode
+Open AppDelegate.m and add :
+
+* `#import <AVFoundation/AVFoundation.h>`
+
+* `[[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayback error: nil];` in your didFinishLaunchingWithOptions method
+
 ## Usage
-```javascript
+```jsx
 <YouTube
   videoId="KVZ-P-ZI6W4"   // The YouTube video ID
-  play={true}             // control playback of video with true/false
-  fullscreen={true}       // control whether the video should play in fullscreen or inline
-  loop={true}             // control whether the video should loop when ended
+  play                    // control playback of video with true/false
+  fullscreen              // control whether the video should play in fullscreen or inline
+  loop                    // control whether the video should loop when ended
 
   onReady={e => this.setState({ isReady: true })}
   onChangeState={e => this.setState({ status: e.state })}
@@ -40,7 +69,7 @@ Can be changed while mounted. Overridden at start by `videoId` and `videoIds`.
 * `play` (boolean): Controls playback of video with `true`/`false`. Setting it as `true` in the beginning itself makes the video autoplay on loading. Default: `false`.
 * `loop` (boolean): Loops the video. Default: `false`.
 * `fullscreen` (boolean): Controls whether the video should play inline or in fullscreen. Default: `false`.
-* `controls` (number): Sets the player's controls scheme. Supported values are `0`, `1`, `2`. Default: `1`. On iOS the numbers conform to [These Parameters](https://developers.google.com/youtube/player_parameters?hl=en#controls). On Android the mapping is `0 = CHROMELSEE`, `1 = DEFAULT`, `2 = MINIMAL` ([More Info](https://developers.google.com/youtube/android/player/reference/com/google/android/youtube/player/YouTubePlayer.PlayerStyle)).
+* `controls` (number): Sets the player's controls scheme. Supported values are `0`, `1`, `2`. Default: `1`. On iOS the numbers conform to [These Parameters](https://developers.google.com/youtube/player_parameters?hl=en#controls). On Android the mapping is `0 = CHROMELESS`, `1 = DEFAULT`, `2 = MINIMAL` ([More Info](https://developers.google.com/youtube/android/player/reference/com/google/android/youtube/player/YouTubePlayer.PlayerStyle)).
 * `showFullscreenButton` (boolean): Show or hide Fullscreen button. Default: `true`.
 * `showinfo` (boolean, *iOS*): Setting the parameter's value to false causes the player to not display information like the video title and uploader before the video starts playing. Default: `true`.
 * `modestbranding` (boolean, *iOS*): This parameter lets you use a YouTube player that does not show a YouTube logo. Default: `false`.
@@ -72,7 +101,7 @@ The iOS implementation of this player uses the official YouTube iFrame under the
 #### Setup
 Standalone iOS player Uses [XCDYoutubeKit](https://github.com/0xced/XCDYouTubeKit) (**Warning**: XCDYoutubeKit doesn't conform to YouTube's Terms Of Use). Add the next line to your `Podfile` and run `pod install` inside `/ios` folder:
 ```
-pod 'XCDYouTubeKit', '~> 2.5'
+pod 'XCDYouTubeKit', '~> 2.8'
 ```
 
 #### Importing
@@ -142,38 +171,6 @@ A static method that returns a Promise to launch a standalone YouTube player wit
 * `startIndex` (number): The index position of the video to play first. Default: `0`.
 * `startTime` (number): Optional starting time of the video (in seconds). Default: `0`.
 
-## Installation
-This component is confirmed to be working on react-native ~0.37 - ~0.45
-
-Install the latest version to your `package.json`:
-
-`$ npm install react-native-youtube -S`
-
-Link the library to your iOS and Android projects with:
-
-`$ react-native link`
-
-**IMPORTANT! (iOS Only)**: To link `assets/YTPlayerView-iframe-player.html` to your project, `react-native link` is not enough (As of RN ~0.37 - ~0.45). You will need to *also* use the older tool it is based on, `rnpm` (This step must be done **after** `react-native link`):
-
-First, if you don't have it installed, globally install `rnpm` (^1.9.0):
-
-`$ npm install -g rnpm`
-
-Then at the project's root folder type:
-
-`$ rnpm link`
-
-(This step can also be done manually by adding `../node_modules/react-native-youtube/assets/YTPlayerView-iframe-player.html` to your Xcode project's root directory)
-
-**IMPORTANT! (Android Only)**: The Android implementation of this component needs to have the official YouTube app installed on the device. Otherwise the user will be prompted to install / activate the app, and an error event will be triggered with `SERVICE_MISSING`/`SERVICE_DISABLED`.
-
-#### OPTIONAL: Activated sound when iPhone (iOS) is on vibrate mode
-Open AppDelegate.m and add :
-
-* `#import <AVFoundation/AVFoundation.h>`
-
-* `[[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayback error: nil];` in your didFinishLaunchingWithOptions method
-
 ## Known Issues
 #### `UNAUTHORIZED_OVERLAY` and `PLAYER_VIEW_TOO_SMALL` on Android
 The Android version of this component is based on the official Java [YouTube Android Player API](https://developers.google.com/youtube/android/player/) library which have a few built-in limitations and protections that we must mitigate with a few hacks. In some cases the native view that holds the YouTube instance fails to mount correctly inside React-Native's view hierarchy so we initiate [an unnoticeable change in its style after the onReady event fires](https://github.com/inProgress-team/react-native-youtube/blob/master/YouTube.android.js#L101) to force a real re-render on the native views hierarchy. Other than that, the native instance has a built-in mechanism to protect it from being covered by other components (what triggers the `UNAUTHORIZED_OVERLAY` error) and it's triggered if the native instance only *touches* another view. For this reason we must margin the native view from its containing view by `StyleSheet.hairlineWidth` which means a single pixel width for the specific device. `PLAYER_VIEW_TOO_SMALL` error can also be fired due to the same problems.
@@ -193,25 +190,23 @@ The YouTube API for Android is a *singleton*. What it means is that unlike the i
 ## Example App and Development
 This repository includes an example project that can be used for trying, developing and testing all functionalities on a dedicated clean app project.
 
-First copy the git repository and install the React-Native project inside `example`:
+First, copy the git repository and install the React-Native project inside `/example`:
 ```sh
 $ git clone https://github.com/inProgress-team/react-native-youtube.git
 $ cd react-native-youtube/example
 $ npm install
-$ react-native link
-$ rnpm link
 ```
 
-Don't forget to install the Pods if you want to test API that depends on XCDYoutubeKit:
+For iOS, also install the Cocoapods
 ```sh
 $ cd ios
 $ pod install
 ```
 
-Then build and run with `react-native run-ios` / `react-native run-android` or your favorite IDE.
+Then build and run with `react-native run-ios` / `react-native run-android` or your preferred IDE.
 
 #### For Developers
-To be able to directly test your changes with the example app, re-install the package from the root directory with `npm i $(npm pack ..)`. This command packs the root directory into an npm package tar file and installs it locally to the example app.
+To be able to directly test your changes with the example app, re-install the package from the root directory with `npm run install-root` after each change. This command packs the root directory into an npm package `.tar` file and installs it locally to the example app.
 
 ## Authors
 * Param Aggarwal (paramaggarwal@gmail.com)

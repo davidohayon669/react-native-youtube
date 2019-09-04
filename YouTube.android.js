@@ -1,7 +1,3 @@
-/**
- * @providesModule YouTube
- */
-
 import React from 'react';
 import PropTypes from 'prop-types';
 import ReactNative, {
@@ -12,11 +8,8 @@ import ReactNative, {
   requireNativeComponent,
   UIManager,
   NativeModules,
-  BackAndroid,
-  BackHandler as BackHandlerModule,
+  BackHandler,
 } from 'react-native';
-
-const BackHandler = BackHandlerModule || BackAndroid;
 
 const RCTYouTube = requireNativeComponent('ReactYouTube', YouTube, {
   nativeOnly: {
@@ -55,143 +48,167 @@ export default class YouTube extends React.Component {
 
   _interval = null;
 
+  _nativeComponentRef = React.createRef();
+
   constructor(props) {
     super(props);
 
+    BackHandler.addEventListener('hardwareBackPress', this._backPress);
+
     this.state = {
-      moduleMargin: StyleSheet.hairlineWidth * 2,
       fullscreen: props.fullscreen,
+      resizingHackFlag: false,
     };
   }
 
-  componentWillMount() {
-    BackHandler.addEventListener('hardwareBackPress', this._backPress);
-
-    // Periodically triggeting a forced unnoticable layout rendering until onReady to make sure the
-    // native loading progress is shown
-    this._interval = setInterval(() => {
-      this.setState({ moduleMargin: Math.random() / 2 });
-    }, 250);
+  componentDidMount() {
+    // Make sure the Loading indication is displayed so use this hack before the video loads
+    this._fireResizingHack();
   }
 
-  componentWillReceiveProps(nextProps) {
+  componentDidUpdate(prevProps) {
     // Translate next `fullscreen` prop to state
-    if (nextProps.fullscreen !== this.props.fullscreen) {
-      this.setState({ fullscreen: nextProps.fullscreen });
+    if (prevProps.fullscreen !== this.props.fullscreen) {
+      this.setState({ fullscreen: this.props.fullscreen });
     }
   }
 
   componentWillUnmount() {
     BackHandler.removeEventListener('hardwareBackPress', this._backPress);
+
+    clearInterval(this._timeout);
+  }
+
+  // The Android YouTube native module is pretty problematic when it comes to mounting correctly
+  // and rendering inside React-Native's views hierarchy. For now we must trigger some layout
+  // changes to force a real render on it so it will respotision it's controls after several
+  // specific events
+  _fireResizingHack() {
+    clearInterval(this._timeout);
+
+    let wait = 0.2;
+
+    const next = () => {
+      this.setState(state => ({ resizingHackFlag: !state.resizingHackFlag }));
+
+      wait = wait >= 1.5 ? 1.5 : wait * 1.4;
+      this._timeout = setTimeout(next, wait * 1000);
+    };
+
+    next();
   }
 
   _backPress = () => {
     if (this.state.fullscreen) {
       this.setState({ fullscreen: false });
+
       return true;
     }
+
     return false;
   };
 
+  _onLayout = () => {
+    // When the Native player changes it's layout, we should also force a resizing hack to make
+    // sure the controls are in their correct place
+    this._fireResizingHack();
+  };
+
   _onError = event => {
-    if (this.props.onError) this.props.onError(event.nativeEvent);
+    if (this.props.onError) {
+      this.props.onError(event.nativeEvent);
+    }
   };
 
   _onReady = event => {
-    clearInterval(this._interval);
+    this._fireResizingHack();
 
-    // The Android YouTube native module is pretty problematic when it comes to mounting correctly
-    // and rendering inside React-Native's views hierarchy. For now we must trigger some layout
-    // changes to force a real render on it so it will smoothly appear after ready and show
-    // controls. We also use the minimal margin to avoid `UNAUTHORIZED_OVERLAY` error from the
-    // native module that is very sensitive to being covered or even touching its containing view.
-    setTimeout(() => {
-      this.setState({ moduleMargin: StyleSheet.hairlineWidth });
-    }, 250);
-    if (this.props.onReady) this.props.onReady(event.nativeEvent);
+    if (this.props.onReady) {
+      this.props.onReady(event.nativeEvent);
+    }
   };
 
   _onChangeState = event => {
-    if (this.props.onChangeState) this.props.onChangeState(event.nativeEvent);
+    if (this.props.onChangeState) {
+      this.props.onChangeState(event.nativeEvent);
+    }
   };
 
   _onChangeQuality = event => {
-    if (this.props.onChangeQuality) this.props.onChangeQuality(event.nativeEvent);
+    if (this.props.onChangeQuality) {
+      this.props.onChangeQuality(event.nativeEvent);
+    }
   };
 
   _onChangeFullscreen = event => {
     const { isFullscreen } = event.nativeEvent;
-    if (this.state.fullscreen !== isFullscreen) this.setState({ fullscreen: isFullscreen });
-    if (this.props.onChangeFullscreen) this.props.onChangeFullscreen(event.nativeEvent);
+    if (this.state.fullscreen !== isFullscreen) {
+      this.setState({ fullscreen: isFullscreen });
+    }
+
+    if (this.props.onChangeFullscreen) {
+      this.props.onChangeFullscreen(event.nativeEvent);
+    }
   };
 
   seekTo(seconds) {
     UIManager.dispatchViewManagerCommand(
-      ReactNative.findNodeHandle(this._nativeComponentRef),
-      UIManager.ReactYouTube.Commands.seekTo,
+      ReactNative.findNodeHandle(this._nativeComponentRef.current),
+      UIManager.getViewManagerConfig('ReactYouTube').Commands.seekTo,
       [parseInt(seconds, 10)],
     );
   }
 
   nextVideo() {
     UIManager.dispatchViewManagerCommand(
-      ReactNative.findNodeHandle(this._nativeComponentRef),
-      UIManager.ReactYouTube.Commands.nextVideo,
+      ReactNative.findNodeHandle(this._nativeComponentRef.current),
+      UIManager.getViewManagerConfig('ReactYouTube').Commands.nextVideo,
       [],
     );
   }
 
   previousVideo() {
     UIManager.dispatchViewManagerCommand(
-      ReactNative.findNodeHandle(this._nativeComponentRef),
-      UIManager.ReactYouTube.Commands.previousVideo,
+      ReactNative.findNodeHandle(this._nativeComponentRef.current),
+      UIManager.getViewManagerConfig('ReactYouTube').Commands.previousVideo,
       [],
     );
   }
 
   playVideoAt(index) {
     UIManager.dispatchViewManagerCommand(
-      ReactNative.findNodeHandle(this._nativeComponentRef),
-      UIManager.ReactYouTube.Commands.playVideoAt,
+      ReactNative.findNodeHandle(this._nativeComponentRef.current),
+      UIManager.getViewManagerConfig('ReactYouTube').Commands.playVideoAt,
       [parseInt(index, 10)],
     );
   }
 
-  videosIndex() {
-    return new Promise((resolve, reject) =>
-      NativeModules.YouTubeModule.videosIndex(ReactNative.findNodeHandle(this._nativeComponentRef))
-        .then(index => resolve(index))
-        .catch(errorMessage => reject(errorMessage)),
+  videosIndex = () =>
+    NativeModules.YouTubeModule.videosIndex(
+      ReactNative.findNodeHandle(this._nativeComponentRef.current),
     );
-  }
 
-  currentTime() {
-    return new Promise((resolve, reject) =>
-      NativeModules.YouTubeModule.currentTime(ReactNative.findNodeHandle(this._nativeComponentRef))
-        .then(currentTime => resolve(currentTime))
-        .catch(errorMessage => reject(errorMessage)),
+  currentTime = () =>
+    NativeModules.YouTubeModule.currentTime(
+      ReactNative.findNodeHandle(this._nativeComponentRef.current),
     );
-  }
 
-  duration() {
-    return new Promise((resolve, reject) =>
-      NativeModules.YouTubeModule.duration(ReactNative.findNodeHandle(this._nativeComponentRef))
-        .then(duration => resolve(duration))
-        .catch(errorMessage => reject(errorMessage)),
+  duration = () =>
+    NativeModules.YouTubeModule.duration(
+      ReactNative.findNodeHandle(this._nativeComponentRef.current),
     );
-  }
 
   render() {
     return (
-      <View style={[styles.container, this.props.style]}>
+      <View onLayout={this._onLayout} style={[styles.container, this.props.style]}>
         <RCTYouTube
-          ref={component => {
-            this._nativeComponentRef = component;
-          }}
+          ref={this._nativeComponentRef}
           {...this.props}
           fullscreen={this.state.fullscreen}
-          style={[styles.module, { margin: this.state.moduleMargin }]}
-          onYouTubeError={this._onError}
+          style={[
+            styles.module,
+            { marginRight: this.state.resizingHackFlag ? StyleSheet.hairlineWidth : 0 },
+          ]}
           onYouTubeReady={this._onReady}
           onYouTubeChangeState={this._onChangeState}
           onYouTubeChangeQuality={this._onChangeQuality}

@@ -17,7 +17,7 @@ RCT_REMAP_METHOD(playVideo,
                  rejecter:(RCTPromiseRejectBlock)reject)
 {
     #ifndef XCD_YOUTUBE_KIT_INSTALLED
-        reject(@"error", @"XCDYouTubeKit is not installed", nil);
+        reject(@"error", @"XCDYouTubeKit is not installed. Refer to README for instructions.", nil);
     #else
         dispatch_async(dispatch_get_main_queue(), ^{
             XCDYouTubeVideoPlayerViewController *videoPlayerViewController =

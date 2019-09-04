@@ -3,7 +3,7 @@ package com.inprogress.reactnativeyoutube;
 import android.app.FragmentManager;
 import android.os.Build;
 import android.os.Parcelable;
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 import android.widget.FrameLayout;
 
 import com.facebook.react.bridge.Arguments;

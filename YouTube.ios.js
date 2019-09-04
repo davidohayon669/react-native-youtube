@@ -1,7 +1,3 @@
-/**
- * @providesModule YouTube
- */
-
 import React from 'react';
 import PropTypes from 'prop-types';
 import ReactNative, {
@@ -26,7 +22,9 @@ const parsePlayerParams = props => ({
       ? props.loop && !props.videoIds[1]
         ? props.videoIds[0]
         : props.videoIds.slice(1).toString() || undefined
-      : props.loop && props.videoId ? props.videoId : undefined,
+      : props.loop && props.videoId
+      ? props.videoId
+      : undefined,
 
     // No need to explicitly pass positive or negative defaults
     loop: props.loop === true ? 1 : undefined,
@@ -74,12 +72,17 @@ export default class YouTube extends React.Component {
 
   shouldComponentUpdate() {
     // Prevent unnecessary renders before the native component is ready to accept them
-    if (this._isReady) return true;
-    return false;
+    if (this._isReady) {
+      return true;
+    } else {
+      return false;
+    }
   }
 
   _onError = event => {
-    if (this.props.onError) this.props.onError(event.nativeEvent);
+    if (this.props.onError) {
+      this.props.onError(event.nativeEvent);
+    }
   };
 
   _onReady = event => {
@@ -87,23 +90,34 @@ export default class YouTube extends React.Component {
     // component know it can render any future change
     this.forceUpdate();
     this._isReady = true;
-    if (this.props.onReady) this.props.onReady(event.nativeEvent);
+
+    if (this.props.onReady) {
+      this.props.onReady(event.nativeEvent);
+    }
   };
 
   _onChangeState = event => {
-    if (this.props.onChangeState) this.props.onChangeState(event.nativeEvent);
+    if (this.props.onChangeState) {
+      this.props.onChangeState(event.nativeEvent);
+    }
   };
 
   _onChangeQuality = event => {
-    if (this.props.onChangeQuality) this.props.onChangeQuality(event.nativeEvent);
+    if (this.props.onChangeQuality) {
+      this.props.onChangeQuality(event.nativeEvent);
+    }
   };
 
   _onChangeFullscreen = event => {
-    if (this.props.onChangeFullscreen) this.props.onChangeFullscreen(event.nativeEvent);
+    if (this.props.onChangeFullscreen) {
+      this.props.onChangeFullscreen(event.nativeEvent);
+    }
   };
 
   _onProgress = event => {
-    if (this.props.onProgress) this.props.onProgress(event.nativeEvent);
+    if (this.props.onProgress) {
+      this.props.onProgress(event.nativeEvent);
+    }
   };
 
   seekTo(seconds) {
@@ -128,20 +142,10 @@ export default class YouTube extends React.Component {
       return Promise.resolve(0);
     }
 
-    return new Promise((resolve, reject) =>
-      NativeModules.YouTubeManager.videosIndex(ReactNative.findNodeHandle(this))
-        .then(index => resolve(index))
-        .catch(errorMessage => reject(errorMessage)),
-    );
+    return NativeModules.YouTubeManager.videosIndex(ReactNative.findNodeHandle(this));
   }
 
-  currentTime() {
-    return new Promise((resolve, reject) =>
-      NativeModules.YouTubeManager.currentTime(ReactNative.findNodeHandle(this))
-        .then(currentTime => resolve(currentTime))
-        .catch(errorMessage => reject(errorMessage)),
-    );
-  }
+  currentTime = () => NativeModules.YouTubeManager.currentTime(ReactNative.findNodeHandle(this));
 
   // iFrame vars like `playsInline`, `showinfo` etc. are set only on iFrame load.
   // This method will force a reload on the inner iFrame. Use it if you know the cost

@@ -52,8 +52,13 @@ buck-out/
 */fastlane/Preview.html
 */fastlane/screenshots
 
+# Bundle artifact
+*.jsbundle
+
+# CocoaPods
+/ios/Pods/
+
 # Project specific
-#
-Pods
 yarn.lock
 package-lock.json
+react-native-youtube-*.tgz
