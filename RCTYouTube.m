@@ -126,11 +126,11 @@
             [self loadPlaylistByVideos:@[videoId, videoId]
                                  index:0
                           startSeconds:0
-                      suggestedQuality:kYTPlaybackQualityDefault];
+                      suggestedQuality:kWKYTPlaybackQualityDefault];
         } else {
             [self loadVideoById:videoId
                    startSeconds:0
-               suggestedQuality:kYTPlaybackQualityDefault];
+               suggestedQuality:kWKYTPlaybackQualityDefault];
         }
     }
 }
@@ -140,7 +140,7 @@
         [self loadPlaylistByVideos:videoIds
                              index:0
                       startSeconds:0
-                  suggestedQuality:kYTPlaybackQualityDefault];
+                  suggestedQuality:kWKYTPlaybackQualityDefault];
         [self setLoopProp:_loop];
     }
 }
@@ -151,7 +151,7 @@
         [self loadPlaylistByPlaylistId:playlistId
                                  index:0
                           startSeconds:0
-                      suggestedQuality:kYTPlaybackQualityDefault];
+                      suggestedQuality:kWKYTPlaybackQualityDefault];
     }
 }
 
@@ -163,7 +163,7 @@
 
 #pragma mark - YTPlayer delegate methods
 
-- (void)playerViewDidBecomeReady:(YTPlayerView *)playerView {
+- (void)playerViewDidBecomeReady:(WKYTPlayerView *)playerView {
     if (_playOnLoad) [self playVideo];
 
     _isReady = YES;
@@ -173,29 +173,29 @@
     }
 }
 
-- (void)playerView:(YTPlayerView *)playerView didChangeToState:(YTPlayerState)state {
+- (void)playerView:(WKYTPlayerView *)playerView didChangeToState:(WKYTPlayerState)state {
 
     NSString *playerState;
     switch (state) {
-        case kYTPlayerStateUnknown:
+        case kWKYTPlayerStateUnknown:
             playerState = @"unknown";
             break;
-        case kYTPlayerStateUnstarted:
+        case kWKYTPlayerStateUnstarted:
             playerState = @"unstarted";
             break;
-        case kYTPlayerStateQueued:
+        case kWKYTPlayerStateQueued:
             playerState = @"queued";
             break;
-        case kYTPlayerStateBuffering:
+        case kWKYTPlayerStateBuffering:
             playerState = @"buffering";
             break;
-        case kYTPlayerStatePlaying:
+        case kWKYTPlayerStatePlaying:
             playerState = @"playing";
             break;
-        case kYTPlayerStatePaused:
+        case kWKYTPlayerStatePaused:
             playerState = @"paused";
             break;
-        case kYTPlayerStateEnded:
+        case kWKYTPlayerStateEnded:
             playerState = @"ended";
             break;
         default:
@@ -210,35 +210,35 @@
     }
 }
 
-- (void)playerView:(YTPlayerView *)playerView didChangeToQuality:(YTPlaybackQuality)quality {
+- (void)playerView:(WKYTPlayerView *)playerView didChangeToQuality:(WKYTPlaybackQuality)quality {
 
     NSString *playerQuality;
     switch (quality) {
-        case kYTPlaybackQualitySmall:
+        case kWKYTPlaybackQualitySmall:
             playerQuality = @"small";
             break;
-        case kYTPlaybackQualityMedium:
+        case kWKYTPlaybackQualityMedium:
             playerQuality = @"medium";
             break;
-        case kYTPlaybackQualityLarge:
+        case kWKYTPlaybackQualityLarge:
             playerQuality = @"large";
             break;
-        case kYTPlaybackQualityHD720:
+        case kWKYTPlaybackQualityHD720:
             playerQuality = @"hd720";
             break;
-        case kYTPlaybackQualityHD1080:
+        case kWKYTPlaybackQualityHD1080:
             playerQuality = @"hd1080";
             break;
-        case kYTPlaybackQualityHighRes:
+        case kWKYTPlaybackQualityHighRes:
             playerQuality = @"high_res";
             break;
-        case kYTPlaybackQualityAuto: /** Addition for YouTube Live Events. */
+        case kWKYTPlaybackQualityAuto: /** Addition for YouTube Live Events. */
             playerQuality = @"auto";
             break;
-        case kYTPlaybackQualityDefault:
+        case kWKYTPlaybackQualityDefault:
             playerQuality = @"default";
             break;
-        case kYTPlaybackQualityUnknown:
+        case kWKYTPlaybackQualityUnknown:
             playerQuality = @"unknown";
             break;
         default:
@@ -253,34 +253,33 @@
     }
 }
 
-- (void)playerView:(YTPlayerView *)playerView didPlayTime:(float)currentTime {
+- (void)playerView:(WKYTPlayerView *)playerView didPlayTime:(float)currentTime {
 
     if (_onProgress) {
         _onProgress(@{
             @"currentTime": @(currentTime),
-            @"duration": @(self.duration),
             @"target": self.reactTag
         });
     }
 }
 
-- (void)playerView:(YTPlayerView *)playerView receivedError:(YTPlayerError)error {
+- (void)playerView:(WKYTPlayerView *)playerView receivedError:(WKYTPlayerError)error {
 
     NSString *playerError;
     switch (error) {
-        case kYTPlayerErrorInvalidParam:
+        case kWKYTPlayerErrorInvalidParam:
             playerError = @"invalid_param";
             break;
-        case kYTPlayerErrorHTML5Error:
+        case kWKYTPlayerErrorHTML5Error:
             playerError = @"html5_error";
             break;
-        case kYTPlayerErrorVideoNotFound:
+        case kWKYTPlayerErrorVideoNotFound:
             playerError = @"video_not_found";
             break;
-        case kYTPlayerErrorNotEmbeddable:
+        case kWKYTPlayerErrorNotEmbeddable:
             playerError = @"not_embeddable";
             break;
-        case kYTPlayerErrorUnknown:
+        case kWKYTPlayerErrorUnknown:
             playerError = @"unknown";
             break;
         default:

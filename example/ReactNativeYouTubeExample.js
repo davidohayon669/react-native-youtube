@@ -67,7 +67,7 @@ export default class ReactNativeYouTubeExample extends React.Component {
             this.setState({ fullscreen: e.isFullscreen });
           }}
           onProgress={e => {
-            this.setState({ duration: e.duration, currentTime: e.currentTime });
+            this.setState({ currentTime: e.currentTime });
           }}
         />
 
@@ -189,11 +189,28 @@ export default class ReactNativeYouTubeExample extends React.Component {
           </View>
         )}
 
-        {/* Update Progress & Duration (Android) */}
+        {/* Get Duration (iOS) */}
+        {Platform.OS === 'ios' && (
+          <View style={styles.buttonGroup}>
+            <Button
+              title="Get Duration (iOS)"
+              onPress={() => {
+                if (this._youTubeRef.current) {
+                  this._youTubeRef.current
+                    .duration()
+                    .then(duration => this.setState({ duration }))
+                    .catch(errorMessage => this.setState({ error: errorMessage }));
+                }
+              }}
+            />
+          </View>
+        )}
+
+        {/* Get Progress & Duration (Android) */}
         {Platform.OS === 'android' && (
           <View style={styles.buttonGroup}>
             <Button
-              title="Update Progress & Duration (Android)"
+              title="Get Progress & Duration (Android)"
               onPress={() => {
                 if (this._youTubeRef.current) {
                   this._youTubeRef.current

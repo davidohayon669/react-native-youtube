@@ -85,7 +85,7 @@ The iOS implementation of this player uses the official YouTube iFrame under the
 * `onChangeQuality`: Sends the current quality of video playback on `e.quality`.
 * `onError`: Sends any errors before and during video playback on `e.error`.
 * `onChangeFullscreen`: Called when the player enters or exits the fullscreen mode on `e.isFullscreen`.
-* `onProgress` *(iOS)*: Called every 500ms with the time progress of the playback on `e.currentTime` and also duration on `e.duration`.
+* `onProgress` *(iOS)*: Called every 500ms with the time progress of the playback on `e.currentTime`.
 
 #### Methods
 * `seekTo(seconds)`: Seeks to a specified time in the video.
@@ -94,7 +94,7 @@ The iOS implementation of this player uses the official YouTube iFrame under the
 * `playVideoAt(index)`: Will start playing the video at `index` (zero-based) position in a playlist (`videoIds` or `playlistId`. Not supported for `playlistId` on Android).
 * `videosIndex()`: Returns a Promise that results with the `index` (zero-based) number of the video currently played in a playlist (`videoIds` or `playlistId`. Not supported for `playlistId` on Android) or errors with an errorMessage string.
 * `currentTime()`: Returns a Promise that results with the `currentTime` of the played video (in seconds) or errors with an errorMessage string. Should be used as an alternative for Android to `onProgress` event on iOS.
-* `duration()` *(Android)*: Returns a Promise that results with the `duration` of the played video (in seconds) or errors with an errorMessage string. Should be used as an alternative for Android to `onProgress` event on iOS.
+* `duration()`: Returns a Promise that results with the `duration` of the played video (in seconds) or errors with an errorMessage string. Should be used as an alternative for Android to `onProgress` event on iOS.
 * `reloadIframe()` *(iOS)*: Specific props (`fullscreen`, `modestbranding`, `showinfo`, `rel`, `controls`, `origin`) can only be set at mounting and initial loading of the underlying WebView that holds the YouTube iFrame (Those are `<iframe>` parameters). If you want to change one of them during the lifecycle of the component, you should know the usability cost of loading the WebView again, and use this method right after the component received the updated prop.
 
 ### Standalone Player (iOS)
