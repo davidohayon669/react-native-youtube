@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		53462DDF1F1FDBB6001DCD44 /* RCTYouTubeStandalone.m in Sources */ = {isa = PBXBuildFile; fileRef = 53462DDE1F1FDBB6001DCD44 /* RCTYouTubeStandalone.m */; };
-		8B26A9141B428A53000C2690 /* YTPlayerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B26A9131B428A53000C2690 /* YTPlayerView.m */; };
 		8B26A91B1B428AA2000C2690 /* RCTYouTube.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B26A9181B428AA2000C2690 /* RCTYouTube.m */; };
 		8B26A91C1B428AA2000C2690 /* RCTYouTubeManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B26A91A1B428AA2000C2690 /* RCTYouTubeManager.m */; };
 /* End PBXBuildFile section */
@@ -28,8 +27,6 @@
 /* Begin PBXFileReference section */
 		53462DDD1F1FDBB6001DCD44 /* RCTYouTubeStandalone.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RCTYouTubeStandalone.h; sourceTree = SOURCE_ROOT; };
 		53462DDE1F1FDBB6001DCD44 /* RCTYouTubeStandalone.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RCTYouTubeStandalone.m; sourceTree = SOURCE_ROOT; };
-		8B26A9121B428A53000C2690 /* YTPlayerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = YTPlayerView.h; path = YTPlayerView/YTPlayerView.h; sourceTree = SOURCE_ROOT; };
-		8B26A9131B428A53000C2690 /* YTPlayerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = YTPlayerView.m; path = YTPlayerView/YTPlayerView.m; sourceTree = SOURCE_ROOT; };
 		8B26A9171B428AA2000C2690 /* RCTYouTube.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RCTYouTube.h; sourceTree = SOURCE_ROOT; };
 		8B26A9181B428AA2000C2690 /* RCTYouTube.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RCTYouTube.m; sourceTree = SOURCE_ROOT; };
 		8B26A9191B428AA2000C2690 /* RCTYouTubeManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RCTYouTubeManager.h; sourceTree = SOURCE_ROOT; };
@@ -48,15 +45,6 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		8B26A9151B428A59000C2690 /* YTPlayerView */ = {
-			isa = PBXGroup;
-			children = (
-				8B26A9121B428A53000C2690 /* YTPlayerView.h */,
-				8B26A9131B428A53000C2690 /* YTPlayerView.m */,
-			);
-			name = YTPlayerView;
-			sourceTree = "<group>";
-		};
 		8BDB9BC01B4289AE00EF9FEF = {
 			isa = PBXGroup;
 			children = (
@@ -78,7 +66,6 @@
 			children = (
 				53462DDD1F1FDBB6001DCD44 /* RCTYouTubeStandalone.h */,
 				53462DDE1F1FDBB6001DCD44 /* RCTYouTubeStandalone.m */,
-				8B26A9151B428A59000C2690 /* YTPlayerView */,
 				8B26A9171B428AA2000C2690 /* RCTYouTube.h */,
 				8B26A9181B428AA2000C2690 /* RCTYouTube.m */,
 				8B26A9191B428AA2000C2690 /* RCTYouTubeManager.h */,
@@ -113,7 +100,7 @@
 		8BDB9BC11B4289AE00EF9FEF /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0830;
+				LastUpgradeCheck = 1030;
 				ORGANIZATIONNAME = React;
 				TargetAttributes = {
 					8BDB9BC81B4289AE00EF9FEF = {
@@ -123,10 +110,11 @@
 			};
 			buildConfigurationList = 8BDB9BC41B4289AE00EF9FEF /* Build configuration list for PBXProject "RCTYouTube" */;
 			compatibilityVersion = "Xcode 3.2";
-			developmentRegion = English;
+			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
+				Base,
 			);
 			mainGroup = 8BDB9BC01B4289AE00EF9FEF;
 			productRefGroup = 8BDB9BCA1B4289AE00EF9FEF /* Products */;
@@ -145,7 +133,6 @@
 			files = (
 				53462DDF1F1FDBB6001DCD44 /* RCTYouTubeStandalone.m in Sources */,
 				8B26A91C1B428AA2000C2690 /* RCTYouTubeManager.m in Sources */,
-				8B26A9141B428A53000C2690 /* YTPlayerView.m in Sources */,
 				8B26A91B1B428AA2000C2690 /* RCTYouTube.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -161,14 +148,22 @@
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
@@ -210,14 +205,22 @@
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
