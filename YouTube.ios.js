@@ -136,7 +136,7 @@ export default class YouTube extends React.Component {
     NativeModules.YouTubeManager.playVideoAt(ReactNative.findNodeHandle(this), parseInt(index, 10));
   }
 
-  videosIndex() {
+  getVideosIndex() {
     // Avoid calling the native method if there is only one video loaded for sure
     if ((Array.isArray(this.props.videoIds) && !this.props.videoIds[1]) || this.props.videoId) {
       return Promise.resolve(0);
@@ -145,9 +145,10 @@ export default class YouTube extends React.Component {
     return NativeModules.YouTubeManager.getVideosIndex(ReactNative.findNodeHandle(this));
   }
 
-  currentTime = () => NativeModules.YouTubeManager.getCurrentTime(ReactNative.findNodeHandle(this));
+  getCurrentTime = () =>
+    NativeModules.YouTubeManager.getCurrentTime(ReactNative.findNodeHandle(this));
 
-  duration = () => NativeModules.YouTubeManager.getDuration(ReactNative.findNodeHandle(this));
+  getDuration = () => NativeModules.YouTubeManager.getDuration(ReactNative.findNodeHandle(this));
 
   // iFrame vars like `playsInline`, `showinfo` etc. are set only on iFrame load.
   // This method will force a reload on the inner iFrame. Use it if you know the cost

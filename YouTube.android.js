@@ -183,18 +183,18 @@ export default class YouTube extends React.Component {
     );
   }
 
-  videosIndex = () =>
-    NativeModules.YouTubeModule.videosIndex(
+  getVideosIndex = () =>
+    NativeModules.YouTubeModule.getVideosIndex(
       ReactNative.findNodeHandle(this._nativeComponentRef.current),
     );
 
-  currentTime = () =>
-    NativeModules.YouTubeModule.currentTime(
+  getCurrentTime = () =>
+    NativeModules.YouTubeModule.getCurrentTime(
       ReactNative.findNodeHandle(this._nativeComponentRef.current),
     );
 
-  duration = () =>
-    NativeModules.YouTubeModule.duration(
+  getDuration = () =>
+    NativeModules.YouTubeModule.getDuration(
       ReactNative.findNodeHandle(this._nativeComponentRef.current),
     );
 

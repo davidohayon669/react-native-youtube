@@ -169,7 +169,7 @@ export default class ReactNativeYouTubeExample extends React.Component {
             onPress={() => {
               if (this._youTubeRef.current) {
                 this._youTubeRef.current
-                  .videosIndex()
+                  .getVideosIndex()
                   .then(index => this.setState({ videosIndex: index }))
                   .catch(errorMessage => this.setState({ error: errorMessage }));
               }
@@ -197,7 +197,7 @@ export default class ReactNativeYouTubeExample extends React.Component {
               onPress={() => {
                 if (this._youTubeRef.current) {
                   this._youTubeRef.current
-                    .duration()
+                    .getDuration()
                     .then(duration => this.setState({ duration }))
                     .catch(errorMessage => this.setState({ error: errorMessage }));
                 }
@@ -214,12 +214,12 @@ export default class ReactNativeYouTubeExample extends React.Component {
               onPress={() => {
                 if (this._youTubeRef.current) {
                   this._youTubeRef.current
-                    .currentTime()
+                    .getCurrentTime()
                     .then(currentTime => this.setState({ currentTime }))
                     .catch(errorMessage => this.setState({ error: errorMessage }));
 
                   this._youTubeRef.current
-                    .duration()
+                    .getDuration()
                     .then(duration => this.setState({ duration }))
                     .catch(errorMessage => this.setState({ error: errorMessage }));
                 }
