@@ -209,6 +209,7 @@ export default class YouTube extends React.Component {
             styles.module,
             { marginRight: this.state.resizingHackFlag ? StyleSheet.hairlineWidth : 0 },
           ]}
+          onYouTubeError={this._onError}
           onYouTubeReady={this._onReady}
           onYouTubeChangeState={this._onChangeState}
           onYouTubeChangeQuality={this._onChangeQuality}
