@@ -6,6 +6,9 @@
     "start": "react-native start",
     "preinstall": "npm pack ..",
     "install-root": "npm run pack-root && npm install react-native-youtube-2.0.0-beta.1.tgz",
+    "reinstall-native-ios": "npm run install-root && npm run postinstall",
+    "postinstall": "cd ios && pod install && cd ..",
+    "clean": "rimraf ios/build ios/Pods android/.gradle android/app/build package-lock.json yarn-lock.json node_modules",
     "pack-root": "npm pack ..",
     "test": "jest",
     "lint": "eslint ."
@@ -14,7 +17,8 @@
     "prettier": "^1.18.2",
     "react": "16.8.6",
     "react-native": "0.60.4",
-    "react-native-youtube": "file:react-native-youtube-2.0.0-beta.1.tgz"
+    "react-native-youtube": "file:react-native-youtube-2.0.0-beta.1.tgz",
+    "rimraf": "^3.0.0"
   },
   "devDependencies": {
     "@babel/core": "7.5.5",
