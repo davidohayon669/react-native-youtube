@@ -6,7 +6,7 @@ Uses [YoutubePlayer-in-WKWebView](https://github.com/hmhv/YoutubePlayer-in-WKWeb
 
 [Having problems with Android? Please read this first](https://github.com/inProgress-team/react-native-youtube#known-issues)
 
-**Important!!!** - This README is for v2. [Latest README for v1 (mainly different installation) can be found here](https://github.com/inProgress-team/react-native-youtube/blob/v1.1.0/README.md)
+**Important!!!** - This README is for v2. [Latest README for v1 can be found here](https://github.com/inProgress-team/react-native-youtube/blob/v1.1.0/README.md)
 
 ## Table of Contents
 
