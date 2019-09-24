@@ -200,13 +200,7 @@ A static method that returns a Promise to launch a standalone YouTube player wit
 
 #### `UNAUTHORIZED_OVERLAY` and `PLAYER_VIEW_TOO_SMALL` on Android
 
-The Android version of this component is based on the official Java [YouTube Android Player API](https://developers.google.com/youtube/android/player/) library which have a few built-in limitations and protections that we must mitigate with a few hacks. In some cases the native view that holds the YouTube instance fails to mount correctly inside React-Native's view hierarchy so we initiate [an unnoticeable change in its style after the onReady event fires](https://github.com/inProgress-team/react-native-youtube/blob/master/YouTube.android.js#L101) to force a real re-render on the native views hierarchy. Other than that, the native instance has a built-in mechanism to protect it from being covered by other components (what triggers the `UNAUTHORIZED_OVERLAY` error) and it's triggered if the native instance only _touches_ another view. For this reason we must margin the native view from its containing view by `StyleSheet.hairlineWidth` which means a single pixel width for the specific device. `PLAYER_VIEW_TOO_SMALL` error can also be fired due to the same problems.
-
-These specific hacks are sufficiently solving these related problems in the example app in this repo and also in a private app that I develop which uses standard views and the (now deprecated) NavigationExperimental. On a virtual AVD (Nexus 5X) and on a real Nexus 5X, with React-Native 0.37 through 0.45.
-
-_How do we solve this?_
-
-Different configurations and environments can still persist these problems so we must find better and more general ways of mitigating them. **The best thing anybody who encounters these errors can do, before posting an issue**, is try to set up and run the example app in this repo and see if the same behavior persist. If it is, then the problem is probably with the development environment and / or hardware. If not, the problem is probably with other libraries or custom components, and the way they are used in conjunction with this component. Try to understand the nature of the limitations of the native component and gather as much information before posting an issue, even then, better add to [#161](https://github.com/inProgress-team/react-native-youtube/issues/161).
+(Needs expansion)
 
 #### Multiple `<YouTube />` instances on Android
 
