@@ -208,10 +208,6 @@ _How do we solve this?_
 
 Different configurations and environments can still persist these problems so we must find better and more general ways of mitigating them. **The best thing anybody who encounters these errors can do, before posting an issue**, is try to set up and run the example app in this repo and see if the same behavior persist. If it is, then the problem is probably with the development environment and / or hardware. If not, the problem is probably with other libraries or custom components, and the way they are used in conjunction with this component. Try to understand the nature of the limitations of the native component and gather as much information before posting an issue, even then, better add to [#161](https://github.com/inProgress-team/react-native-youtube/issues/161).
 
-#### No player controls in Android
-
-The Android version can sometimes disable the players control even when the controls are explicitly set to be shown. There is no explanation to this behavior yet. This bug is managed in [#131](https://github.com/inProgress-team/react-native-youtube/issues/131).
-
 #### Multiple `<YouTube />` instances on Android
 
 The YouTube API for Android is a _singleton_. What it means is that unlike the iOS implementation, no two players can be mounted and play a video at the same time. If you have two scenes that happen to live together, or come one after the other (such as when navigating to a new scene), The new `<YouTube />` Will take the focus of the singleton and play the video, but after being unmounted, the older mounted `<YouTube />` will not be able to take the role back, and will need to be re-mounted.
