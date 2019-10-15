@@ -20,18 +20,33 @@ RCT_REMAP_METHOD(playVideo,
         reject(@"error", @"XCDYouTubeKit is not installed. Refer to README for instructions.", nil);
     #else
         dispatch_async(dispatch_get_main_queue(), ^{
-            XCDYouTubeVideoPlayerViewController *videoPlayerViewController =
-                [[XCDYouTubeVideoPlayerViewController alloc] initWithVideoIdentifier:videoId];
-            [[NSNotificationCenter defaultCenter] addObserver:self
-                                                     selector:@selector(moviePlayerPlaybackDidFinish:)
-                                                         name:MPMoviePlayerPlaybackDidFinishNotification
-                                                       object:videoPlayerViewController.moviePlayer];
+            UIViewController *root = [[[[UIApplication sharedApplication] delegate] window] rootViewController];
+            AVPlayerViewController *playerViewController = [AVPlayerViewController new];
+            [root presentViewController:playerViewController animated:YES completion:nil];
+
+            __weak AVPlayerViewController *weakPlayerViewController = playerViewController;
+            [[XCDYouTubeClient defaultClient] getVideoWithIdentifier:videoId completionHandler:^(XCDYouTubeVideo * _Nullable video, NSError * _Nullable error) {
+                if (video) {
+                    NSDictionary *streamURLs = video.streamURLs;
+                    NSURL *streamURL = streamURLs[
+                        XCDYouTubeVideoQualityHTTPLiveStreaming] ?:
+                        streamURLs[@(XCDYouTubeVideoQualityHD720)] ?:
+                        streamURLs[@(XCDYouTubeVideoQualityMedium360)] ?:
+                        streamURLs[@(XCDYouTubeVideoQualitySmall240)
+                    ];
+                    weakPlayerViewController.player = [AVPlayer playerWithURL:streamURL];
+                    [weakPlayerViewController.player play];
+                    [[NSNotificationCenter defaultCenter] addObserver:self
+                                                            selector:@selector(moviePlayerPlaybackDidFinish:)
+                                                                name:AVPlayerItemDidPlayToEndTimeNotification
+                                                            object:weakPlayerViewController.player.currentItem];
+                } else {
+                    [root dismissViewControllerAnimated:YES completion:nil];
+                }
+            }];
 
             resolver = resolve;
             rejecter = reject;
-
-            UIViewController *root = [[[[UIApplication sharedApplication] delegate] window] rootViewController];
-            [root presentMoviePlayerViewControllerAnimated:videoPlayerViewController];
         });
     #endif
 }
@@ -40,20 +55,9 @@ RCT_REMAP_METHOD(playVideo,
     - (void) moviePlayerPlaybackDidFinish:(NSNotification *)notification
     {
         [[NSNotificationCenter defaultCenter] removeObserver:self
-                                                        name:MPMoviePlayerPlaybackDidFinishNotification
+                                                        name:AVPlayerItemDidPlayToEndTimeNotification
                                                       object:notification.object];
-
-        MPMovieFinishReason finishReason = [notification.userInfo[MPMoviePlayerPlaybackDidFinishReasonUserInfoKey] integerValue];
-
-        if (finishReason == MPMovieFinishReasonPlaybackError)
-        {
-            NSError *error = notification.userInfo[XCDMoviePlayerPlaybackDidFinishErrorUserInfoKey];
-            // Handle error
-            rejecter(@"error", @"YTError", error);
-        } else {
-            resolver(@"success");
-        }
-
+        resolver(@"success");
         rejecter = nil;
         resolver = nil;
     }
