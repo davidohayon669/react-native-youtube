@@ -3,6 +3,7 @@
 #import <XCDYouTubeKit/XCDYouTubeKit.h>
 #define XCD_YOUTUBE_KIT_INSTALLED
 #endif
+@import AVKit;
 
 @implementation RCTYouTubeStandalone {
     RCTPromiseResolveBlock resolver;
