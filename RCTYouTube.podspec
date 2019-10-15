@@ -15,5 +15,4 @@ Pod::Spec.new do |s|
   s.preserve_paths = "*.js"
   s.dependency "React"
   s.dependency "YoutubePlayer-in-WKWebView", "~> 0.3.1"
-
 end
