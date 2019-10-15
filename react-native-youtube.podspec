@@ -15,5 +15,5 @@ Pod::Spec.new do |s|
   s.preserve_paths = '*.js'
   s.resources      = ['assets/YTPlayerView-iframe-player.html']
   s.dependency 'React'
-
+  s.dependency 'XCDYouTubeKit', '~> 2.8'
 end
