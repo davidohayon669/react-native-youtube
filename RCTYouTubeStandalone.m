@@ -26,7 +26,8 @@ RCT_REMAP_METHOD(playVideo,
             [root presentViewController:playerViewController animated:YES completion:nil];
 
             __weak AVPlayerViewController *weakPlayerViewController = playerViewController;
-            [[XCDYouTubeClient defaultClient] getVideoWithIdentifier:videoId completionHandler:^(XCDYouTubeVideo * _Nullable video, NSError * _Nullable error) {
+            [[XCDYouTubeClient defaultClient] getVideoWithIdentifier:videoId
+                                                   completionHandler:^(XCDYouTubeVideo * _Nullable video, NSError * _Nullable error) {
                 if (video) {
                     NSDictionary *streamURLs = video.streamURLs;
                     NSURL *streamURL = streamURLs[
@@ -37,10 +38,11 @@ RCT_REMAP_METHOD(playVideo,
                     ];
                     weakPlayerViewController.player = [AVPlayer playerWithURL:streamURL];
                     [weakPlayerViewController.player play];
+
                     [[NSNotificationCenter defaultCenter] addObserver:self
-                                                            selector:@selector(moviePlayerPlaybackDidFinish:)
-                                                                name:AVPlayerItemDidPlayToEndTimeNotification
-                                                            object:weakPlayerViewController.player.currentItem];
+                                                             selector:@selector(moviePlayerPlaybackDidFinish:)
+                                                                 name:AVPlayerItemDidPlayToEndTimeNotification
+                                                               object:weakPlayerViewController.player.currentItem];
                 } else {
                     [root dismissViewControllerAnimated:YES completion:nil];
                 }
