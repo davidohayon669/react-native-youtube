@@ -127,7 +127,7 @@ import { YouTubeStandaloneIOS } from 'react-native-youtube';
 
 ```javascript
 YouTubeStandaloneIOS.playVideo('KVZ-P-ZI6W4')
-  .then(() => console.log('Standalone Player Exited'))
+  .then(message => console.log(message))
   .catch(errorMessage => console.error(errorMessage));
 ```
 
