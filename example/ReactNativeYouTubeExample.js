@@ -235,7 +235,9 @@ export default class ReactNativeYouTubeExample extends React.Component {
               title="Launch Standalone Player"
               onPress={() => {
                 YouTubeStandaloneIOS.playVideo('KVZ-P-ZI6W4')
-                  .then(() => console.log('iOS Standalone Player Finished'))
+                  .then(message => {
+                    console.log(message);
+                  })
                   .catch(errorMessage => this.setState({ error: errorMessage }));
               }}
             />

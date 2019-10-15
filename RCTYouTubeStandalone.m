@@ -26,6 +26,7 @@ RCT_REMAP_METHOD(playVideo,
             [root presentViewController:playerViewController animated:YES completion:nil];
 
             __weak AVPlayerViewController *weakPlayerViewController = playerViewController;
+
             [[XCDYouTubeClient defaultClient] getVideoWithIdentifier:videoId
                                                    completionHandler:^(XCDYouTubeVideo * _Nullable video, NSError * _Nullable error) {
                 if (video) {
@@ -36,34 +37,18 @@ RCT_REMAP_METHOD(playVideo,
                         streamURLs[@(XCDYouTubeVideoQualityMedium360)] ?:
                         streamURLs[@(XCDYouTubeVideoQualitySmall240)
                     ];
+
                     weakPlayerViewController.player = [AVPlayer playerWithURL:streamURL];
                     [weakPlayerViewController.player play];
 
-                    [[NSNotificationCenter defaultCenter] addObserver:self
-                                                             selector:@selector(moviePlayerPlaybackDidFinish:)
-                                                                 name:AVPlayerItemDidPlayToEndTimeNotification
-                                                               object:weakPlayerViewController.player.currentItem];
+                    resolve(@"YouTubeStandaloneIOS player launched successfully");
                 } else {
+                    reject(@"error", error.localizedDescription, nil);
                     [root dismissViewControllerAnimated:YES completion:nil];
                 }
             }];
-
-            resolver = resolve;
-            rejecter = reject;
         });
     #endif
 }
-
-#ifdef XCD_YOUTUBE_KIT_INSTALLED
-    - (void) moviePlayerPlaybackDidFinish:(NSNotification *)notification
-    {
-        [[NSNotificationCenter defaultCenter] removeObserver:self
-                                                        name:AVPlayerItemDidPlayToEndTimeNotification
-                                                      object:notification.object];
-        resolver(@"success");
-        rejecter = nil;
-        resolver = nil;
-    }
-#endif
 
 @end
