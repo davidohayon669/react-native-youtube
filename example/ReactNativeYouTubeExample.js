@@ -40,7 +40,7 @@ export default class ReactNativeYouTubeExample extends React.Component {
           // Un-comment one of videoId / videoIds / playlist.
           // You can also edit these props while Hot-Loading in development mode to see how
           // it affects the loaded native module
-          videoId="ncw4ISEU5ik"
+          videoId="xuCn8ux2gbs"
           // videoIds={['uMK0prafzw0', 'qzYgSecGQww', 'XXlZfc1TrD0', 'czcjU1w-c6k']}
           // playlistId="PLF797E961509B4EB5"
           play={this.state.isPlaying}
@@ -170,8 +170,12 @@ export default class ReactNativeYouTubeExample extends React.Component {
               if (this._youTubeRef.current) {
                 this._youTubeRef.current
                   .getVideosIndex()
-                  .then(index => this.setState({ videosIndex: index }))
-                  .catch(errorMessage => this.setState({ error: errorMessage }));
+                  .then(index => {
+                    this.setState({ videosIndex: index });
+                  })
+                  .catch(errorMessage => {
+                    this.setState({ error: errorMessage });
+                  });
               }
             }}
           />
@@ -198,8 +202,12 @@ export default class ReactNativeYouTubeExample extends React.Component {
                 if (this._youTubeRef.current) {
                   this._youTubeRef.current
                     .getDuration()
-                    .then(duration => this.setState({ duration }))
-                    .catch(errorMessage => this.setState({ error: errorMessage }));
+                    .then(duration => {
+                      this.setState({ duration });
+                    })
+                    .catch(errorMessage => {
+                      this.setState({ error: errorMessage });
+                    });
                 }
               }}
             />
@@ -215,13 +223,21 @@ export default class ReactNativeYouTubeExample extends React.Component {
                 if (this._youTubeRef.current) {
                   this._youTubeRef.current
                     .getCurrentTime()
-                    .then(currentTime => this.setState({ currentTime }))
-                    .catch(errorMessage => this.setState({ error: errorMessage }));
+                    .then(currentTime => {
+                      this.setState({ currentTime });
+                    })
+                    .catch(errorMessage => {
+                      this.setState({ error: errorMessage });
+                    });
 
                   this._youTubeRef.current
                     .getDuration()
-                    .then(duration => this.setState({ duration }))
-                    .catch(errorMessage => this.setState({ error: errorMessage }));
+                    .then(duration => {
+                      this.setState({ duration });
+                    })
+                    .catch(errorMessage => {
+                      this.setState({ error: errorMessage });
+                    });
                 }
               }}
             />
@@ -238,7 +254,9 @@ export default class ReactNativeYouTubeExample extends React.Component {
                   .then(message => {
                     console.log(message);
                   })
-                  .catch(errorMessage => this.setState({ error: errorMessage }));
+                  .catch(errorMessage => {
+                    this.setState({ error: errorMessage });
+                  });
               }}
             />
           </View>
