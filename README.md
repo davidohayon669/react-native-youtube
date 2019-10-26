@@ -202,7 +202,7 @@ A static method that returns a Promise to launch a standalone YouTube player wit
 
 The Android version of this component is based on the official Java [YouTube Android Player API](https://developers.google.com/youtube/android/player/) which limits the ability to [cover player view](https://developers.google.com/youtube/android/player/reference/com/google/android/youtube/player/YouTubePlayer.ErrorReason.html#public-static-final-youtubeplayer.errorreason-unauthorized_overlay), or [render it too small](https://developers.google.com/youtube/android/player/reference/com/google/android/youtube/player/YouTubePlayer.ErrorReason.html#public-static-final-youtubeplayer.errorreason-player_view_too_small). Some React Native components such as navigation ones can interfere with these limitations in unpredictable ways. This issue is discussed in [#161](https://github.com/inProgress-team/react-native-youtube/issues/161).
 
-#### Changing `videoId` / `videoIds` / `playlistId` while the component is mounted
+#### Changing `videoId` / `videoIds` / `playlistId` while the component is mounted in Android
 
 The Android API has bugs when props that identify the videos are changed during the lifecycle of the native component. For now it is recommended to re-mount a new `<YouTube />` instance each time there is a need to replace the video or playlist of a player. Also, looping through a `playlist` or `videoIds` is broken due to the underlying library's bugs.
 
