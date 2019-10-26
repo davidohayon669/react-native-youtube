@@ -200,7 +200,7 @@ A static method that returns a Promise to launch a standalone YouTube player wit
 
 #### `UNAUTHORIZED_OVERLAY` and `PLAYER_VIEW_TOO_SMALL` on Android
 
-(Needs expansion)
+The Android version of this component is based on the official Java [YouTube Android Player API](https://developers.google.com/youtube/android/player/) which limits the ability to [cover player view](https://developers.google.com/youtube/android/player/reference/com/google/android/youtube/player/YouTubePlayer.ErrorReason.html#public-static-final-youtubeplayer.errorreason-unauthorized_overlay), or [render it too small](https://developers.google.com/youtube/android/player/reference/com/google/android/youtube/player/YouTubePlayer.ErrorReason.html#public-static-final-youtubeplayer.errorreason-player_view_too_small). Some React Native components such as navigation ones can interfere with these limitations in unpredictable ways. This issue is discussed in #161
 
 #### Multiple `<YouTube />` instances on Android
 
