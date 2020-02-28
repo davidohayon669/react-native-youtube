@@ -9,7 +9,6 @@ import {
   View,
   Text,
   ScrollView,
-  TouchableOpacity,
   PixelRatio,
   Platform,
   Button,
