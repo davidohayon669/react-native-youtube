@@ -12,14 +12,10 @@
 		13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB11A68108700A75B9A /* LaunchScreen.xib */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
-		25E8164E0B5C896ABCE3140A /* libPods-ReactNativeYouTubeExampleTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 25B2ADA73DBC413C31D2DF0D /* libPods-ReactNativeYouTubeExampleTests.a */; };
 		2D02E4BC1E0B4A80006451C7 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.m */; };
 		2D02E4BD1E0B4A84006451C7 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		2D02E4BF1E0B4AB3006451C7 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		2DCD954D1E0B4F2C00145EB5 /* ReactNativeYouTubeExampleTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* ReactNativeYouTubeExampleTests.m */; };
-		35AE1067B6B299769570585F /* libPods-ReactNativeYouTubeExample-tvOSTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = AFBD56DD2F011C58FF2FFCA1 /* libPods-ReactNativeYouTubeExample-tvOSTests.a */; };
-		80174CD9ECD41264B0C28532 /* libPods-ReactNativeYouTubeExample-tvOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BA43DEB30B2DD3DF424A3641 /* libPods-ReactNativeYouTubeExample-tvOS.a */; };
-		883B964972C629DDB391067F /* libPods-ReactNativeYouTubeExample.a in Frameworks */ = {isa = PBXBuildFile; fileRef = FE4223E94A234F0D11856425 /* libPods-ReactNativeYouTubeExample.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -51,22 +47,10 @@
 		13B07FB51A68108700A75B9A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = ReactNativeYouTubeExample/Images.xcassets; sourceTree = "<group>"; };
 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = ReactNativeYouTubeExample/Info.plist; sourceTree = "<group>"; };
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = ReactNativeYouTubeExample/main.m; sourceTree = "<group>"; };
-		1C9ABC583AD918392A1605F3 /* Pods-ReactNativeYouTubeExample-tvOSTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ReactNativeYouTubeExample-tvOSTests.debug.xcconfig"; path = "Target Support Files/Pods-ReactNativeYouTubeExample-tvOSTests/Pods-ReactNativeYouTubeExample-tvOSTests.debug.xcconfig"; sourceTree = "<group>"; };
-		1FFE1BF2366C6BBEE5300153 /* Pods-ReactNativeYouTubeExampleTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ReactNativeYouTubeExampleTests.release.xcconfig"; path = "Target Support Files/Pods-ReactNativeYouTubeExampleTests/Pods-ReactNativeYouTubeExampleTests.release.xcconfig"; sourceTree = "<group>"; };
-		25B2ADA73DBC413C31D2DF0D /* libPods-ReactNativeYouTubeExampleTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-ReactNativeYouTubeExampleTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2D02E47B1E0B4A5D006451C7 /* ReactNativeYouTubeExample-tvOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "ReactNativeYouTubeExample-tvOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2D02E4901E0B4A5D006451C7 /* ReactNativeYouTubeExample-tvOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "ReactNativeYouTubeExample-tvOSTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
-		417AB152844540D577F8F7AB /* Pods-ReactNativeYouTubeExample-tvOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ReactNativeYouTubeExample-tvOS.debug.xcconfig"; path = "Target Support Files/Pods-ReactNativeYouTubeExample-tvOS/Pods-ReactNativeYouTubeExample-tvOS.debug.xcconfig"; sourceTree = "<group>"; };
-		464638B0E4AD30E8AFA08AB9 /* Pods-ReactNativeYouTubeExample.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ReactNativeYouTubeExample.release.xcconfig"; path = "Target Support Files/Pods-ReactNativeYouTubeExample/Pods-ReactNativeYouTubeExample.release.xcconfig"; sourceTree = "<group>"; };
-		76C5584DA608EC12280E922A /* Pods-ReactNativeYouTubeExampleTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ReactNativeYouTubeExampleTests.debug.xcconfig"; path = "Target Support Files/Pods-ReactNativeYouTubeExampleTests/Pods-ReactNativeYouTubeExampleTests.debug.xcconfig"; sourceTree = "<group>"; };
-		86CFAC066A8E6283EFE90282 /* Pods-ReactNativeYouTubeExample-tvOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ReactNativeYouTubeExample-tvOS.release.xcconfig"; path = "Target Support Files/Pods-ReactNativeYouTubeExample-tvOS/Pods-ReactNativeYouTubeExample-tvOS.release.xcconfig"; sourceTree = "<group>"; };
-		AFBD56DD2F011C58FF2FFCA1 /* libPods-ReactNativeYouTubeExample-tvOSTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-ReactNativeYouTubeExample-tvOSTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		BA43DEB30B2DD3DF424A3641 /* libPods-ReactNativeYouTubeExample-tvOS.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-ReactNativeYouTubeExample-tvOS.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		ED2971642150620600B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = Platforms/AppleTVOS.platform/Developer/SDKs/AppleTVOS12.0.sdk/System/Library/Frameworks/JavaScriptCore.framework; sourceTree = DEVELOPER_DIR; };
-		EF1D627256CC64BB9D0D4334 /* Pods-ReactNativeYouTubeExample.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ReactNativeYouTubeExample.debug.xcconfig"; path = "Target Support Files/Pods-ReactNativeYouTubeExample/Pods-ReactNativeYouTubeExample.debug.xcconfig"; sourceTree = "<group>"; };
-		F9F7CB3BB950DCA884B32256 /* Pods-ReactNativeYouTubeExample-tvOSTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ReactNativeYouTubeExample-tvOSTests.release.xcconfig"; path = "Target Support Files/Pods-ReactNativeYouTubeExample-tvOSTests/Pods-ReactNativeYouTubeExample-tvOSTests.release.xcconfig"; sourceTree = "<group>"; };
-		FE4223E94A234F0D11856425 /* libPods-ReactNativeYouTubeExample.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-ReactNativeYouTubeExample.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -74,7 +58,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				25E8164E0B5C896ABCE3140A /* libPods-ReactNativeYouTubeExampleTests.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -82,7 +65,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				883B964972C629DDB391067F /* libPods-ReactNativeYouTubeExample.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -90,7 +72,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				80174CD9ECD41264B0C28532 /* libPods-ReactNativeYouTubeExample-tvOS.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -98,7 +79,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				35AE1067B6B299769570585F /* libPods-ReactNativeYouTubeExample-tvOSTests.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -141,10 +121,6 @@
 			children = (
 				ED297162215061F000B7C4FE /* JavaScriptCore.framework */,
 				ED2971642150620600B7C4FE /* JavaScriptCore.framework */,
-				FE4223E94A234F0D11856425 /* libPods-ReactNativeYouTubeExample.a */,
-				BA43DEB30B2DD3DF424A3641 /* libPods-ReactNativeYouTubeExample-tvOS.a */,
-				AFBD56DD2F011C58FF2FFCA1 /* libPods-ReactNativeYouTubeExample-tvOSTests.a */,
-				25B2ADA73DBC413C31D2DF0D /* libPods-ReactNativeYouTubeExampleTests.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -164,7 +140,6 @@
 				00E356EF1AD99517003FC87E /* ReactNativeYouTubeExampleTests */,
 				83CBBA001A601CBA00E9B192 /* Products */,
 				2D16E6871FA4F8E400B85C8A /* Frameworks */,
-				B87CDB8EA92FB15D343C9400 /* Pods */,
 			);
 			indentWidth = 2;
 			sourceTree = "<group>";
@@ -182,22 +157,6 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		B87CDB8EA92FB15D343C9400 /* Pods */ = {
-			isa = PBXGroup;
-			children = (
-				EF1D627256CC64BB9D0D4334 /* Pods-ReactNativeYouTubeExample.debug.xcconfig */,
-				464638B0E4AD30E8AFA08AB9 /* Pods-ReactNativeYouTubeExample.release.xcconfig */,
-				417AB152844540D577F8F7AB /* Pods-ReactNativeYouTubeExample-tvOS.debug.xcconfig */,
-				86CFAC066A8E6283EFE90282 /* Pods-ReactNativeYouTubeExample-tvOS.release.xcconfig */,
-				1C9ABC583AD918392A1605F3 /* Pods-ReactNativeYouTubeExample-tvOSTests.debug.xcconfig */,
-				F9F7CB3BB950DCA884B32256 /* Pods-ReactNativeYouTubeExample-tvOSTests.release.xcconfig */,
-				76C5584DA608EC12280E922A /* Pods-ReactNativeYouTubeExampleTests.debug.xcconfig */,
-				1FFE1BF2366C6BBEE5300153 /* Pods-ReactNativeYouTubeExampleTests.release.xcconfig */,
-			);
-			name = Pods;
-			path = Pods;
-			sourceTree = "<group>";
-		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -205,7 +164,6 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 00E357021AD99517003FC87E /* Build configuration list for PBXNativeTarget "ReactNativeYouTubeExampleTests" */;
 			buildPhases = (
-				5F0FB305AD4803A1B5F9D340 /* [CP] Check Pods Manifest.lock */,
 				00E356EA1AD99517003FC87E /* Sources */,
 				00E356EB1AD99517003FC87E /* Frameworks */,
 				00E356EC1AD99517003FC87E /* Resources */,
@@ -224,7 +182,6 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "ReactNativeYouTubeExample" */;
 			buildPhases = (
-				116B7B65AD181214E03AD0E1 /* [CP] Check Pods Manifest.lock */,
 				FD10A7F022414F080027D42C /* Start Packager */,
 				13B07F871A680F5B00A75B9A /* Sources */,
 				13B07F8C1A680F5B00A75B9A /* Frameworks */,
@@ -236,7 +193,7 @@
 			dependencies = (
 			);
 			name = ReactNativeYouTubeExample;
-			productName = ReactNativeYouTubeExample;
+			productName = "ReactNativeYouTubeExample";
 			productReference = 13B07F961A680F5B00A75B9A /* ReactNativeYouTubeExample.app */;
 			productType = "com.apple.product-type.application";
 		};
@@ -244,7 +201,6 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 2D02E4BA1E0B4A5E006451C7 /* Build configuration list for PBXNativeTarget "ReactNativeYouTubeExample-tvOS" */;
 			buildPhases = (
-				611F9662396292EB4D53BF79 /* [CP] Check Pods Manifest.lock */,
 				FD10A7F122414F3F0027D42C /* Start Packager */,
 				2D02E4771E0B4A5D006451C7 /* Sources */,
 				2D02E4781E0B4A5D006451C7 /* Frameworks */,
@@ -264,7 +220,6 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 2D02E4BB1E0B4A5E006451C7 /* Build configuration list for PBXNativeTarget "ReactNativeYouTubeExample-tvOSTests" */;
 			buildPhases = (
-				EEEB9C2ABC1C76228BB6EE91 /* [CP] Check Pods Manifest.lock */,
 				2D02E48C1E0B4A5D006451C7 /* Sources */,
 				2D02E48D1E0B4A5D006451C7 /* Frameworks */,
 				2D02E48E1E0B4A5D006451C7 /* Resources */,
@@ -373,28 +328,6 @@
 			shellPath = /bin/sh;
 			shellScript = "export NODE_BINARY=node\n../node_modules/react-native/scripts/react-native-xcode.sh";
 		};
-		116B7B65AD181214E03AD0E1 /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-ReactNativeYouTubeExample-checkManifestLockResult.txt",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
 		2D02E4CB1E0B4B27006451C7 /* Bundle React Native Code And Images */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -408,72 +341,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "export NODE_BINARY=node\n../node_modules/react-native/scripts/react-native-xcode.sh";
-		};
-		5F0FB305AD4803A1B5F9D340 /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-ReactNativeYouTubeExampleTests-checkManifestLockResult.txt",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-		611F9662396292EB4D53BF79 /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-ReactNativeYouTubeExample-tvOS-checkManifestLockResult.txt",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-		EEEB9C2ABC1C76228BB6EE91 /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-ReactNativeYouTubeExample-tvOSTests-checkManifestLockResult.txt",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
 		};
 		FD10A7F022414F080027D42C /* Start Packager */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -580,7 +447,6 @@
 /* Begin XCBuildConfiguration section */
 		00E356F61AD99517003FC87E /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 76C5584DA608EC12280E922A /* Pods-ReactNativeYouTubeExampleTests.debug.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				GCC_PREPROCESSOR_DEFINITIONS = (
@@ -603,7 +469,6 @@
 		};
 		00E356F71AD99517003FC87E /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 1FFE1BF2366C6BBEE5300153 /* Pods-ReactNativeYouTubeExampleTests.release.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				COPY_PHASE_STRIP = NO;
@@ -623,7 +488,6 @@
 		};
 		13B07F941A680F5B00A75B9A /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = EF1D627256CC64BB9D0D4334 /* Pods-ReactNativeYouTubeExample.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CURRENT_PROJECT_VERSION = 1;
@@ -643,7 +507,6 @@
 		};
 		13B07F951A680F5B00A75B9A /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 464638B0E4AD30E8AFA08AB9 /* Pods-ReactNativeYouTubeExample.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CURRENT_PROJECT_VERSION = 1;
@@ -662,7 +525,6 @@
 		};
 		2D02E4971E0B4A5E006451C7 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 417AB152844540D577F8F7AB /* Pods-ReactNativeYouTubeExample-tvOS.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = "App Icon & Top Shelf Image";
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
@@ -690,7 +552,6 @@
 		};
 		2D02E4981E0B4A5E006451C7 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 86CFAC066A8E6283EFE90282 /* Pods-ReactNativeYouTubeExample-tvOS.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = "App Icon & Top Shelf Image";
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
@@ -718,7 +579,6 @@
 		};
 		2D02E4991E0B4A5E006451C7 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 1C9ABC583AD918392A1605F3 /* Pods-ReactNativeYouTubeExample-tvOSTests.debug.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CLANG_ANALYZER_NONNULL = YES;
@@ -745,7 +605,6 @@
 		};
 		2D02E49A1E0B4A5E006451C7 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = F9F7CB3BB950DCA884B32256 /* Pods-ReactNativeYouTubeExample-tvOSTests.release.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CLANG_ANALYZER_NONNULL = YES;
