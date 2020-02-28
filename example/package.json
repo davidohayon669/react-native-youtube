@@ -16,7 +16,7 @@
     "lint": "eslint ."
   },
   "dependencies": {
-    "prettier": "^1.18.2",
+    "prettier": "^1.19.1",
     "react": "16.9.0",
     "react-native": "0.61.5",
     "react-native-youtube": "file:react-native-youtube-2.0.0.tgz",
