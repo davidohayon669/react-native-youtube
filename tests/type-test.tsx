@@ -7,8 +7,19 @@ const YouTubeTest = () => {
     videoId: 'bar',
   });
   YouTubeStandaloneIOS.playVideo('foo');
+  const videoRef = React.useRef<YouTube>(null)
+  React.useEffect(()=>{
+    videoRef.current.getCurrentTime()
+    videoRef.current.nextVideo()
+    videoRef.current.previousVideo()
+    videoRef.current.reloadIframe()
+    videoRef.current.getDuration()
+    videoRef.current.playVideoAt(1)
+    videoRef.current.seekTo(1000)
+  },[])
   return (
     <YouTube
+      ref={videoRef}
       videoId={'foo'}
       videoIds={['foo', 'bar']}
       playlistId={'foo'}
@@ -21,11 +32,11 @@ const YouTubeTest = () => {
       showFullscreenButton
       rel
       origin={'foo'}
-      onError={() => {}}
-      onReady={() => {}}
+      onError={(event) => {}}
+      onReady={(event) => {}}
       onChangeState={() => {}}
       onChangeQuality={() => {}}
-      onChangeFullscreen={() => {}}
+      onChangeFullscreen={(event) => {}}
       onProgress={() => {}}
       style={{ flex: 1 }}
     />
