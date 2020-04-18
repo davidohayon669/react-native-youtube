@@ -1,15 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import ReactNative, {
-  View,
-  requireNativeComponent,
-  NativeModules,
-  ViewPropTypes,
-} from 'react-native';
+import ReactNative, { requireNativeComponent, NativeModules, ViewPropTypes } from 'react-native';
 
 const RCTYouTube = requireNativeComponent('RCTYouTube', null);
 
-const parsePlayerParams = props => ({
+const parsePlayerParams = (props) => ({
   videoId: Array.isArray(props.videoIds) ? props.videoIds[0] : props.videoId,
   playlistId: props.playlistId,
   playerVars: {
@@ -79,13 +74,13 @@ export default class YouTube extends React.Component {
     }
   }
 
-  _onError = event => {
+  _onError = (event) => {
     if (this.props.onError) {
       this.props.onError(event.nativeEvent);
     }
   };
 
-  _onReady = event => {
+  _onReady = (event) => {
     // Force render to handle any props that have changed since mounting, and let the
     // component know it can render any future change
     this.forceUpdate();
@@ -96,25 +91,25 @@ export default class YouTube extends React.Component {
     }
   };
 
-  _onChangeState = event => {
+  _onChangeState = (event) => {
     if (this.props.onChangeState) {
       this.props.onChangeState(event.nativeEvent);
     }
   };
 
-  _onChangeQuality = event => {
+  _onChangeQuality = (event) => {
     if (this.props.onChangeQuality) {
       this.props.onChangeQuality(event.nativeEvent);
     }
   };
 
-  _onChangeFullscreen = event => {
+  _onChangeFullscreen = (event) => {
     if (this.props.onChangeFullscreen) {
       this.props.onChangeFullscreen(event.nativeEvent);
     }
   };
 
-  _onProgress = event => {
+  _onProgress = (event) => {
     if (this.props.onProgress) {
       this.props.onProgress(event.nativeEvent);
     }

@@ -14,24 +14,24 @@ export interface YouTubeProps {
   showFullscreenButton?: boolean;
   rel?: boolean;
   origin?: string;
-  onError?: (event:any) => void;
-  onReady?: (event:any) => void;
+  onError?: (event: any) => void;
+  onReady?: (event: any) => void;
   onChangeState?: () => void;
   onChangeQuality?: () => void;
-  onChangeFullscreen?: (event:any) => void;
-  onProgress?: (event:any) => void;
+  onChangeFullscreen?: (event: any) => void;
+  onProgress?: (event: any) => void;
   style?: StyleProp<ViewStyle>;
 }
 
 declare class YouTube extends React.Component<YouTubeProps> {
-  seekTo(seconds:number):void
-  nextVideo():void
-  previousVideo():void
-  playVideoAt(index:number):void
-  getVideosIndex():Promise<number>
-  getCurrentTime():Promise<number>
-  getDuration():Promise<number>
-  reloadIframe():void
+  seekTo(seconds: number): void;
+  nextVideo(): void;
+  previousVideo(): void;
+  playVideoAt(index: number): void;
+  getVideosIndex(): Promise<number>;
+  getCurrentTime(): Promise<number>;
+  getDuration(): Promise<number>;
+  reloadIframe(): void;
 }
 
 export declare const YouTubeStandaloneIOS: {

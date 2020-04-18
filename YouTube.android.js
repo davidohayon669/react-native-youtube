@@ -89,7 +89,7 @@ export default class YouTube extends React.Component {
     let wait = 0.2;
 
     const next = () => {
-      this.setState(state => ({ resizingHackFlag: !state.resizingHackFlag }));
+      this.setState((state) => ({ resizingHackFlag: !state.resizingHackFlag }));
 
       wait = wait >= 1.5 ? 1.5 : wait * 1.4;
       this._timeout = setTimeout(next, wait * 1000);
@@ -114,13 +114,13 @@ export default class YouTube extends React.Component {
     this._fireResizingHack();
   };
 
-  _onError = event => {
+  _onError = (event) => {
     if (this.props.onError) {
       this.props.onError(event.nativeEvent);
     }
   };
 
-  _onReady = event => {
+  _onReady = (event) => {
     this._fireResizingHack();
 
     if (this.props.onReady) {
@@ -128,19 +128,19 @@ export default class YouTube extends React.Component {
     }
   };
 
-  _onChangeState = event => {
+  _onChangeState = (event) => {
     if (this.props.onChangeState) {
       this.props.onChangeState(event.nativeEvent);
     }
   };
 
-  _onChangeQuality = event => {
+  _onChangeQuality = (event) => {
     if (this.props.onChangeQuality) {
       this.props.onChangeQuality(event.nativeEvent);
     }
   };
 
-  _onChangeFullscreen = event => {
+  _onChangeFullscreen = (event) => {
     const { isFullscreen } = event.nativeEvent;
     if (this.state.fullscreen !== isFullscreen) {
       this.setState({ fullscreen: isFullscreen });
