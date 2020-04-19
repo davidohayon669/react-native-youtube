@@ -9,7 +9,7 @@ export type OnChangeFullscreenArg = { isFullscreen: boolean }
 
 export type OnProgressArg = { currentTime: number }
 
-export type OnChangeStateArg = 
+export type OnChangeStateArg =
   { state: 'started' } |
   { state: 'playing' } |
   { state: 'buffering' } |
