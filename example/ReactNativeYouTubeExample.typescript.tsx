@@ -2,7 +2,7 @@
  * Typescript example.
  *
  * Before use:
- * 1) Rename this file to .tsx
+ * 1) Rename this file to ReactNativeYoutubeExample.tsx (remove the ".typescript" part)
  * 2) Delete (or move) the .js counterpart
  */
 
