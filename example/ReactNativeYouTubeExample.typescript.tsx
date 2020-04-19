@@ -133,14 +133,14 @@ export default class ReactNativeYouTubeExample extends React.Component<{}, State
           <Button
             title="Previous Video"
             onPress={() => {
-              this._youTubeRef?.current?.previousVideo();
+              this._youTubeRef.current?.previousVideo();
             }}
           />
           <Text> </Text>
           <Button
             title="Next Video"
             onPress={() => {
-              this._youTubeRef?.current?.nextVideo();
+              this._youTubeRef.current?.nextVideo();
             }}
           />
         </View>
@@ -150,30 +150,30 @@ export default class ReactNativeYouTubeExample extends React.Component<{}, State
           <Button
             title="15 Seconds"
             onPress={() => {
-              this._youTubeRef?.current?.seekTo(15);
+              this._youTubeRef.current?.seekTo(15);
             }}
           />
           <Text> </Text>
           <Button
             title="2 Minutes"
             onPress={() => {
-              this._youTubeRef?.current?.seekTo(2 * 60);
+              this._youTubeRef.current?.seekTo(2 * 60);
             }}
           />
           <Text> </Text>
           <Button
             title="15 Minutes"
             onPress={() => {
-              this._youTubeRef?.current?.seekTo(15 * 60);
+              this._youTubeRef.current?.seekTo(15 * 60);
             }}
           />
         </View>
 
         {/* Play specific video in a videoIds array by index */}
-        {this._youTubeRef?.current?.props.videoIds &&
-          Array.isArray(this._youTubeRef?.current?.props.videoIds) && (
+        {this._youTubeRef.current?.props.videoIds &&
+          Array.isArray(this._youTubeRef.current?.props.videoIds) && (
             <View style={styles.buttonGroup}>
-              {this._youTubeRef?.current?.props.videoIds.map((videoId: string, i: number) => (
+              {this._youTubeRef.current?.props.videoIds.map((videoId: string, i: number) => (
                 <React.Fragment key={i}>
                   <Button
                     title={`Video ${i}`}
@@ -222,7 +222,7 @@ export default class ReactNativeYouTubeExample extends React.Component<{}, State
             <Button
               title="Get Duration (iOS)"
               onPress={() => {
-                this._youTubeRef?.current?.getDuration()
+                this._youTubeRef.current?.getDuration()
                   .then((duration: number) => {
                     this.setState({ duration });
                   })
@@ -240,7 +240,7 @@ export default class ReactNativeYouTubeExample extends React.Component<{}, State
             <Button
               title="Get Progress & Duration (Android)"
               onPress={() => {
-                this._youTubeRef?.current?.getCurrentTime()
+                this._youTubeRef.current?.getCurrentTime()
                   .then((currentTime: any) => {
                     this.setState({ currentTime });
                   })
@@ -248,7 +248,7 @@ export default class ReactNativeYouTubeExample extends React.Component<{}, State
                     this.setState({ error: errorMessage });
                   });
 
-                this._youTubeRef?.current?.getDuration()
+                this._youTubeRef.current?.getDuration()
                   .then((duration: number) => {
                     this.setState({ duration });
                   })
@@ -348,7 +348,7 @@ export default class ReactNativeYouTubeExample extends React.Component<{}, State
             <Button
               title="Reload iFrame (iOS)"
               onPress={() => {
-                this._youTubeRef?.current?.reloadIframe();
+                this._youTubeRef.current?.reloadIframe();
               }}
             />
           </View>
