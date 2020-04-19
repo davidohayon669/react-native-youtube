@@ -27,7 +27,7 @@ export interface YouTubeProps {
   play?: boolean;
   loop?: boolean;
   fullscreen?: boolean;
-  controls?: 1 | 2 | 3;
+  controls?: 0 | 1 | 2;
   showinfo?: boolean;
   modestbranding?: boolean;
   showFullscreenButton?: boolean;
