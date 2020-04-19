@@ -268,7 +268,7 @@ export default class ReactNativeYouTubeExample extends React.Component<{}, State
               onPress={() => {
                 YouTubeStandaloneIOS.playVideo('KVZ-P-ZI6W4')
                   .then((message: any) => {
-                    console.console.log(message);
+                    console.log(message);
                   })
                   .catch((errorMessage: any) => {
                     this.setState({ error: errorMessage });
@@ -292,7 +292,7 @@ export default class ReactNativeYouTubeExample extends React.Component<{}, State
                   startTime: 124.5,
                 })
                   .then(() => {
-                    console.console.log('Android Standalone Player Finished');
+                    console.log('Android Standalone Player Finished');
                   })
                   .catch((errorMessage: any) => {
                     this.setState({ error: errorMessage });
@@ -312,7 +312,7 @@ export default class ReactNativeYouTubeExample extends React.Component<{}, State
                   startTime: 99.5,
                 })
                   .then(() => {
-                    console.console.log('Android Standalone Player Finished');
+                    console.log('Android Standalone Player Finished');
                   })
                   .catch((errorMessage: any) => {
                     this.setState({ error: errorMessage });
@@ -332,7 +332,7 @@ export default class ReactNativeYouTubeExample extends React.Component<{}, State
                   startTime: 100.5,
                 })
                   .then(() => {
-                    console.console.log('Android Standalone Player Finished');
+                    console.log('Android Standalone Player Finished');
                   })
                   .catch((errorMessage: any) => {
                     this.setState({ error: errorMessage });
