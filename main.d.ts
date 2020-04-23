@@ -2,6 +2,7 @@ import * as React from 'react';
 import { StyleProp, ViewStyle } from 'react-native';
 
 export interface YouTubeProps {
+  apiKey?: string;
   videoId?: string;
   videoIds?: string[];
   playlistId?: string;
@@ -10,6 +11,7 @@ export interface YouTubeProps {
   fullscreen?: boolean;
   controls?: 1 | 2 | 3;
   showinfo?: boolean;
+  resumePlayAndroid?: boolean;
   modestbranding?: boolean;
   showFullscreenButton?: boolean;
   rel?: boolean;
