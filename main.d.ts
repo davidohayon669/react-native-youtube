@@ -13,6 +13,7 @@ export interface YouTubeProps {
   modestbranding?: boolean;
   showFullscreenButton?: boolean;
   rel?: boolean;
+  apiKey?: string;
   origin?: string;
   onError?: (event: any) => void;
   onReady?: (event: any) => void;
