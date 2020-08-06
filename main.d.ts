@@ -2,6 +2,7 @@ import * as React from 'react';
 import { StyleProp, ViewStyle } from 'react-native';
 
 export interface YouTubeProps {
+  apiKey: string;
   videoId?: string;
   videoIds?: string[];
   playlistId?: string;
