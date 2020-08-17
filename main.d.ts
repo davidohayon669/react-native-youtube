@@ -5,6 +5,7 @@ export interface YouTubeProps {
   videoId?: string;
   videoIds?: string[];
   playlistId?: string;
+  apiKey?: string;
   play?: boolean;
   loop?: boolean;
   fullscreen?: boolean;
