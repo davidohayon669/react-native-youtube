@@ -1,18 +1,16 @@
 package com.inprogress.reactnativeyoutube;
 
+import android.os.Handler;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
-import android.os.Handler;
 
+import com.facebook.react.bridge.ReadableArray;
 import com.google.android.youtube.player.YouTubeInitializationResult;
 import com.google.android.youtube.player.YouTubePlayer;
 
-import com.facebook.react.bridge.ReadableArray;
-
 import java.util.ArrayList;
 import java.util.List;
-import java.lang.Runnable;
 
 
 public class YouTubePlayerController implements
@@ -24,6 +22,8 @@ public class YouTubePlayerController implements
     private YouTubePlayer mYouTubePlayer;
     private YouTubeView mYouTubeView;
 
+    private int FLAGS_NONE = -1;
+
     private static final int VIDEO_MODE = 0;
     private static final int VIDEOS_MODE = 1;
     private static final int PLAYLIST_MODE = 2;
@@ -32,6 +32,8 @@ public class YouTubePlayerController implements
     private boolean mIsReady = false;
     private int mMode = 0;
     private int mVideosIndex = 0;
+
+    private int mFullscreenControlFlags = FLAGS_NONE;
 
     private String mVideoId = null;
     private List<String> mVideoIds = new ArrayList<String>();
@@ -54,6 +56,7 @@ public class YouTubePlayerController implements
             mYouTubePlayer.setPlayerStateChangeListener(this);
             mYouTubePlayer.setPlaybackEventListener(this);
             mYouTubePlayer.setOnFullscreenListener(this);
+            updateFullscreenControlFlags();
             updateFullscreen();
             updateShowFullscreenButton();
             updateControls();
@@ -162,11 +165,11 @@ public class YouTubePlayerController implements
     }
 
     public int getCurrentTime() {
-      return mYouTubePlayer.getCurrentTimeMillis() / 1000;
+        return mYouTubePlayer.getCurrentTimeMillis() / 1000;
     }
 
     public int getDuration() {
-      return mYouTubePlayer.getDurationMillis() / 1000;
+        return mYouTubePlayer.getDurationMillis() / 1000;
     }
 
     public void nextVideo() {
@@ -241,6 +244,12 @@ public class YouTubePlayerController implements
         mYouTubePlayer.setFullscreen(mFullscreen);
     }
 
+    private void updateFullscreenControlFlags() {
+        if (mFullscreenControlFlags != -1) {
+            mYouTubePlayer.setFullscreenControlFlags(mFullscreenControlFlags);
+        }
+    }
+
     private void updateShowFullscreenButton() {
         mYouTubePlayer.setShowFullscreenButton(mShowFullscreenButton);
     }
@@ -312,7 +321,7 @@ public class YouTubePlayerController implements
             handler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                   mYouTubePlayer.play();
+                    mYouTubePlayer.play();
                 }
             }, 1);
         }
@@ -378,6 +387,11 @@ public class YouTubePlayerController implements
     public void setFullscreen(boolean fullscreen) {
         mFullscreen = fullscreen;
         if (isLoaded()) updateFullscreen();
+    }
+
+    public void setFullscreenControlFlags(int flags) {
+        mFullscreenControlFlags = flags;
+        if (isLoaded()) updateFullscreenControlFlags();
     }
 
     public void setControls(int controls) {

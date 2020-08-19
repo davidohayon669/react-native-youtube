@@ -49,10 +49,10 @@ Open AppDelegate.m and add :
   play // control playback of video with true/false
   fullscreen // control whether the video should play in fullscreen or inline
   loop // control whether the video should loop when ended
-  onReady={e => this.setState({ isReady: true })}
-  onChangeState={e => this.setState({ status: e.state })}
-  onChangeQuality={e => this.setState({ quality: e.quality })}
-  onError={e => this.setState({ error: e.error })}
+  onReady={(e) => this.setState({ isReady: true })}
+  onChangeState={(e) => this.setState({ status: e.state })}
+  onChangeQuality={(e) => this.setState({ quality: e.quality })}
+  onError={(e) => this.setState({ error: e.error })}
   style={{ alignSelf: 'stretch', height: 300 }}
 />
 ```
@@ -78,6 +78,7 @@ import YouTube from 'react-native-youtube';
 - `loop` (boolean): Loops the video. Default: `false`.
 - `fullscreen` (boolean): Controls whether the video should play inline or in fullscreen. Default: `false`.
 - `controls` (number): Sets the player's controls scheme. Supported values are `0`, `1`, `2`. Default: `1`. On iOS the numbers conform to [These Parameters](https://developers.google.com/youtube/player_parameters?hl=en#controls). On Android the mapping is `0 = CHROMELESS`, `1 = DEFAULT`, `2 = MINIMAL` ([More Info](https://developers.google.com/youtube/android/player/reference/com/google/android/youtube/player/YouTubePlayer.PlayerStyle)).
+- `fullscreenControlsFlags` (number): Set's player fullscreen control flags on Android. Available flags are `FULLSCREEN_FLAG_CONTROL_ORIENTATION`, `FULLSCREEN_FLAG_CONTROL_SYSTEM_UI`, `FULLSCREEN_FLAG_ALWAYS_FULLSCREEN_IN_LANDSCAPE` and `FULLSCREEN_FLAG_CUSTOM_LAYOUT` ([More Info](<https://developers.google.com/youtube/android/player/reference/com/google/android/youtube/player/YouTubePlayer.html#setFullscreenControlFlags(int)>))
 - `showFullscreenButton` (boolean): Show or hide Fullscreen button. Default: `true`.
 - `showinfo` (boolean, _iOS_): Setting the parameter's value to false causes the player to not display information like the video title and uploader before the video starts playing. Default: `true`.
 - `modestbranding` (boolean, _iOS_): This parameter lets you use a YouTube player that does not show a YouTube logo. Default: `false`.
@@ -127,8 +128,8 @@ import { YouTubeStandaloneIOS } from 'react-native-youtube';
 
 ```javascript
 YouTubeStandaloneIOS.playVideo('KVZ-P-ZI6W4')
-  .then(message => console.log(message))
-  .catch(errorMessage => console.error(errorMessage));
+  .then((message) => console.log(message))
+  .catch((errorMessage) => console.error(errorMessage));
 ```
 
 #### `YouTubeStandaloneIOS.playVideo(videoId)` (Static)
@@ -155,7 +156,7 @@ YouTubeStandaloneAndroid.playVideo({
   startTime: 120, // Starting point of video (in seconds)
 })
   .then(() => console.log('Standalone Player Exited'))
-  .catch(errorMessage => console.error(errorMessage));
+  .catch((errorMessage) => console.error(errorMessage));
 ```
 
 #### `YouTubeStandaloneAndroid.playVideo(options)` (Static)
