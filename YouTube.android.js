@@ -31,6 +31,7 @@ export default class YouTube extends React.Component {
     loop: PropTypes.bool,
     fullscreen: PropTypes.bool,
     controls: PropTypes.oneOf([0, 1, 2]),
+    fullscreenControlFlags: PropTypes.number,
     showFullscreenButton: PropTypes.bool,
     resumePlayAndroid: PropTypes.bool,
     onError: PropTypes.func,
@@ -45,6 +46,14 @@ export default class YouTube extends React.Component {
     showFullscreenButton: true,
     resumePlayAndroid: true,
   };
+
+  static FULLSCREEN_FLAG_CONTROL_ORIENTATION =
+    NativeModules.YouTubeModule.FULLSCREEN_FLAG_CONTROL_ORIENTATION;
+  static FULLSCREEN_FLAG_CONTROL_SYSTEM_UI =
+    NativeModules.YouTubeModule.FULLSCREEN_FLAG_CONTROL_SYSTEM_UI;
+  static FULLSCREEN_FLAG_ALWAYS_FULLSCREEN_IN_LANDSCAPE =
+    NativeModules.YouTubeModule.FULLSCREEN_FLAG_ALWAYS_FULLSCREEN_IN_LANDSCAPE;
+  static FULLSCREEN_FLAG_CUSTOM_LAYOUT = NativeModules.YouTubeModule.FULLSCREEN_FLAG_CUSTOM_LAYOUT;
 
   _interval = null;
 

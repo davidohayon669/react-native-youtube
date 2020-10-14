@@ -3,8 +3,9 @@ package com.inprogress.reactnativeyoutube;
 import android.app.FragmentManager;
 import android.os.Build;
 import android.os.Parcelable;
-import androidx.annotation.Nullable;
 import android.widget.FrameLayout;
+
+import androidx.annotation.Nullable;
 
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.ReactContext;
@@ -183,6 +184,10 @@ public class YouTubeView extends FrameLayout {
 
     public void setFullscreen(boolean bool) {
         mYouTubeController.setFullscreen(bool);
+    }
+
+    public void setFullscreenControlFlags(int flags) {
+        mYouTubeController.setFullscreenControlFlags(flags);
     }
 
     public void setControls(int nb) {

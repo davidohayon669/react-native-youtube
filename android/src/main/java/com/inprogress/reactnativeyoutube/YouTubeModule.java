@@ -1,5 +1,7 @@
 package com.inprogress.reactnativeyoutube;
 
+import androidx.annotation.Nullable;
+
 import com.facebook.react.bridge.Promise;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
@@ -8,6 +10,10 @@ import com.facebook.react.uimanager.IllegalViewOperationException;
 import com.facebook.react.uimanager.NativeViewHierarchyManager;
 import com.facebook.react.uimanager.UIBlock;
 import com.facebook.react.uimanager.UIManagerModule;
+import com.google.android.youtube.player.YouTubePlayer;
+
+import java.util.HashMap;
+import java.util.Map;
 
 
 public class YouTubeModule extends ReactContextBaseJavaModule {
@@ -31,7 +37,7 @@ public class YouTubeModule extends ReactContextBaseJavaModule {
         try {
             UIManagerModule uiManager = mReactContext.getNativeModule(UIManagerModule.class);
             uiManager.addUIBlock(new UIBlock() {
-                public void execute (NativeViewHierarchyManager nvhm) {
+                public void execute(NativeViewHierarchyManager nvhm) {
                     YouTubeView youTubeView = (YouTubeView) nvhm.resolveView(reactTag);
                     YouTubeManager youTubeManager = (YouTubeManager) nvhm.resolveViewManager(reactTag);
                     int index = youTubeManager.getVideosIndex(youTubeView);
@@ -48,7 +54,7 @@ public class YouTubeModule extends ReactContextBaseJavaModule {
         try {
             UIManagerModule uiManager = mReactContext.getNativeModule(UIManagerModule.class);
             uiManager.addUIBlock(new UIBlock() {
-                public void execute (NativeViewHierarchyManager nvhm) {
+                public void execute(NativeViewHierarchyManager nvhm) {
                     YouTubeView youTubeView = (YouTubeView) nvhm.resolveView(reactTag);
                     YouTubeManager youTubeManager = (YouTubeManager) nvhm.resolveViewManager(reactTag);
                     int currentTime = youTubeManager.getCurrentTime(youTubeView);
@@ -65,7 +71,7 @@ public class YouTubeModule extends ReactContextBaseJavaModule {
         try {
             UIManagerModule uiManager = mReactContext.getNativeModule(UIManagerModule.class);
             uiManager.addUIBlock(new UIBlock() {
-                public void execute (NativeViewHierarchyManager nvhm) {
+                public void execute(NativeViewHierarchyManager nvhm) {
                     YouTubeView youTubeView = (YouTubeView) nvhm.resolveView(reactTag);
                     YouTubeManager youTubeManager = (YouTubeManager) nvhm.resolveViewManager(reactTag);
                     int duration = youTubeManager.getDuration(youTubeView);
@@ -75,5 +81,16 @@ public class YouTubeModule extends ReactContextBaseJavaModule {
         } catch (IllegalViewOperationException e) {
             promise.reject(E_MODULE_ERROR, e);
         }
+    }
+
+    @Nullable
+    @Override
+    public Map<String, Object> getConstants() {
+        Map<String, Object> constants = new HashMap<>();
+        constants.put("FULLSCREEN_FLAG_CONTROL_ORIENTATION", YouTubePlayer.FULLSCREEN_FLAG_CONTROL_ORIENTATION);
+        constants.put("FULLSCREEN_FLAG_CONTROL_SYSTEM_UI", YouTubePlayer.FULLSCREEN_FLAG_CONTROL_SYSTEM_UI);
+        constants.put("FULLSCREEN_FLAG_ALWAYS_FULLSCREEN_IN_LANDSCAPE", YouTubePlayer.FULLSCREEN_FLAG_ALWAYS_FULLSCREEN_IN_LANDSCAPE);
+        constants.put("FULLSCREEN_FLAG_CUSTOM_LAYOUT", YouTubePlayer.FULLSCREEN_FLAG_CUSTOM_LAYOUT);
+        return constants;
     }
 }

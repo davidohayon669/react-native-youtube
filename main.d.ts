@@ -2,9 +2,11 @@ import * as React from 'react';
 import { StyleProp, ViewStyle } from 'react-native';
 
 export interface YouTubeProps {
+  ref?: any;
   videoId?: string;
   videoIds?: string[];
   playlistId?: string;
+  apiKey?: string;
   play?: boolean;
   loop?: boolean;
   fullscreen?: boolean;
@@ -12,6 +14,7 @@ export interface YouTubeProps {
   showinfo?: boolean;
   modestbranding?: boolean;
   showFullscreenButton?: boolean;
+  fullscreenControlFlags?: number;
   rel?: boolean;
   origin?: string;
   onError?: (event: any) => void;
@@ -32,6 +35,11 @@ declare class YouTube extends React.Component<YouTubeProps> {
   getCurrentTime(): Promise<number>;
   getDuration(): Promise<number>;
   reloadIframe(): void;
+
+  static FULLSCREEN_FLAG_CONTROL_ORIENTATION?: number;
+  static FULLSCREEN_FLAG_CONTROL_SYSTEM_UI?: number;
+  static FULLSCREEN_FLAG_ALWAYS_FULLSCREEN_IN_LANDSCAPE?: number;
+  static FULLSCREEN_FLAG_CUSTOM_LAYOUT?: number;
 }
 
 export declare const YouTubeStandaloneIOS: {
