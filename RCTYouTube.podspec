@@ -13,7 +13,7 @@ Pod::Spec.new do |s|
   s.source         = { :git => package_json["repository"]["url"].gsub(/(http.*)/).first, :tag => "v#{s.version}" }
   s.source_files   = "RCTYouTube*.{h,m}"
   s.preserve_paths = "*.js"
-  s.dependency "React"
+  s.dependency "React-Core"
   s.dependency "YoutubePlayer-in-WKWebView", "~> 0.3.1"
 
 end
