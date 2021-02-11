@@ -37,7 +37,7 @@ const YouTubeTest = () => {
       onChangeState={(event) => {}}
       onChangeQuality={(event) => {}}
       onChangeFullscreen={(event) => {}}
-      onProgress={() => {}}
+      onProgress={(event) => {}}
       style={{ flex: 1 }}
     />
   );
