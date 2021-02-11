@@ -34,8 +34,8 @@ const YouTubeTest = () => {
       origin={'foo'}
       onError={(event) => {}}
       onReady={(event) => {}}
-      onChangeState={() => {}}
-      onChangeQuality={() => {}}
+      onChangeState={(event) => {}}
+      onChangeQuality={(event) => {}}
       onChangeFullscreen={(event) => {}}
       onProgress={() => {}}
       style={{ flex: 1 }}
