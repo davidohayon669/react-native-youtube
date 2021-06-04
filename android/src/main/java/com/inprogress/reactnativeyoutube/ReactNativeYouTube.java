@@ -17,10 +17,13 @@ public class ReactNativeYouTube implements ReactPackage {
     @Override
     public List<NativeModule> createNativeModules(ReactApplicationContext reactContext) {
         List<NativeModule> modules = new ArrayList<>();
-        YouTubeModule youTubeModule = new YouTubeModule(reactContext);
-        modules.add(youTubeModule);
+
+        ReactNativeYouTubePlayerModule reactNativeYouTubePlayerModule = new ReactNativeYouTubePlayerModule(reactContext);
+        modules.add(reactNativeYouTubePlayerModule);
+
         YouTubeStandaloneModule youTubeStandaloneModule = new YouTubeStandaloneModule(reactContext);
         modules.add(youTubeStandaloneModule);
+
         return modules;
     }
 
@@ -32,7 +35,7 @@ public class ReactNativeYouTube implements ReactPackage {
     @Override
     public List<ViewManager> createViewManagers(ReactApplicationContext reactContext) {
         return Arrays.<ViewManager>asList(
-            new YouTubeManager()
+            new ReactNativeYouTubePlayerManager()
         );
     }
 }

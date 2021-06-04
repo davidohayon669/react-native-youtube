@@ -19,7 +19,7 @@ android {
     compileSdkVersion safeExtGet('compileSdkVersion', 28)
 
     defaultConfig {
-        minSdkVersion safeExtGet('minSdkVersion', 16)
+        minSdkVersion safeExtGet('minSdkVersion', 17)
         targetSdkVersion safeExtGet('targetSdkVersion', 28)
     }
 
@@ -31,4 +31,5 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation('com.facebook.react:react-native:+')
+    implementation('com.pierfrancescosoffritti.androidyoutubeplayer:core:10.0.5')
 }

@@ -31,6 +31,7 @@ export default class YouTube extends React.Component {
     fullscreen: PropTypes.bool,
     controls: PropTypes.oneOf([0, 1, 2]),
     showFullscreenButton: PropTypes.bool,
+    resumePlayAndroid: PropTypes.bool,
     onError: PropTypes.func,
     onReady: PropTypes.func,
     onChangeState: PropTypes.func,
@@ -41,7 +42,10 @@ export default class YouTube extends React.Component {
 
   static defaultProps = {
     showFullscreenButton: true,
+    resumePlayAndroid: true,
   };
+
+  _interval = null;
 
   _nativeComponentRef = React.createRef();
 
@@ -52,7 +56,13 @@ export default class YouTube extends React.Component {
 
     this.state = {
       fullscreen: props.fullscreen,
+      resizingHackFlag: false,
     };
+  }
+
+  componentDidMount() {
+    // Make sure the Loading indication is displayed so use this hack before the video loads
+    this._fireResizingHack();
   }
 
   componentDidUpdate(prevProps) {
@@ -64,6 +74,27 @@ export default class YouTube extends React.Component {
 
   componentWillUnmount() {
     BackHandler.removeEventListener('hardwareBackPress', this._backPress);
+
+    clearInterval(this._timeout);
+  }
+
+  // The Android YouTube native module is pretty problematic when it comes to mounting correctly
+  // and rendering inside React-Native's views hierarchy. For now we must trigger some layout
+  // changes to force a real render on it so it will respotision it's controls after several
+  // specific events
+  _fireResizingHack() {
+    clearInterval(this._timeout);
+
+    let wait = 0.2;
+
+    const next = () => {
+      this.setState((state) => ({ resizingHackFlag: !state.resizingHackFlag }));
+
+      wait = wait >= 1.5 ? 1.5 : wait * 1.4;
+      this._timeout = setTimeout(next, wait * 1000);
+    };
+
+    next();
   }
 
   _backPress = () => {
@@ -76,6 +107,12 @@ export default class YouTube extends React.Component {
     return false;
   };
 
+  _onLayout = () => {
+    // When the Native player changes it's layout, we should also force a resizing hack to make
+    // sure the controls are in their correct place
+    this._fireResizingHack();
+  };
+
   _onError = (event) => {
     if (this.props.onError) {
       this.props.onError(event.nativeEvent);
@@ -83,6 +120,8 @@ export default class YouTube extends React.Component {
   };
 
   _onReady = (event) => {
+    this._fireResizingHack();
+
     if (this.props.onReady) {
       this.props.onReady(event.nativeEvent);
     }
@@ -100,22 +139,22 @@ export default class YouTube extends React.Component {
     }
   };
 
-  // _onChangeFullscreen = (event) => {
-  //   const { isFullscreen } = event.nativeEvent;
-  //   if (this.state.fullscreen !== isFullscreen) {
-  //     this.setState({ fullscreen: isFullscreen });
-  //   }
+  _onChangeFullscreen = (event) => {
+    const { isFullscreen } = event.nativeEvent;
+    if (this.state.fullscreen !== isFullscreen) {
+      this.setState({ fullscreen: isFullscreen });
+    }
 
-  //   if (this.props.onChangeFullscreen) {
-  //     this.props.onChangeFullscreen(event.nativeEvent);
-  //   }
-  // };
+    if (this.props.onChangeFullscreen) {
+      this.props.onChangeFullscreen(event.nativeEvent);
+    }
+  };
 
   seekTo(seconds) {
     UIManager.dispatchViewManagerCommand(
       ReactNative.findNodeHandle(this._nativeComponentRef.current),
       UIManager.getViewManagerConfig('ReactYouTube').Commands.seekTo,
-      [seconds],
+      [parseInt(seconds, 10)],
     );
   }
 
@@ -144,17 +183,17 @@ export default class YouTube extends React.Component {
   }
 
   getVideosIndex = () =>
-    NativeModules.ReactNativeYouTubePlayerModule.getVideosIndex(
-      ReactNative.findNodeHandle(this._nativeComponentRef.current),
-    );
-
-  getDuration = () =>
-    NativeModules.ReactNativeYouTubePlayerModule.getDuration(
+    NativeModules.YouTubeModule.getVideosIndex(
       ReactNative.findNodeHandle(this._nativeComponentRef.current),
     );
 
   getCurrentTime = () =>
-    NativeModules.ReactNativeYouTubePlayerModule.getCurrentTime(
+    NativeModules.YouTubeModule.getCurrentTime(
+      ReactNative.findNodeHandle(this._nativeComponentRef.current),
+    );
+
+  getDuration = () =>
+    NativeModules.YouTubeModule.getDuration(
       ReactNative.findNodeHandle(this._nativeComponentRef.current),
     );
 
@@ -164,13 +203,16 @@ export default class YouTube extends React.Component {
         <RCTYouTube
           ref={this._nativeComponentRef}
           {...this.props}
-          // fullscreen={this.state.fullscreen}
-          style={styles.module}
+          fullscreen={this.state.fullscreen}
+          style={[
+            styles.module,
+            { marginRight: this.state.resizingHackFlag ? StyleSheet.hairlineWidth : 0 },
+          ]}
           onYouTubeError={this._onError}
           onYouTubeReady={this._onReady}
           onYouTubeChangeState={this._onChangeState}
-          // onYouTubeChangeQuality={this._onChangeQuality}
-          // onYouTubeChangeFullscreen={this._onChangeFullscreen}
+          onYouTubeChangeQuality={this._onChangeQuality}
+          onYouTubeChangeFullscreen={this._onChangeFullscreen}
         />
       </View>
     );

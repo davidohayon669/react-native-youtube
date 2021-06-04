@@ -19,6 +19,8 @@ import YouTube, { YouTubeStandaloneIOS, YouTubeStandaloneAndroid } from 'react-n
 export default class ReactNativeYouTubeExample extends React.Component {
   state = {
     isReady: false,
+    currentVideoIndex: 0,
+    videoIds: ['9PODnRarD78', 'umF1kfVujhM', '5pjKjncwFBw'],
     status: null,
     quality: null,
     error: null,
@@ -26,6 +28,9 @@ export default class ReactNativeYouTubeExample extends React.Component {
     isLooping: true,
     duration: 0,
     currentTime: 0,
+    durationLabel: 'N/A',
+    currentTimeLabel: 'N/A',
+    videosIndexLabel: 'N/A',
     fullscreen: false,
     playerWidth: Dimensions.get('window').width,
   };
@@ -37,6 +42,22 @@ export default class ReactNativeYouTubeExample extends React.Component {
       <ScrollView style={styles.container}>
         <Text style={styles.welcome}>{'<YouTube /> component for React Native.'}</Text>
 
+        {/* <YouTube
+          ref={this._youTubeRef}
+          // You must have an API Key for the player to load in Android
+          apiKey="YOUR_API_KEY"
+          // Un-comment one of videoId / videoIds / playlist.
+          // You can also edit these props while Hot-Loading in development mode to see how
+          // it affects the loaded native module
+          // videoId="xuCn8ux2gbs"
+          videoId="uMK0prafzw0"
+          // videoIds={['uMK0prafzw0', 'qzYgSecGQww', 'XXlZfc1TrD0', 'czcjU1w-c6k']}
+          style={[
+            { height: PixelRatio.roundToNearestPixel(this.state.playerWidth / (16 / 9)) },
+            styles.player,
+          ]}
+        /> */}
+
         <YouTube
           ref={this._youTubeRef}
           // You must have an API Key for the player to load in Android
@@ -44,9 +65,10 @@ export default class ReactNativeYouTubeExample extends React.Component {
           // Un-comment one of videoId / videoIds / playlist.
           // You can also edit these props while Hot-Loading in development mode to see how
           // it affects the loaded native module
-          videoId="xuCn8ux2gbs"
-          // videoIds={['uMK0prafzw0', 'qzYgSecGQww', 'XXlZfc1TrD0', 'czcjU1w-c6k']}
-          // playlistId="PLF797E961509B4EB5"
+          // videoId="xuCn8ux2gbs"
+          // videoId={this.state.videoIds[this.state.currentVideoIndex]}
+          videoIds={['uMK0prafzw0', 'qzYgSecGQww', 'XXlZfc1TrD0', '8bdeizHM9OU']}
+          // videoId="PLF797E961509B4EB5"
           play={this.state.isPlaying}
           loop={this.state.isLooping}
           fullscreen={this.state.fullscreen}
@@ -55,22 +77,28 @@ export default class ReactNativeYouTubeExample extends React.Component {
             { height: PixelRatio.roundToNearestPixel(this.state.playerWidth / (16 / 9)) },
             styles.player,
           ]}
-          onError={e => {
+          onError={(e) => {
             this.setState({ error: e.error });
           }}
-          onReady={e => {
+          onReady={(e) => {
             this.setState({ isReady: true });
           }}
-          onChangeState={e => {
+          onChangeState={(e) => {
+            console.log(e.state);
+            if (e.state === 'playing') {
+              this.setState({ isPlaying: true });
+            } else if (e.state === 'paused') {
+              this.setState({ isPlaying: false });
+            }
             this.setState({ status: e.state });
           }}
-          onChangeQuality={e => {
+          onChangeQuality={(e) => {
             this.setState({ quality: e.quality });
           }}
-          onChangeFullscreen={e => {
+          onChangeFullscreen={(e) => {
             this.setState({ fullscreen: e.isFullscreen });
           }}
-          onProgress={e => {
+          onProgress={(e) => {
             this.setState({ currentTime: e.currentTime });
           }}
         />
@@ -78,10 +106,10 @@ export default class ReactNativeYouTubeExample extends React.Component {
         {/* Playing / Looping */}
         <View style={styles.buttonGroup}>
           <Button
-            title={this.state.status == 'playing' ? 'Pause' : 'Play'}
-            color={this.state.status == 'playing' ? 'red' : undefined}
+            title={this.state.isPlaying ? 'Pause' : 'Play'}
+            color={this.state.isPlaying ? 'red' : undefined}
             onPress={() => {
-              this.setState(state => ({ isPlaying: !state.isPlaying }));
+              this.setState((state) => ({ isPlaying: !state.isPlaying }));
             }}
           />
           <Text> </Text>
@@ -89,7 +117,17 @@ export default class ReactNativeYouTubeExample extends React.Component {
             title={this.state.isLooping ? 'Looping' : 'Not Looping'}
             color={this.state.isLooping ? 'green' : undefined}
             onPress={() => {
-              this.setState(state => ({ isLooping: !state.isLooping }));
+              this.setState((state) => ({ isLooping: !state.isLooping }));
+            }}
+          />
+          <Text> </Text>
+          <Button
+            title="Switch Video"
+            onPress={() => {
+              const currentVideoIndex =
+                (this.state.currentVideoIndex + 1) % this.state.videoIds.length;
+
+              this.setState({ currentVideoIndex });
             }}
           />
         </View>
@@ -121,7 +159,9 @@ export default class ReactNativeYouTubeExample extends React.Component {
             title="15 Seconds"
             onPress={() => {
               if (this._youTubeRef.current) {
-                this._youTubeRef.current.seekTo(15);
+                console.log(14.5);
+
+                this._youTubeRef.current.seekTo(14.9);
               }
             }}
           />
@@ -169,15 +209,15 @@ export default class ReactNativeYouTubeExample extends React.Component {
         {/* Get current played video's position index when playing videoIds (and playlist in iOS) */}
         <View style={styles.buttonGroup}>
           <Button
-            title={'Get Videos Index: ' + this.state.videosIndex}
+            title={'Get Videos Index: ' + this.state.videosIndexLabel}
             onPress={() => {
               if (this._youTubeRef.current) {
                 this._youTubeRef.current
                   .getVideosIndex()
-                  .then(index => {
-                    this.setState({ videosIndex: index });
+                  .then((videosIndexLabel) => {
+                    this.setState({ videosIndexLabel });
                   })
-                  .catch(errorMessage => {
+                  .catch((errorMessage) => {
                     this.setState({ error: errorMessage });
                   });
               }
@@ -197,56 +237,32 @@ export default class ReactNativeYouTubeExample extends React.Component {
           </View>
         )}
 
-        {/* Get Duration (iOS) */}
-        {Platform.OS === 'ios' && (
-          <View style={styles.buttonGroup}>
-            <Button
-              title="Get Duration (iOS)"
-              onPress={() => {
-                if (this._youTubeRef.current) {
-                  this._youTubeRef.current
-                    .getDuration()
-                    .then(duration => {
-                      this.setState({ duration });
-                    })
-                    .catch(errorMessage => {
-                      this.setState({ error: errorMessage });
-                    });
-                }
-              }}
-            />
-          </View>
-        )}
+        <View style={styles.buttonGroup}>
+          <Button
+            title={`Get Progress & Duration (${this.state.currentTimeLabel}/${this.state.durationLabel})`}
+            onPress={() => {
+              if (this._youTubeRef.current) {
+                this._youTubeRef.current
+                  .getCurrentTime()
+                  .then((currentTimeLabel) => {
+                    this.setState({ currentTimeLabel });
+                  })
+                  .catch((errorMessage) => {
+                    this.setState({ error: errorMessage });
+                  });
 
-        {/* Get Progress & Duration (Android) */}
-        {Platform.OS === 'android' && (
-          <View style={styles.buttonGroup}>
-            <Button
-              title="Get Progress & Duration (Android)"
-              onPress={() => {
-                if (this._youTubeRef.current) {
-                  this._youTubeRef.current
-                    .getCurrentTime()
-                    .then(currentTime => {
-                      this.setState({ currentTime });
-                    })
-                    .catch(errorMessage => {
-                      this.setState({ error: errorMessage });
-                    });
-
-                  this._youTubeRef.current
-                    .getDuration()
-                    .then(duration => {
-                      this.setState({ duration });
-                    })
-                    .catch(errorMessage => {
-                      this.setState({ error: errorMessage });
-                    });
-                }
-              }}
-            />
-          </View>
-        )}
+                this._youTubeRef.current
+                  .getDuration()
+                  .then((durationLabel) => {
+                    this.setState({ durationLabel });
+                  })
+                  .catch((errorMessage) => {
+                    this.setState({ error: errorMessage });
+                  });
+              }
+            }}
+          />
+        </View>
 
         {/* Standalone Player (iOS) */}
         {Platform.OS === 'ios' && YouTubeStandaloneIOS && (
@@ -255,10 +271,10 @@ export default class ReactNativeYouTubeExample extends React.Component {
               title="Launch Standalone Player"
               onPress={() => {
                 YouTubeStandaloneIOS.playVideo('KVZ-P-ZI6W4')
-                  .then(message => {
+                  .then((message) => {
                     console.log(message);
                   })
-                  .catch(errorMessage => {
+                  .catch((errorMessage) => {
                     this.setState({ error: errorMessage });
                   });
               }}
@@ -283,7 +299,7 @@ export default class ReactNativeYouTubeExample extends React.Component {
                   .then(() => {
                     console.log('Android Standalone Player Finished');
                   })
-                  .catch(errorMessage => {
+                  .catch((errorMessage) => {
                     this.setState({ error: errorMessage });
                   });
               }}
@@ -303,7 +319,7 @@ export default class ReactNativeYouTubeExample extends React.Component {
                   .then(() => {
                     console.log('Android Standalone Player Finished');
                   })
-                  .catch(errorMessage => {
+                  .catch((errorMessage) => {
                     this.setState({ error: errorMessage });
                   });
               }}
@@ -323,7 +339,7 @@ export default class ReactNativeYouTubeExample extends React.Component {
                   .then(() => {
                     console.log('Android Standalone Player Finished');
                   })
-                  .catch(errorMessage => {
+                  .catch((errorMessage) => {
                     this.setState({ error: errorMessage });
                   });
               }}
@@ -361,6 +377,19 @@ export default class ReactNativeYouTubeExample extends React.Component {
         <Text style={styles.instructions}>
           {this.state.error ? 'Error: ' + this.state.error : ''}
         </Text>
+        <Text>Haha</Text>
+        <Text>Haha</Text>
+        <Text>Haha</Text>
+        <Text>Haha</Text>
+        <Text>Haha</Text>
+        <Text>Haha</Text>
+        <Text>Haha</Text>
+        <Text>Haha</Text>
+        <Text>Haha</Text>
+        <Text>Haha</Text>
+        <Text>Haha</Text>
+        <Text>Haha</Text>
+        <Text>Haha</Text>
       </ScrollView>
     );
   }
