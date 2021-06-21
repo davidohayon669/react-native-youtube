@@ -1,6 +1,24 @@
 import * as React from 'react';
 import { StyleProp, ViewStyle } from 'react-native';
 
+export type OnErrorArg = { error: string }
+
+export type OnChangeQualityArg = { quality: string } // TODO doublecheck, havent seen this
+
+export type OnChangeFullscreenArg = { isFullscreen: boolean }
+
+export type OnProgressArg = { currentTime: number }
+
+export type OnChangeStateArg =
+  { state: 'started' } |
+  { state: 'playing' } |
+  { state: 'buffering' } |
+  { state: 'paused' } |
+  { state: 'stopped' } |
+  { state: 'seeking', currentTime: number }
+
+export type YouTubeState = 'started' | 'playing' | 'buffering' | 'paused' | 'stopped' | 'seeking'
+
 export interface YouTubeProps {
   apiKey: string;
   videoId?: string;
@@ -9,18 +27,18 @@ export interface YouTubeProps {
   play?: boolean;
   loop?: boolean;
   fullscreen?: boolean;
-  controls?: 1 | 2 | 3;
+  controls?: 0 | 1 | 2;
   showinfo?: boolean;
   modestbranding?: boolean;
   showFullscreenButton?: boolean;
   rel?: boolean;
   origin?: string;
-  onError?: (event: any) => void;
-  onReady?: (event: any) => void;
-  onChangeState?: () => void;
-  onChangeQuality?: () => void;
-  onChangeFullscreen?: (event: any) => void;
-  onProgress?: (event: any) => void;
+  onError?: (arg: OnErrorArg) => void;
+  onReady?: () => void;
+  onChangeState?: (arg: OnChangeStateArg) => void;
+  onChangeQuality?: (arg: OnChangeQualityArg) => void;
+  onChangeFullscreen?: (arg: OnChangeFullscreenArg) => void;
+  onProgress?: (arg: OnProgressArg) => void;
   style?: StyleProp<ViewStyle>;
 }
 
@@ -57,7 +75,7 @@ export declare const YouTubeStandaloneAndroid: {
   }): Promise<void>;
   playPlaylist(params: {
     apiKey: string;
-    playlistId: string[];
+    playlistId: string;
     autoplay?: boolean;
     lightboxMode?: boolean;
     startIndex?: number;
