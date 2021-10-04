@@ -23,7 +23,7 @@ const parsePlayerParams = (props) => ({
 
     // No need to explicitly pass positive or negative defaults
     loop: props.loop === true ? 1 : undefined,
-    playsinline: props.fullscreen === true ? undefined : 1,
+    playsinline: props.fullscreen === true ? 0 : 1,
     controls: props.controls,
     fs: props.showFullscreenButton === false ? 0 : undefined,
     showinfo: props.showinfo === false ? 0 : undefined,
