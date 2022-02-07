@@ -17,8 +17,8 @@ export interface YouTubeProps {
   origin?: string;
   onError?: (event: any) => void;
   onReady?: (event: any) => void;
-  onChangeState?: () => void;
-  onChangeQuality?: () => void;
+  onChangeState?: (event: any) => void;
+  onChangeQuality?: (event: any) => void;
   onChangeFullscreen?: (event: any) => void;
   onProgress?: (event: any) => void;
   style?: StyleProp<ViewStyle>;
@@ -57,7 +57,7 @@ export declare const YouTubeStandaloneAndroid: {
   }): Promise<void>;
   playPlaylist(params: {
     apiKey: string;
-    playlistId: string[];
+    playlistId: string;
     autoplay?: boolean;
     lightboxMode?: boolean;
     startIndex?: number;
