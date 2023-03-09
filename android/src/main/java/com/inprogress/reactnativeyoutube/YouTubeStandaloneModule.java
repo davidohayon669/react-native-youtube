@@ -39,7 +39,7 @@ public class YouTubeStandaloneModule extends ReactContextBaseJavaModule {
         public void onActivityResult(Activity activity, int requestCode, int resultCode, Intent intent) {
             if (requestCode == REQ_START_STANDALONE_PLAYER) {
                 if (mPickerPromise != null) {
-                    if (resultCode != Activity.RESULT_OK) {
+                    if (resultCode != Activity.RESULT_OK && intent != null) {
                         YouTubeInitializationResult errorReason =
                             YouTubeStandalonePlayer.getReturnedInitializationResult(intent);
                         if (errorReason.isUserRecoverableError()) {
