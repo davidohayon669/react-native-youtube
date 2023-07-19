@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import ReactNative, {
   View,
-  ViewPropTypes,
   Text,
   StyleSheet,
   requireNativeComponent,
@@ -10,6 +9,8 @@ import ReactNative, {
   NativeModules,
   BackHandler,
 } from 'react-native';
+
+import { ViewPropTypes } from 'deprecated-react-native-prop-types';
 
 const RCTYouTube = requireNativeComponent('ReactYouTube', YouTube, {
   nativeOnly: {
