@@ -1,12 +1,12 @@
-# react-native-youtube [![react-native-youtube](http://img.shields.io/npm/dm/react-native-youtube.svg)](https://www.npmjs.org/package/react-native-youtube) [![npm version](https://badge.fury.io/js/react-native-youtube.svg)](http://badge.fury.io/js/react-native-youtube) [![Dependency Status](https://david-dm.org/inProgress-team/react-native-youtube.svg)](https://david-dm.org/inProgress-team/react-native-youtube)
+# react-native-youtube [![react-native-youtube](http://img.shields.io/npm/dm/react-native-youtube.svg)](https://www.npmjs.org/package/react-native-youtube) [![npm version](https://badge.fury.io/js/react-native-youtube.svg)](http://badge.fury.io/js/react-native-youtube) [![Dependency Status](https://david-dm.org/davidohayon669/react-native-youtube.svg)](https://david-dm.org/davidohayon669/react-native-youtube)
 
 A `<YouTube />` component for React Native.
 
 Uses [YoutubePlayer-in-WKWebView](https://github.com/hmhv/YoutubePlayer-in-WKWebView) for iOS and [YouTube Android Player API](https://developers.google.com/youtube/android/player/) for Android and exposes much of the API, as declaratively as possible, into React Native.
 
-[Having problems with Android? Please read this first](https://github.com/inProgress-team/react-native-youtube#known-issues)
+[Having problems with Android? Please read this first](https://github.com/davidohayon669/react-native-youtube#known-issues)
 
-**Important!!!** - This README is for v2. [Latest README for v1 can be found here](https://github.com/inProgress-team/react-native-youtube/blob/v1.1.0/README.md)
+**Important!!!** - This README is for v2. [Latest README for v1 can be found here](https://github.com/davidohayon669/react-native-youtube/blob/v1.1.0/README.md)
 
 ## Table of Contents
 
@@ -21,7 +21,7 @@ Uses [YoutubePlayer-in-WKWebView](https://github.com/hmhv/YoutubePlayer-in-WKWeb
 
 ## Screenshot
 
-![Screenshot of the example app](https://github.com/inProgress-team/react-native-youtube/raw/master/Screenshot.png)
+![Screenshot of the example app](https://github.com/davidohayon669/react-native-youtube/raw/master/Screenshot.png)
 
 ## Install
 
@@ -200,7 +200,7 @@ A static method that returns a Promise to launch a standalone YouTube player wit
 
 #### `UNAUTHORIZED_OVERLAY` and `PLAYER_VIEW_TOO_SMALL` on Android
 
-The Android version of this component is based on the official Java [YouTube Android Player API](https://developers.google.com/youtube/android/player/) which limits the ability to [cover player view](https://developers.google.com/youtube/android/player/reference/com/google/android/youtube/player/YouTubePlayer.ErrorReason.html#public-static-final-youtubeplayer.errorreason-unauthorized_overlay), or [render it too small](https://developers.google.com/youtube/android/player/reference/com/google/android/youtube/player/YouTubePlayer.ErrorReason.html#public-static-final-youtubeplayer.errorreason-player_view_too_small). Some React Native components such as navigation ones can interfere with these limitations in unpredictable ways. This issue is discussed in [#161](https://github.com/inProgress-team/react-native-youtube/issues/161).
+The Android version of this component is based on the official Java [YouTube Android Player API](https://developers.google.com/youtube/android/player/) which limits the ability to [cover player view](https://developers.google.com/youtube/android/player/reference/com/google/android/youtube/player/YouTubePlayer.ErrorReason.html#public-static-final-youtubeplayer.errorreason-unauthorized_overlay), or [render it too small](https://developers.google.com/youtube/android/player/reference/com/google/android/youtube/player/YouTubePlayer.ErrorReason.html#public-static-final-youtubeplayer.errorreason-player_view_too_small). Some React Native components such as navigation ones can interfere with these limitations in unpredictable ways. This issue is discussed in [#161](https://github.com/davidohayon669/react-native-youtube/issues/161).
 
 #### Changing `videoId` / `videoIds` / `playlistId` while the component is mounted in Android
 
@@ -217,7 +217,7 @@ This repository includes an example project that can be used for trying, develop
 First, copy the git repository and install the React-Native project inside `/example`:
 
 ```sh
-$ git clone https://github.com/inProgress-team/react-native-youtube.git
+$ git clone https://github.com/davidohayon669/react-native-youtube.git
 $ cd react-native-youtube/example
 $ npm install
 ```
@@ -239,7 +239,6 @@ To be able to directly test your changes with the example app, re-install the pa
 
 - Param Aggarwal (paramaggarwal@gmail.com)
 - David Ohayon ([@davidohayon669](https://twitter.com/davidohayon669))
-- Ownership has been transferred to inProgress-team
 
 ## License
 

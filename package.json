@@ -1,6 +1,6 @@
 {
   "name": "react-native-youtube",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "description": "A <YouTube/> component for React Native.",
   "main": "main.js",
   "types": "main.d.ts",
@@ -9,7 +9,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/inProgress-team/react-native-youtube.git"
+    "url": "git+https://github.com/davidohayon669/react-native-youtube.git"
   },
   "keywords": [
     "youtube",
@@ -19,11 +19,12 @@
   "author": "Param Aggarwal",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/inProgress-team/react-native-youtube/issues"
+    "url": "https://github.com/davidohayon669/react-native-youtube/issues"
   },
-  "homepage": "https://github.com/inProgress-team/react-native-youtube#readme",
+  "homepage": "https://github.com/davidohayon669/react-native-youtube",
   "dependencies": {
-    "prop-types": "^15.5.0"
+    "prop-types": "^15.5.0",
+    "deprecated-react-native-prop-types": "^2.3.0"
   },
   "peerDependencies": {
     "react-native": ">=0.60"

@@ -1,13 +1,13 @@
 {
   "name": "ReactNativeYouTubeExample",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "private": true,
   "scripts": {
     "android": "react-native run-android",
     "ios": "react-native run-ios",
     "start": "react-native start",
     "preinstall": "npm pack ..",
-    "install-root": "npm run pack-root && npm install react-native-youtube-2.0.1.tgz",
+    "install-root": "npm run pack-root && npm install react-native-youtube-2.0.2.tgz",
     "reinstall-native-ios": "npm run install-root && npm run postinstall",
     "postinstall": "cd ios && pod install && cd ..",
     "clean": "rimraf ios/build ios/Pods android/.gradle android/app/build package-lock.json yarn-lock.json node_modules",
@@ -19,7 +19,7 @@
     "prettier": "^2.0.4",
     "react": "16.9.0",
     "react-native": "0.61.5",
-    "react-native-youtube": "file:react-native-youtube-2.0.1.tgz",
+    "react-native-youtube": "file:react-native-youtube-2.0.2.tgz",
     "rimraf": "^3.0.0"
   },
   "devDependencies": {
