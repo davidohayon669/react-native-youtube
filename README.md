@@ -77,7 +77,7 @@ import YouTube from 'react-native-youtube';
 - `play` (boolean): Controls playback of video with `true`/`false`. Setting it as `true` in the beginning itself makes the video autoplay on loading. Default: `false`.
 - `loop` (boolean): Loops the video. Default: `false`.
 - `fullscreen` (boolean): Controls whether the video should play inline or in fullscreen. Default: `false`.
-- `controls` (number): Sets the player's controls scheme. Supported values are `0`, `1`, `2`. Default: `1`. On iOS the numbers conform to [These Parameters](https://developers.google.com/youtube/player_parameters?hl=en#controls). On Android the mapping is `0 = CHROMELESS`, `1 = DEFAULT`, `2 = MINIMAL` ([More Info](https://developers.google.com/youtube/android/player/reference/com/google/android/youtube/player/YouTubePlayer.PlayerStyle)).
+- `controls` (number): Sets the player's controls scheme. Supported values are `0`, `1`. Default: `1`. On iOS the numbers conform to [These Parameters](https://developers.google.com/youtube/player_parameters?hl=en#controls). On Android the mapping is `0 = CHROMELESS`, `1 = DEFAULT` ([More Info](https://developers.google.com/youtube/android/player/reference/com/google/android/youtube/player/YouTubePlayer.PlayerStyle)).
 - `showFullscreenButton` (boolean): Show or hide Fullscreen button. Default: `true`.
 - `showinfo` (boolean, _iOS_): Setting the parameter's value to false causes the player to not display information like the video title and uploader before the video starts playing. Default: `true`.
 - `modestbranding` (boolean, _iOS_): This parameter lets you use a YouTube player that does not show a YouTube logo. Default: `false`.

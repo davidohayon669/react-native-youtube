@@ -42,7 +42,7 @@ export default class YouTube extends React.Component {
     play: PropTypes.bool,
     loop: PropTypes.bool,
     fullscreen: PropTypes.bool,
-    controls: PropTypes.oneOf([0, 1, 2]),
+    controls: PropTypes.oneOf([0, 1]),
     showinfo: PropTypes.bool,
     modestbranding: PropTypes.bool,
     showFullscreenButton: PropTypes.bool,
