@@ -57,7 +57,7 @@ export declare const YouTubeStandaloneAndroid: {
   }): Promise<void>;
   playPlaylist(params: {
     apiKey: string;
-    playlistId: string[];
+    playlistId: string;
     autoplay?: boolean;
     lightboxMode?: boolean;
     startIndex?: number;
